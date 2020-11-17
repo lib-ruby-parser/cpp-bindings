@@ -2,7 +2,6 @@
 #define LIB_RUBY_PARSER_RANGE_H
 
 #include <cstddef>
-#include <memory>
 
 class Range
 {
@@ -14,7 +13,7 @@ public:
 
     size_t size()
     {
-        return 0;
+        return end_pos - begin_pos;
     }
 };
 

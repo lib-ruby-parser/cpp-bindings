@@ -3,7 +3,6 @@
 
 #include <cstddef>
 #include <memory>
-
 #include "inner_node.h"
 #include "range.h"
 

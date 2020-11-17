@@ -27,13 +27,16 @@ impl<'a> CppClass<'a> {
 public:
 {fields}
 {constructor}
+{raw_constructor}
+    {class_name}() = delete;
     {class_name}({class_name} &&) = default;
     {class_name}(const {class_name} &) = delete;
 }};
 ",
             class_name = self.class_name(),
             fields = self.fields_declaration(),
-            constructor = self.constructor()
+            constructor = self.constructor(),
+            raw_constructor = self.raw_constructor()
         )
     }
 
@@ -66,6 +69,63 @@ public:
             constructor_name = self.class_name(),
             constructor_args = constructor_args,
             initializer_list = initializer_list,
+        )
+    }
+
+    fn raw_constructor_args(&self) -> String {
+        self.cpp_fields
+            .iter()
+            .map(|f| format!("        {}", f.raw_constructor_arg()))
+            .collect::<Vec<_>>()
+            .join(",\n")
+    }
+
+    fn raw_constructor(&self) -> String {
+        let raw_initializer_list = self
+            .cpp_fields
+            .iter()
+            .map(CppField::raw_initializer)
+            .collect::<Vec<_>>()
+            .join(", ");
+
+        format!(
+            "    {constructor_name}(
+{raw_constructor_args}) : {raw_initializer_list} {{}}",
+            constructor_name = self.class_name(),
+            raw_constructor_args = self.raw_constructor_args(),
+            raw_initializer_list = raw_initializer_list,
+        )
+    }
+
+    pub fn make_fn(&self) -> String {
+        let args = self
+            .cpp_fields
+            .iter()
+            .map(CppField::raw_field_names)
+            .collect::<Vec<_>>()
+            .concat()
+            .join(", ");
+        format!(
+            "Node *make_{fn_name}(
+{arglist}) {{
+    node_variant_t inner = std::move({class_name}({args}));
+    return new Node(std::move(inner));
+}}",
+            class_name = self.class_name(),
+            fn_name = self.node.filename,
+            arglist = self.raw_constructor_args(),
+            args = args
+        )
+    }
+
+    pub fn forward_decl(&self) -> String {
+        format!("class {};", self.class_name())
+    }
+    pub fn make_decl(&self) -> String {
+        format!(
+            "Node *make_{fn_name}({arglist});",
+            fn_name = self.node.filename,
+            arglist = self.raw_constructor_args()
         )
     }
 }

@@ -1,4 +1,4 @@
-CC = clang
+CC = clang++
 RUST_OBJ = lib-ruby-parser-cpp-bindings/target/debug/liblib_ruby_parser_cpp_bindings.a
 CC_DEFAULT_FLAGS = -std=c++17 -g -lpthread -ldl
 TARGET_DIR = target

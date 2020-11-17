@@ -48,19 +48,19 @@ impl<'a> CppFieldType<'a> {
 
     pub fn as_raw_ptr(&self) -> String {
         match &self.field_type {
-            FieldType::Node => "*Node",
-            FieldType::Nodes => "*Node",
-            FieldType::MaybeNode => "*Node",
-            FieldType::Range => "*Range",
-            FieldType::MaybeRange => "*Range",
-            FieldType::Str => "*char",
-            FieldType::MaybeStr => "*char",
-            FieldType::Chars => "*char",
-            FieldType::StringValue => "*char",
-            FieldType::U8 => "size_t",
-            FieldType::Usize => "size_t",
-            FieldType::RawString => "*char",
-            FieldType::RegexOptions => "*Node",
+            FieldType::Node => "Node *",
+            FieldType::Nodes => "Node *",
+            FieldType::MaybeNode => "Node *",
+            FieldType::Range => "Range *",
+            FieldType::MaybeRange => "Range *",
+            FieldType::Str => "char *",
+            FieldType::MaybeStr => "char *",
+            FieldType::Chars => "char *",
+            FieldType::StringValue => "char *",
+            FieldType::U8 => "size_t ",
+            FieldType::Usize => "size_t ",
+            FieldType::RawString => "char *",
+            FieldType::RegexOptions => "Node *",
         }
         .to_owned()
     }
