@@ -22,7 +22,7 @@ impl<'a> CppClass<'a> {
 
     pub fn code(&self) -> String {
         format!(
-            "class {class_name} : InnerNode
+            "class {class_name}
 {{
 public:
 {fields}
@@ -89,7 +89,7 @@ public:
             .join(", ");
 
         format!(
-            "    {constructor_name}(
+            "    explicit {constructor_name}(
 {raw_constructor_args}) : {raw_initializer_list} {{}}",
             constructor_name = self.class_name(),
             raw_constructor_args = self.raw_constructor_args(),
@@ -120,12 +120,5 @@ public:
 
     pub fn forward_decl(&self) -> String {
         format!("class {};", self.class_name())
-    }
-    pub fn make_decl(&self) -> String {
-        format!(
-            "Node *make_{fn_name}({arglist});",
-            fn_name = self.node.filename,
-            arglist = self.raw_constructor_args()
-        )
     }
 }

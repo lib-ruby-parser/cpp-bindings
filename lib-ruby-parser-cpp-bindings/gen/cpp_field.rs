@@ -81,10 +81,9 @@ impl<'a> CppField<'a> {
             | lib_ruby_parser_nodes::FieldType::RegexOptions => {
                 format!("std::unique_ptr<Node>({})", self.field_name())
             }
-            lib_ruby_parser_nodes::FieldType::Nodes => format!(
-                "node_ptr_to_vec({name}, {name}_len)",
-                name = self.field_name()
-            ),
+            lib_ruby_parser_nodes::FieldType::Nodes => {
+                format!("ptr_to_vec({name}, {name}_len)", name = self.field_name())
+            }
             lib_ruby_parser_nodes::FieldType::Range
             | lib_ruby_parser_nodes::FieldType::MaybeRange => {
                 format!("std::unique_ptr<Range>({})", self.field_name())

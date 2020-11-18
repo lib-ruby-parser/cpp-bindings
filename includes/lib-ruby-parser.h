@@ -2,33 +2,33 @@
 #define LIB_RUBY_PARSER_H
 
 #include "types.h"
-#include "bindings.h"
 #include "gen.h"
-#include "make.h"
+#include "parser_result.h"
 
-class ParserResult
+namespace lib_ruby_parser
 {
-public:
-    ParserResult() = delete;
-    ParserResult(std::unique_ptr<Node> ast) : ast(std::move(ast)) {}
-    std::unique_ptr<Node> ast;
-
-    static std::unique_ptr<ParserResult> from(const char *code, size_t len);
-};
-
-extern "C"
-{
-    extern ParserResult *parse(const char *code, size_t len);
-
-    ParserResult *make_parser_result(Node *ast)
+    template <typename T>
+    std::vector<T> ptr_to_vec(T **ptr, size_t len)
     {
-        return new ParserResult(std::unique_ptr<Node>(ast));
+        std::vector<T> v;
+        for (auto i = 0; i < len; i++)
+        {
+            v.push_back(std::move(*ptr[i]));
+            free(ptr[i]);
+        }
+        if (len != 0)
+        {
+            free(ptr);
+        }
+        return std::move(v);
     }
-}
 
-std::unique_ptr<ParserResult> ParserResult::from(const char *code, size_t len)
-{
-    return std::unique_ptr<ParserResult>(parse(code, len));
-}
+    std::string char_ptr_to_string(char *ptr, size_t len)
+    {
+        std::string result(ptr, len);
+        free(ptr);
+        return result;
+    }
+} // namespace lib_ruby_parser
 
 #endif // LIB_RUBY_PARSER_H

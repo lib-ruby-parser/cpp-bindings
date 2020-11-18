@@ -15,19 +15,17 @@ impl<'a> CppFile<'a> {
     }
 
     pub fn classes_code(&self) -> String {
-        let classes = self
+        let class_forwards: Vec<String> = self
             .cpp_classes
             .iter()
-            .map(CppClass::code)
-            .collect::<Vec<_>>()
-            .join("\n");
+            .map(CppClass::forward_decl)
+            .collect();
 
-        let variants = self
-            .cpp_classes
-            .iter()
-            .map(|class| format!("    {}", CppClass::class_name(class)))
-            .collect::<Vec<_>>()
-            .join(",\n");
+        let classes: Vec<String> = self.cpp_classes.iter().map(CppClass::code).collect();
+
+        let variants: Vec<String> = self.cpp_classes.iter().map(CppClass::class_name).collect();
+
+        let make_fns: Vec<String> = self.cpp_classes.iter().map(CppClass::make_fn).collect();
 
         format!(
             "#ifndef LIB_RUBY_PARSER_GEN_H
@@ -36,15 +34,19 @@ impl<'a> CppFile<'a> {
 #include <vector>
 #include <string>
 #include <variant>
-#include \"inner_node.h\"
 #include \"range.h\"
 
-class Node;
+namespace lib_ruby_parser {{
 
-std::vector<Node> node_ptr_to_vec(Node *ptr, size_t len);
+class Node;
+{class_forwards}
+
+template <typename T>
+std::vector<T> ptr_to_vec(T **ptr, size_t len);
 std::string char_ptr_to_string(char *ptr, size_t len);
 
 {classes}
+
 using node_variant_t = std::variant<
 {variants}>;
 
@@ -53,96 +55,38 @@ class Node
 public:
     node_variant_t inner;
     Node() = delete;
-    Node(node_variant_t inner) : inner(std::move(inner)) {{}}
     Node(Node &&) = default;
     Node(const Node &) = delete;
+    explicit Node(node_variant_t inner) : inner(std::move(inner)) {{}}
+
+    template <typename T>
+    bool is()
+    {{
+        return std::holds_alternative<T>(inner);
+    }}
+
+    template <typename T>
+    T get()
+    {{
+        return std::move(std::get<T>(inner));
+    }}
 }};
 
-std::vector<Node> node_ptr_to_vec(Node *ptr, size_t len)
-{{
-    std::vector<Node> v;
-    for (auto i = 0; i < len; i++) {{
-        v.push_back(std::move(ptr[i]));
-    }}
-    return std::move(v);
 }}
 
-std::string char_ptr_to_string(char *ptr, size_t len)
-{{
-    std::string result(ptr, len);
-    free(ptr);
-    return result;
+#include \"parser_result.h\"
+
+namespace lib_ruby_parser {{
+extern \"C\" {{
+    {make_fns}
+}}
 }}
 
 #endif // LIB_RUBY_PARSER_GEN_H",
-            classes = classes,
-            variants = variants
-        )
-    }
-
-    pub fn make_code(&self) -> String {
-        let make_fns = self
-            .cpp_classes
-            .iter()
-            .map(CppClass::make_fn)
-            .collect::<Vec<_>>()
-            .join("\n");
-
-        format!(
-            "#ifndef LIB_RUBY_PARSER_mAKE_H
-#define LIB_RUBY_PARSER_mAKE_H
-
-#include \"gen.h\"
-
-extern \"C\" {{
-{make_fns}
-
-    Range *make_range(size_t begin_pos, size_t end_pos)
-    {{
-        return new Range(begin_pos, end_pos);
-    }}
-}}
-
-#endif // LIB_RUBY_PARSER_mAKE_H",
-            make_fns = make_fns
-        )
-    }
-
-    pub fn bindings_code(&self) -> String {
-        let class_forwards = self
-            .cpp_classes
-            .iter()
-            .map(CppClass::forward_decl)
-            .collect::<Vec<_>>()
-            .join("\n");
-
-        let make_decls = self
-            .cpp_classes
-            .iter()
-            .map(CppClass::make_decl)
-            .collect::<Vec<_>>()
-            .join("\n");
-
-        format!(
-            "#ifndef LIB_RUBY_PARSER_BINDINGS_H
-#define LIB_RUBY_PARSER_BINDINGS_H
-
-#include <cstddef>
-
-class Node;
-class Range;
-class ParserResult;
-{class_forwards}
-
-extern \"C\" {{
-    Range *make_range(size_t begin_pos, size_t end_pos);
-    ParserResult *make_parser_result(Node *node);
-{make_decls}
-}}
-
-#endif // LIB_RUBY_PARSER_BINDINGS_H",
-            class_forwards = class_forwards,
-            make_decls = make_decls
+            class_forwards = class_forwards.join("\n"),
+            classes = classes.join("\n"),
+            variants = variants.join(",\n    "),
+            make_fns = make_fns.join("\n    ")
         )
     }
 }

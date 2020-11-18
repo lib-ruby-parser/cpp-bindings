@@ -12,7 +12,7 @@ impl RustFile {
 
     pub fn code(&self) -> String {
         format!(
-            "use crate::{{CppFromRust, StringPtr, nodes_to_ptr}};
+            "use crate::{{CppFromRust, StringPtr, NodePtr, RangePtr, nodes_to_ptr}};
 use crate::bindings::*;
 
 {impls}
@@ -22,12 +22,6 @@ impl CppFromRust<lib_ruby_parser::Node> for Node {{
         match node {{
             {match_branches}
         }}
-    }}
-}}
-
-impl CppFromRust<Box<lib_ruby_parser::Node>> for Node {{
-    fn convert(node: Box<lib_ruby_parser::Node>) -> *mut Self {{
-        CppFromRust::convert(*node)
     }}
 }}
 ",
@@ -48,9 +42,9 @@ impl CppFromRust<Box<lib_ruby_parser::Node>> for Node {{
             .iter()
             .map(|node| {
                 format!(
-            "lib_ruby_parser::Node::{rust_struct_name}(inner) => CppFromRust::convert(inner),",
-            rust_struct_name = node.struct_name
-        )
+                    "lib_ruby_parser::Node::{rust_struct_name}(inner) => Node::convert(inner),",
+                    rust_struct_name = node.struct_name
+                )
             })
             .collect()
     }
@@ -105,7 +99,7 @@ impl<'a> CppFromRustImpl<'a> {
             .map(|f| {
                 match f.field_type {
                     FieldType::Node | FieldType::MaybeNode | FieldType::RegexOptions => format!(
-                        "let {field_name}: *mut Node = CppFromRust::convert({field_name});",
+                        "let {field_name} = NodePtr::from({field_name}).unwrap();",
                         field_name = f.field_name
                     ),
                     FieldType::Nodes => format!(
@@ -113,7 +107,7 @@ impl<'a> CppFromRustImpl<'a> {
                         field_name = f.field_name
                     ),
                     FieldType::Range | FieldType::MaybeRange => format!(
-                        "let {field_name}: *mut Range = CppFromRust::convert({field_name});",
+                        "let {field_name} = RangePtr::from({field_name}).unwrap();",
                         field_name = f.field_name
                     ),
                     FieldType::Str | FieldType::MaybeStr | FieldType::Chars | FieldType::StringValue | FieldType::RawString => format!(

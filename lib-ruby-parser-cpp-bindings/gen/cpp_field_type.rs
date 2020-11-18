@@ -49,7 +49,7 @@ impl<'a> CppFieldType<'a> {
     pub fn as_raw_ptr(&self) -> String {
         match &self.field_type {
             FieldType::Node => "Node *",
-            FieldType::Nodes => "Node *",
+            FieldType::Nodes => "Node **",
             FieldType::MaybeNode => "Node *",
             FieldType::Range => "Range *",
             FieldType::MaybeRange => "Range *",

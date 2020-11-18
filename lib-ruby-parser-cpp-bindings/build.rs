@@ -21,24 +21,31 @@ fn build_cpp_files() {
     let cpp_file = CppFile::new(&nodes);
 
     std::fs::write(&relative_path("../includes/gen.h"), cpp_file.classes_code()).unwrap();
-    std::fs::write(&relative_path("../includes/make.h"), cpp_file.make_code()).unwrap();
+    // std::fs::write(&relative_path("../includes/make.h"), cpp_file.make_code()).unwrap();
 
-    std::fs::write(
-        &relative_path("../includes/bindings.h"),
-        cpp_file.bindings_code(),
-    )
-    .unwrap();
+    // std::fs::write(
+    //     &relative_path("../includes/bindings.h"),
+    //     cpp_file.bindings_code(),
+    // )
+    // .unwrap();
+
+    // std::fs::write(&relative_path("../includes/node.h"), cpp_file.node_h_code()).unwrap();
 }
 
 fn build_bindings() {
-    println!("cargo:rerun-if-changed=../includes/bindings.h");
+    println!("cargo:rerun-if-changed=../includes/gen.h");
 
-    let bindings_h = relative_path("../includes/bindings.h");
+    let bindings_h = relative_path("../includes/gen.h");
 
     let bindings = bindgen::Builder::default()
         .header(bindings_h)
         .parse_callbacks(Box::new(bindgen::CargoCallbacks))
-        .clang_args(&["-x", "c++"])
+        .clang_args(&["-v", "-x", "c++", "-std=c++17"])
+        .disable_name_namespacing()
+        .opaque_type("std::.*")
+        .whitelist_function("lib_ruby_parser::.*")
+        .whitelist_type("lib_ruby_parser::.*")
+        .whitelist_var("lib_ruby_parser::.*")
         .generate()
         .expect("Unable to generate bindings");
 

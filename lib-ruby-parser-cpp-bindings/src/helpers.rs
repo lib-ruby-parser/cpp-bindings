@@ -22,10 +22,10 @@ pub fn vec_to_ptr(vec: Vec<u8>) -> (*mut i8, size_t) {
     (ptr as *mut i8, len)
 }
 
-pub fn nodes_to_ptr(nodes: Vec<lib_ruby_parser::Node>) -> (*mut Node, size_t) {
-    let nodes: Vec<Node> = nodes
+pub fn nodes_to_ptr(nodes: Vec<lib_ruby_parser::Node>) -> (*mut *mut Node, size_t) {
+    let nodes: Vec<*mut Node> = nodes
         .into_iter()
-        .map(|node| *unsafe { Box::from_raw(CppFromRust::convert(node)) })
+        .map(|node| CppFromRust::convert(node))
         .collect();
 
     let len = nodes.len() as size_t;
