@@ -31,6 +31,7 @@ impl<'a> CppFile<'a> {
             "#ifndef LIB_RUBY_PARSER_GEN_H
 #define LIB_RUBY_PARSER_GEN_H
 
+#include <memory>
 #include <vector>
 #include <string>
 #include <variant>
