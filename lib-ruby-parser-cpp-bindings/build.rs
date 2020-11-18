@@ -21,25 +21,18 @@ fn build_cpp_files() {
     let cpp_file = CppFile::new(&nodes);
 
     std::fs::write(&relative_path("../includes/gen.h"), cpp_file.classes_code()).unwrap();
-    // std::fs::write(&relative_path("../includes/make.h"), cpp_file.make_code()).unwrap();
-
-    // std::fs::write(
-    //     &relative_path("../includes/bindings.h"),
-    //     cpp_file.bindings_code(),
-    // )
-    // .unwrap();
-
-    // std::fs::write(&relative_path("../includes/node.h"), cpp_file.node_h_code()).unwrap();
 }
 
 fn build_bindings() {
-    println!("cargo:rerun-if-changed=../includes/gen.h");
+    println!("cargo:rerun-if-changed=../includes/lib-ruby-parser.h");
+    println!("cargo:rerun-if-changed=../includes/parser_result.h");
+    println!("cargo:rerun-if-changed=../includes/range.h");
+    println!("cargo:rerun-if-changed=../includes/types.h");
 
     let bindings_h = relative_path("../includes/gen.h");
 
     let bindings = bindgen::Builder::default()
         .header(bindings_h)
-        .parse_callbacks(Box::new(bindgen::CargoCallbacks))
         .clang_args(&["-v", "-x", "c++", "-std=c++17"])
         .disable_name_namespacing()
         .opaque_type("std::.*")

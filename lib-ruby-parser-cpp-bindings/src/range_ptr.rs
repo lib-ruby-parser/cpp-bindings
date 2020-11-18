@@ -1,5 +1,4 @@
 use crate::bindings::{make_range, size_t, Range};
-use crate::ptr_value;
 
 pub struct RangePtr {
     ptr: *mut Range,
@@ -16,7 +15,7 @@ impl From<lib_ruby_parser::source::Range> for RangePtr {
         let begin_pos = range.begin_pos as size_t;
         let end_pos = range.end_pos as size_t;
         Self {
-            ptr: ptr_value(unsafe { make_range(begin_pos, end_pos) }),
+            ptr: unsafe { make_range(begin_pos, end_pos) },
         }
     }
 }

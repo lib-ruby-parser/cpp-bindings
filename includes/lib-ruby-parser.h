@@ -14,7 +14,7 @@ namespace lib_ruby_parser
         for (auto i = 0; i < len; i++)
         {
             v.push_back(std::move(*ptr[i]));
-            free(ptr[i]);
+            delete(ptr[i]);
         }
         if (len != 0)
         {

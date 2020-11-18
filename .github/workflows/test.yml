@@ -11,14 +11,31 @@ env:
 
 jobs:
   test:
-    name: run tests
+    name: ${{ matrix.compiler.cxx }}
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
-        rust: [stable, beta, nightly]
+        compiler:
+          - { cc: clang-8,  cxx: clang++-8 }
+          - { cc: clang-9,  cxx: clang++-9 }
+          - { cc: clang-10, cxx: clang++-10 }
+          - { cc: gcc-7,    cxx: g++-7 }
+          - { cc: gcc-8,    cxx: g++-8 }
+          - { cc: gcc-9,    cxx: g++-9 }
+          - { cc: gcc-10,   cxx: g++-10 }
 
     steps:
+      - name: make sure compiler are available
+        run: |
+          which ${{ matrix.compiler.cc }}
+          which ${{ matrix.compiler.cxx }}
+
+      - name: install valgrind
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y valgrind
+
       - name: checkout
         uses: actions/checkout@v2
         with:
@@ -28,17 +45,8 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           profile: minimal
-          toolchain: ${{ matrix.rust }}
+          toolchain: stable
           override: true
 
-      - name: apt-get update
-        run: sudo apt-get update
-
-      - name: install clang
-        run: sudo apt-get install -y clang-format clang-tidy clang-tools clang libc++-dev libc++1 libc++abi-dev libc++abi1 libclang-dev libclang1 libomp-dev libomp5 lld lldb llvm-dev llvm-runtime llvm
-
-      - name: install valgrind
-        run: sudo apt-get install -y valgrind
-
       - name: run tests
-        run: make test-all
+        run: CC=${{ matrix.compiler.cc }} CXX=${{ matrix.compiler.cxx }} make test-all
