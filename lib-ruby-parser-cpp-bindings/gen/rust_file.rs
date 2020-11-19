@@ -42,7 +42,7 @@ impl CppFromRust<lib_ruby_parser::Node> for Node {{
             .iter()
             .map(|node| {
                 format!(
-                    "lib_ruby_parser::Node::{rust_struct_name}(inner) => Node::convert(inner),",
+                    "lib_ruby_parser::Node::{rust_struct_name}(inner) => Node::convert(*inner),",
                     rust_struct_name = node.struct_name
                 )
             })
