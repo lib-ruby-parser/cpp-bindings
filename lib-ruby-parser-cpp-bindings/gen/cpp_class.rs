@@ -108,7 +108,7 @@ public:
         format!(
             "Node *make_{fn_name}(
 {arglist}) {{
-    node_variant_t inner = std::move({class_name}({args}));
+    node_variant_t inner = std::make_unique<{class_name}>({args});
     return new Node(std::move(inner));
 }}",
             class_name = self.class_name(),

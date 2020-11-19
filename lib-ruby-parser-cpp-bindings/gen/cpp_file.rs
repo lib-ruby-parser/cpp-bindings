@@ -23,7 +23,11 @@ impl<'a> CppFile<'a> {
 
         let classes: Vec<String> = self.cpp_classes.iter().map(CppClass::code).collect();
 
-        let variants: Vec<String> = self.cpp_classes.iter().map(CppClass::class_name).collect();
+        let variants: Vec<String> = self
+            .cpp_classes
+            .iter()
+            .map(|c| format!("std::unique_ptr<{}>", CppClass::class_name(c)))
+            .collect();
 
         let make_fns: Vec<String> = self.cpp_classes.iter().map(CppClass::make_fn).collect();
 
@@ -49,7 +53,7 @@ std::string char_ptr_to_string(char *ptr, size_t len);
 {classes}
 
 using node_variant_t = std::variant<
-{variants}>;
+    {variants}>;
 
 class Node
 {{
@@ -63,13 +67,13 @@ public:
     template <typename T>
     bool is()
     {{
-        return std::holds_alternative<T>(inner);
+        return std::holds_alternative<std::unique_ptr<T>>(inner);
     }}
 
     template <typename T>
-    T get()
+    T *get()
     {{
-        return std::move(std::get<T>(inner));
+        return std::get<std::unique_ptr<T>>(inner).get();
     }}
 }};
 

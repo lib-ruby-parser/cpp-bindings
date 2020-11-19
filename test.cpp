@@ -22,7 +22,7 @@ void test_range()
 void test_node()
 {
     Node node(
-        Int(
+        std::make_unique<Int>(
             std::string("42"),
             std::unique_ptr<Range>(nullptr),
             std::make_unique<Range>(3, 4)));
@@ -30,10 +30,9 @@ void test_node()
     assert(node.is<Int>());
     assert(!node.is<Float>());
 
-    Int inner = node.get<Int>();
-    assert(inner.operator_l == nullptr);
-    assert(*(inner.expression_l) == Range(3, 4));
-    assert(inner.value == std::string("42"));
+    assert(node.get<Int>()->operator_l == nullptr);
+    assert(*(node.get<Int>()->expression_l) == Range(3, 4));
+    assert(node.get<Int>()->value == std::string("42"));
 }
 
 void test_parse()
@@ -46,9 +45,9 @@ void test_parse()
     assert(ast->is<Int>());
     auto int_node = ast->get<Int>();
 
-    assert(int_node.value == "42");
-    assert(*(int_node.expression_l) == Range(0, 2));
-    assert(int_node.operator_l == nullptr);
+    assert(int_node->value == "42");
+    assert(*(int_node->expression_l) == Range(0, 2));
+    assert(int_node->operator_l == nullptr);
 }
 
 void test_parse_all()
