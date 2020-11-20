@@ -5,6 +5,8 @@
 #include "gen.h"
 #include "token.h"
 #include "diagnostic.h"
+#include "comment.h"
+#include "magic_comment.h"
 
 namespace lib_ruby_parser
 {
@@ -15,13 +17,19 @@ namespace lib_ruby_parser
         explicit ParserResult(
             std::unique_ptr<Node> ast,
             std::vector<Token> tokens,
-            std::vector<Diagnostic> diagnostics) : ast(std::move(ast)),
-                                                   tokens(std::move(tokens)),
-                                                   diagnostics(std::move(diagnostics)) {}
+            std::vector<Diagnostic> diagnostics,
+            std::vector<Comment> comments,
+            std::vector<MagicComment> magic_comments) : ast(std::move(ast)),
+                                                        tokens(std::move(tokens)),
+                                                        diagnostics(std::move(diagnostics)),
+                                                        comments(std::move(comments)),
+                                                        magic_comments(std::move(magic_comments)) {}
 
         std::unique_ptr<Node> ast;
         std::vector<Token> tokens;
         std::vector<Diagnostic> diagnostics;
+        std::vector<Comment> comments;
+        std::vector<MagicComment> magic_comments;
 
         static std::unique_ptr<ParserResult> from_source(std::string source);
     };
@@ -35,12 +43,18 @@ namespace lib_ruby_parser
             Token **tokens,
             size_t tokens_len,
             Diagnostic **diagnostics,
-            size_t diagnostics_len)
+            size_t diagnostics_len,
+            Comment **comments,
+            size_t comments_len,
+            MagicComment **magic_comments,
+            size_t magic_comments_len)
         {
             return new ParserResult(
                 std::unique_ptr<Node>(ast),
                 ptr_to_vec(tokens, tokens_len),
-                ptr_to_vec(diagnostics, diagnostics_len));
+                ptr_to_vec(diagnostics, diagnostics_len),
+                ptr_to_vec(comments, comments_len),
+                ptr_to_vec(magic_comments, magic_comments_len));
         }
     }
 

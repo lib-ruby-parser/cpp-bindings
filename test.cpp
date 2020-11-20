@@ -76,6 +76,40 @@ void test_diagnostics()
                                          std::make_unique<Range>(10, 13)));
 }
 
+void test_comments()
+{
+    auto result = ParserResult::from_source(std::string("# foo\n# bar\nbaz"));
+
+    assert(result->comments.size() == 2);
+
+    assert(result->comments[0] == Comment(
+                                      CommentType::INLINE,
+                                      std::make_unique<Range>(0, 6)));
+    assert(result->comments[1] == Comment(
+                                      CommentType::INLINE,
+                                      std::make_unique<Range>(6, 12)));
+}
+
+void test_magic_comments()
+{
+    auto result = ParserResult::from_source(std::string("# warn-indent: true\n# frozen-string-literal: true\n# encoding: utf-8\n"));
+
+    assert(result->magic_comments.size() == 3);
+
+    assert(result->magic_comments[0] == MagicComment(
+                                            MagicCommentKind::WARN_INDENT,
+                                            std::make_unique<Range>(2, 13),
+                                            std::make_unique<Range>(15, 19)));
+    assert(result->magic_comments[1] == MagicComment(
+                                            MagicCommentKind::FROZEN_STRING_LITERAL,
+                                            std::make_unique<Range>(22, 43),
+                                            std::make_unique<Range>(45, 49)));
+    assert(result->magic_comments[2] == MagicComment(
+                                            MagicCommentKind::ENCODING,
+                                            std::make_unique<Range>(52, 60),
+                                            std::make_unique<Range>(62, 67)));
+}
+
 void test_parse_all()
 {
     std::ifstream file("all_nodes.rb");
@@ -93,6 +127,8 @@ int main()
     test_parse();
     test_tokens();
     test_diagnostics();
+    test_comments();
+    test_magic_comments();
 
     test_parse_all();
 
