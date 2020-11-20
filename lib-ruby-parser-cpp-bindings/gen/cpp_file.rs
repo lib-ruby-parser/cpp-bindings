@@ -40,6 +40,7 @@ impl<'a> CppFile<'a> {
 #include <string>
 #include <variant>
 #include \"range.h\"
+#include \"token.h\"
 
 namespace lib_ruby_parser {{
 

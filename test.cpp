@@ -50,6 +50,15 @@ void test_parse()
     assert(int_node->operator_l == nullptr);
 }
 
+void test_tokens()
+{
+    auto result = ParserResult::from_source(std::string("42"));
+
+    assert(result->tokens.size() == 2);
+    assert(result->tokens[0] == Token(314, std::string("42"), std::make_unique<Loc>(0, 2)));
+    assert(result->tokens[1] == Token(0, std::string(""), std::make_unique<Loc>(2, 2)));
+}
+
 void test_parse_all()
 {
     std::ifstream file("all_nodes.rb");
@@ -65,6 +74,7 @@ int main()
     test_range();
     test_node();
     test_parse();
+    test_tokens();
     test_parse_all();
 
     std::cout << "all tests passed.\n";

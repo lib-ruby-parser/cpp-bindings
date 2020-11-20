@@ -3,6 +3,7 @@
 
 #include <string>
 #include "gen.h"
+#include "token.h"
 
 namespace lib_ruby_parser
 {
@@ -10,8 +11,10 @@ namespace lib_ruby_parser
     {
     public:
         ParserResult() = delete;
-        ParserResult(std::unique_ptr<Node> ast) : ast(std::move(ast)) {}
+        explicit ParserResult(std::unique_ptr<Node> ast, std::vector<Token> tokens) : ast(std::move(ast)), tokens(std::move(tokens)) {}
+
         std::unique_ptr<Node> ast;
+        std::vector<Token> tokens;
 
         static std::unique_ptr<ParserResult> from_source(std::string source);
     };
@@ -20,9 +23,9 @@ namespace lib_ruby_parser
     {
         extern ParserResult *parse(const char *code, size_t len);
 
-        ParserResult *make_parser_result(Node *ast)
+        ParserResult *make_parser_result(Node *ast, Token **tokens, size_t tokens_len)
         {
-            return new ParserResult(std::unique_ptr<Node>(ast));
+            return new ParserResult(std::unique_ptr<Node>(ast), ptr_to_vec(tokens, tokens_len));
         }
     }
 
