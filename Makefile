@@ -1,9 +1,9 @@
-DEBUG_RUST_OBJ = lib-ruby-parser-cpp-bindings/target/debug/liblib_ruby_parser_cpp_bindings.a
-RELEASE_RUST_OBJ = lib-ruby-parser-cpp-bindings/target/release/liblib_ruby_parser_cpp_bindings.a
+TARGET_DIR = target
+DEBUG_RUST_OBJ = $(TARGET_DIR)/lib-ruby-parser-static-debug
+RELEASE_RUST_OBJ = $(TARGET_DIR)/lib-ruby-parser-static-release
 CC_DEFAULT_FLAGS = -std=c++17 -lpthread -ldl
 CC_DEBUG_FLAGS = $(CC_DEFAULT_FLAGS) -g
 CC_RELEASE_FLAGS = $(CC_DEFAULT_FLAGS) -O2
-TARGET_DIR = target
 
 main: build-main
 	./$(TARGET_DIR)/main
@@ -11,11 +11,13 @@ main: build-main
 test: build-test
 	./$(TARGET_DIR)/test
 
-cargo-build-debug:
+cargo-build-debug: target-dir
 	cd lib-ruby-parser-cpp-bindings && cargo build
+	cp lib-ruby-parser-cpp-bindings/target/debug/liblib_ruby_parser_cpp_bindings.a $(DEBUG_RUST_OBJ)
 
-cargo-build-release:
+cargo-build-release: target-dir
 	cd lib-ruby-parser-cpp-bindings && cargo build --release
+	cp lib-ruby-parser-cpp-bindings/target/release/liblib_ruby_parser_cpp_bindings.a $(RELEASE_RUST_OBJ)
 
 build-main: cargo-build-debug target-dir
 	$(CXX) main.cpp $(DEBUG_RUST_OBJ) $(CC_DEBUG_FLAGS) -o $(TARGET_DIR)/main

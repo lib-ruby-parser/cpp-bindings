@@ -118,8 +118,6 @@ void test_range_source()
     auto arg = send->args[0].get<Int>();
     auto input = result->input;
 
-    std::cout << input << " " << recv->expression_l->source(result->input) << " " << arg->expression_l->source(result->input) << std::endl;
-
     assert(recv->expression_l->source(result->input) == std::string("100"));
     assert(arg->expression_l->source(result->input) == std::string("200"));
 }

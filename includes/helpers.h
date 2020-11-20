@@ -10,7 +10,7 @@ namespace lib_ruby_parser
     std::vector<T> ptr_to_vec(T **ptr, size_t len)
     {
         std::vector<T> v;
-        for (auto i = 0; i < len; i++)
+        for (size_t i = 0; i < len; i++)
         {
             v.push_back(std::move(*ptr[i]));
             delete (ptr[i]);

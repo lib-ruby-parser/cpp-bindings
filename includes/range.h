@@ -2,6 +2,7 @@
 #define LIB_RUBY_PARSER_RANGE_H
 
 #include <cstddef>
+#include <string>
 
 namespace lib_ruby_parser
 {
