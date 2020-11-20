@@ -41,6 +41,7 @@ impl<'a> CppFile<'a> {
 #include <variant>
 #include \"range.h\"
 #include \"token.h\"
+#include \"diagnostic.h\"
 
 namespace lib_ruby_parser {{
 

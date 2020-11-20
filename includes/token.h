@@ -40,7 +40,13 @@ namespace lib_ruby_parser
         Token() = delete;
         Token(Token &&) = default;
         Token(const Token &) = delete;
-        explicit Token(int token_type, std::string token_value, std::unique_ptr<Loc> loc) : token_type(token_type), token_value(token_value), loc(std::move(loc)) {}
+        explicit Token(
+            int token_type,
+            std::string token_value,
+            std::unique_ptr<Loc> loc) : token_type(token_type),
+                                        token_value(token_value),
+                                        loc(std::move(loc)) {}
+
         int token_type;
         std::string token_value;
         std::unique_ptr<Loc> loc;
@@ -71,9 +77,10 @@ namespace lib_ruby_parser
 
         Token *make_token(int token_type, char *token_value, size_t token_value_len, Loc *loc)
         {
-            auto s = char_ptr_to_string(token_value, token_value_len);
-            auto l = std::unique_ptr<Loc>(loc);
-            return new Token(token_type, s, std::move(l));
+            return new Token(
+                token_type,
+                char_ptr_to_string(token_value, token_value_len),
+                std::unique_ptr<Loc>(loc));
         }
     }
 

@@ -59,6 +59,23 @@ void test_tokens()
     assert(result->tokens[1] == Token(0, std::string(""), std::make_unique<Loc>(2, 2)));
 }
 
+void test_diagnostics()
+{
+    auto result = ParserResult::from_source(std::string("self = 1; nil = 2"));
+
+    assert(result->diagnostics.size() == 2);
+
+    assert(result->diagnostics[0] == Diagnostic(
+                                         ErrorLevel::ERROR,
+                                         std::string("Can't change the value of self"),
+                                         std::make_unique<Range>(0, 4)));
+
+    assert(result->diagnostics[1] == Diagnostic(
+                                         ErrorLevel::ERROR,
+                                         std::string("Can't assign to nil"),
+                                         std::make_unique<Range>(10, 13)));
+}
+
 void test_parse_all()
 {
     std::ifstream file("all_nodes.rb");
@@ -75,6 +92,8 @@ int main()
     test_node();
     test_parse();
     test_tokens();
+    test_diagnostics();
+
     test_parse_all();
 
     std::cout << "all tests passed.\n";

@@ -24,6 +24,7 @@ fn build_cpp_files() {
 }
 
 fn build_bindings() {
+    println!("cargo:rerun-if-changed=../includes/diagnostic.h");
     println!("cargo:rerun-if-changed=../includes/helpers.h");
     println!("cargo:rerun-if-changed=../includes/lib-ruby-parser.h");
     println!("cargo:rerun-if-changed=../includes/parser_result.h");
