@@ -19,17 +19,20 @@ namespace lib_ruby_parser
             std::vector<Token> tokens,
             std::vector<Diagnostic> diagnostics,
             std::vector<Comment> comments,
-            std::vector<MagicComment> magic_comments) : ast(std::move(ast)),
-                                                        tokens(std::move(tokens)),
-                                                        diagnostics(std::move(diagnostics)),
-                                                        comments(std::move(comments)),
-                                                        magic_comments(std::move(magic_comments)) {}
+            std::vector<MagicComment> magic_comments,
+            std::string input) : ast(std::move(ast)),
+                                 tokens(std::move(tokens)),
+                                 diagnostics(std::move(diagnostics)),
+                                 comments(std::move(comments)),
+                                 magic_comments(std::move(magic_comments)),
+                                 input(input) {}
 
         std::unique_ptr<Node> ast;
         std::vector<Token> tokens;
         std::vector<Diagnostic> diagnostics;
         std::vector<Comment> comments;
         std::vector<MagicComment> magic_comments;
+        std::string input;
 
         static std::unique_ptr<ParserResult> from_source(std::string source);
     };
@@ -47,14 +50,17 @@ namespace lib_ruby_parser
             Comment **comments,
             size_t comments_len,
             MagicComment **magic_comments,
-            size_t magic_comments_len)
+            size_t magic_comments_len,
+            char *input,
+            size_t input_len)
         {
             return new ParserResult(
                 std::unique_ptr<Node>(ast),
                 ptr_to_vec(tokens, tokens_len),
                 ptr_to_vec(diagnostics, diagnostics_len),
                 ptr_to_vec(comments, comments_len),
-                ptr_to_vec(magic_comments, magic_comments_len));
+                ptr_to_vec(magic_comments, magic_comments_len),
+                char_ptr_to_string(input, input_len));
         }
     }
 

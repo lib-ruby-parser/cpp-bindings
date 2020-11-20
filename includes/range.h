@@ -26,9 +26,14 @@ namespace lib_ruby_parser
             return !(*this == other);
         }
 
-        size_t size()
+        inline size_t size()
         {
             return end_pos - begin_pos;
+        }
+
+        std::string source(const std::string &input)
+        {
+            return input.substr(begin_pos, size());
         }
     };
 

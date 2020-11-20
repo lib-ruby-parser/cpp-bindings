@@ -110,6 +110,20 @@ void test_magic_comments()
                                             std::make_unique<Range>(62, 67)));
 }
 
+void test_range_source()
+{
+    auto result = ParserResult::from_source(std::string("100 + 200"));
+    auto send = result->ast->get<Send>();
+    auto recv = send->recv->get<Int>();
+    auto arg = send->args[0].get<Int>();
+    auto input = result->input;
+
+    std::cout << input << " " << recv->expression_l->source(result->input) << " " << arg->expression_l->source(result->input) << std::endl;
+
+    assert(recv->expression_l->source(result->input) == std::string("100"));
+    assert(arg->expression_l->source(result->input) == std::string("200"));
+}
+
 void test_parse_all()
 {
     std::ifstream file("all_nodes.rb");
@@ -129,6 +143,7 @@ int main()
     test_diagnostics();
     test_comments();
     test_magic_comments();
+    test_range_source();
 
     test_parse_all();
 

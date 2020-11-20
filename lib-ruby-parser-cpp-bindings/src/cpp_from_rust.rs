@@ -6,7 +6,7 @@ use crate::bindings::{
     Token,
 };
 use crate::NodePtr;
-use crate::{map_vec_to_c_list, string_to_ptr};
+use crate::{input_to_ptr, map_vec_to_c_list, string_to_ptr};
 
 pub trait CppFromRust<T> {
     fn convert(value: T) -> *mut Self;
@@ -29,6 +29,7 @@ impl CppFromRust<lib_ruby_parser::ParserResult> for ParserResult {
         let (comments, comments_len) = map_vec_to_c_list(comments, CppFromRust::convert);
         let (magic_comments, magic_comments_len) =
             map_vec_to_c_list(magic_comments, CppFromRust::convert);
+        let (input, input_len) = input_to_ptr(input);
 
         unsafe {
             make_parser_result(
@@ -41,6 +42,8 @@ impl CppFromRust<lib_ruby_parser::ParserResult> for ParserResult {
                 comments_len,
                 magic_comments,
                 magic_comments_len,
+                input,
+                input_len,
             )
         }
     }
