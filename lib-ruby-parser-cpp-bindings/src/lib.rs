@@ -37,3 +37,9 @@ pub extern "C" fn parse(input: *const u8, length: usize) -> *const ParserResult 
     let cpp_parser_result = CppFromRust::convert(rust_parser_result);
     cpp_parser_result
 }
+
+#[no_mangle]
+pub extern "C" fn token_name(id: i32) -> *mut i8 {
+    let (ptr, _) = string_to_ptr(lib_ruby_parser::token_name(id));
+    ptr
+}

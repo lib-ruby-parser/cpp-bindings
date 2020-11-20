@@ -50,13 +50,20 @@ void test_parse()
     assert(int_node->operator_l == nullptr);
 }
 
+#define assert_token(token, exp_name, exp_value, exp_begin, exp_end) \
+    assert((token).name() == std::string(exp_name));                 \
+    assert((token).token_value == std::string(exp_value));           \
+    assert((token).loc->begin == exp_begin);                         \
+    assert((token).loc->end == exp_end);
+
 void test_tokens()
 {
     auto result = ParserResult::from_source(std::string("42"));
 
     assert(result->tokens.size() == 2);
-    assert(result->tokens[0] == Token(314, std::string("42"), std::make_unique<Loc>(0, 2)));
-    assert(result->tokens[1] == Token(0, std::string(""), std::make_unique<Loc>(2, 2)));
+
+    assert_token(result->tokens[0], "tINTEGER", "42", 0, 2);
+    assert_token(result->tokens[1], "EOF", "", 2, 2);
 }
 
 void test_diagnostics()

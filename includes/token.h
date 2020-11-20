@@ -7,6 +7,11 @@
 
 namespace lib_ruby_parser
 {
+    extern "C"
+    {
+        extern char *token_name(int id);
+    }
+
     class Loc
     {
     public:
@@ -66,6 +71,14 @@ namespace lib_ruby_parser
         {
             return !(*this == other);
         }
+
+        std::string name()
+        {
+            char *ptr = token_name(token_type);
+            std::string result = std::string(ptr);
+            free(ptr);
+            return result;
+        }
     };
 
     extern "C"
@@ -83,7 +96,6 @@ namespace lib_ruby_parser
                 std::unique_ptr<Loc>(loc));
         }
     }
-
 } // namespace lib_ruby_parser
 
 #endif // LIB_RUBY_PARSER_TOKEN_H
