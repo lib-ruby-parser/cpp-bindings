@@ -10,7 +10,8 @@ namespace lib_ruby_parser
     {
         ENCODING,
         FROZEN_STRING_LITERAL,
-        WARN_INDENT
+        WARN_INDENT,
+        SHAREABLE_CONSTANT_VALUE,
     };
 
     class MagicComment

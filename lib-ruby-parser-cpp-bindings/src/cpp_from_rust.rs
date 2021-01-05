@@ -2,8 +2,8 @@ use crate::bindings::{
     make_comment, make_diagnostic, make_loc, make_magic_comment, make_parser_result, make_range,
     make_token, size_t, Comment, CommentType_DOCUMENT, CommentType_INLINE, CommentType_UNKNOWN,
     Diagnostic, ErrorLevel_ERROR, ErrorLevel_WARNING, MagicComment, MagicCommentKind_ENCODING,
-    MagicCommentKind_FROZEN_STRING_LITERAL, MagicCommentKind_WARN_INDENT, ParserResult, Range,
-    Token,
+    MagicCommentKind_FROZEN_STRING_LITERAL, MagicCommentKind_SHAREABLE_CONSTANT_VALUE,
+    MagicCommentKind_WARN_INDENT, ParserResult, Range, Token,
 };
 use crate::NodePtr;
 use crate::{input_to_ptr, map_vec_to_c_list, string_to_ptr};
@@ -101,6 +101,9 @@ impl CppFromRust<lib_ruby_parser::source::MagicComment> for MagicComment {
                 MagicCommentKind_FROZEN_STRING_LITERAL
             }
             lib_ruby_parser::source::MagicCommentKind::WarnIndent => MagicCommentKind_WARN_INDENT,
+            lib_ruby_parser::source::MagicCommentKind::ShareableContstantValue => {
+                MagicCommentKind_SHAREABLE_CONSTANT_VALUE
+            }
         };
         unsafe {
             make_magic_comment(
