@@ -1,7 +1,7 @@
 TARGET_DIR = target
 DEBUG_RUST_OBJ = $(TARGET_DIR)/lib-ruby-parser-static-debug
 RELEASE_RUST_OBJ = $(TARGET_DIR)/lib-ruby-parser-static-release
-CC_DEFAULT_FLAGS = -std=c++17 -lpthread -ldl
+CC_DEFAULT_FLAGS = -std=c++17 -lpthread -ldl -Wall
 CC_DEBUG_FLAGS = $(CC_DEFAULT_FLAGS) -g -O0
 CC_RELEASE_FLAGS = $(CC_DEFAULT_FLAGS) -O2
 

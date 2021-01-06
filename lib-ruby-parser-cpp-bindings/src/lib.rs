@@ -4,8 +4,6 @@
 #![allow(dead_code)]
 #![allow(improper_ctypes)]
 
-use std::slice;
-
 extern crate lib_ruby_parser;
 
 pub mod bindings;
@@ -33,12 +31,17 @@ pub extern "C" fn parse(
     length: usize,
     options: *mut ParserOptions,
 ) -> *const ParserResult {
-    let input = unsafe { slice::from_raw_parts(input, length) };
-    let options = lib_ruby_parser::ParserOptions {
-        ..Default::default()
-    };
+    println!("1");
+    let input = unsafe { std::slice::from_raw_parts(input, length) };
+    println!("2");
+    let options = unsafe { options.as_ref() }
+        .map(|options| lib_ruby_parser::ParserOptions::from(options))
+        .unwrap_or_else(|| lib_ruby_parser::ParserOptions::default());
+    println!("3");
     let rust_parser_result = lib_ruby_parser::Parser::new(input, options).do_parse();
+    println!("4");
     let cpp_parser_result = CppFromRust::convert(rust_parser_result);
+    println!("5");
     cpp_parser_result
 }
 
@@ -46,4 +49,30 @@ pub extern "C" fn parse(
 pub extern "C" fn token_name(id: i32) -> *mut i8 {
     let (ptr, _) = string_to_ptr(lib_ruby_parser::token_name(id).to_owned());
     ptr
+}
+
+impl From<&ParserOptions> for lib_ruby_parser::ParserOptions {
+    fn from(options: &ParserOptions) -> Self {
+        println!("converting 1");
+        let buffer_name = unsafe { std::ffi::CStr::from_ptr(options.buffer_name) }
+            .to_owned()
+            .into_string()
+            .unwrap();
+        println!("converting 2, {}", buffer_name);
+        let debug = options.debug;
+        let record_tokens = options.record_tokens;
+        drop(options);
+        println!("converting 3");
+        let result = Self {
+            buffer_name,
+            debug,
+            decoder: lib_ruby_parser::source::CustomDecoder::default(),
+            token_rewriter: None,
+            record_tokens,
+        };
+
+        println!("converting 4");
+
+        result
+    }
 }

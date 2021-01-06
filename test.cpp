@@ -58,7 +58,7 @@ void test_parse()
 
 void test_tokens()
 {
-    auto result = ParserResult::from_source(std::string("42"), ParserOptions());
+    auto result = ParserResult::from_source(std::string("42"), ParserOptions("(eval)", false, nullptr, nullptr, true));
 
     assert(result->tokens.size() == 2);
 

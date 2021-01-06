@@ -12,7 +12,9 @@ namespace lib_ruby_parser
     public:
         ParserOptions()
         {
-            buffer_name = "(eval)";
+            buffer_name = new char[7];
+            memcpy(buffer_name, "(eval)", 6);
+            buffer_name[6] = '\0';
             debug = false;
             decoder = nullptr;
             token_rewriter = nullptr;
@@ -20,20 +22,31 @@ namespace lib_ruby_parser
         }
 
         explicit ParserOptions(
-            std::string buffer_name,
+            std::string buffer_name_,
             bool debug,
-            std::unique_ptr<Decoder> decoder,
-            std::unique_ptr<TokenRewriter> token_rewriter,
-            bool record_tokens) : buffer_name(buffer_name),
-                                  debug(debug),
-                                  decoder(std::move(decoder)),
-                                  token_rewriter(std::move(token_rewriter)),
-                                  record_tokens(record_tokens) {}
+            Decoder *decoder,
+            TokenRewriter *token_rewriter,
+            bool record_tokens) : debug(debug),
+                                  decoder(decoder),
+                                  token_rewriter(token_rewriter),
+                                  record_tokens(record_tokens)
+        {
+            buffer_name = new char[buffer_name_.size() + 1];
+            std::copy(buffer_name_.begin(), buffer_name_.end(), buffer_name);
+            buffer_name[buffer_name_.size()] = '\0';
+        }
 
-        std::string buffer_name;
+        ~ParserOptions()
+        {
+            delete buffer_name;
+            delete decoder;
+            delete token_rewriter;
+        }
+
+        char *buffer_name;
         bool debug;
-        std::unique_ptr<Decoder> decoder;
-        std::unique_ptr<TokenRewriter> token_rewriter;
+        Decoder *decoder;
+        TokenRewriter *token_rewriter;
         bool record_tokens;
     };
 } // namespace lib_ruby_parser

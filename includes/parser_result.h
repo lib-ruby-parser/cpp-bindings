@@ -55,6 +55,7 @@ namespace lib_ruby_parser
             char *input,
             size_t input_len)
         {
+            std::cout << "make_parser_result called" << std::endl;
             return new ParserResult(
                 std::unique_ptr<Node>(ast),
                 ptr_to_vec(tokens, tokens_len),

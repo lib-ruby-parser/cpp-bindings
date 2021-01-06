@@ -30,6 +30,7 @@ fn build_bindings() {
     println!("cargo:rerun-if-changed=../includes/lib-ruby-parser.h");
     println!("cargo:rerun-if-changed=../includes/magic_comment.h");
     println!("cargo:rerun-if-changed=../includes/parser_result.h");
+    println!("cargo:rerun-if-changed=../includes/parser_options.h");
     println!("cargo:rerun-if-changed=../includes/range.h");
     println!("cargo:rerun-if-changed=../includes/token.h");
     println!("cargo:rerun-if-changed=../includes/decoder.h");
@@ -46,6 +47,11 @@ fn build_bindings() {
         .whitelist_function("lib_ruby_parser::.*")
         .whitelist_type("lib_ruby_parser::.*")
         .whitelist_var("lib_ruby_parser::.*")
+        .derive_copy(true)
+        .rustified_enum("lib_ruby_parser::CommentType")
+        .rustified_enum("lib_ruby_parser::MagicCommentKind")
+        .rustified_enum("lib_ruby_parser::ErrorLevel")
+        .layout_tests(false)
         .generate()
         .expect("Unable to generate bindings");
 
