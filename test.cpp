@@ -37,7 +37,7 @@ void test_node()
 
 void test_parse()
 {
-    auto result = ParserResult::from_source(std::string("42"));
+    auto result = ParserResult::from_source(std::string("42"), ParserOptions());
 
     assert(result->ast != nullptr);
     auto ast = std::move(result->ast);
@@ -58,7 +58,7 @@ void test_parse()
 
 void test_tokens()
 {
-    auto result = ParserResult::from_source(std::string("42"));
+    auto result = ParserResult::from_source(std::string("42"), ParserOptions());
 
     assert(result->tokens.size() == 2);
 
@@ -68,7 +68,7 @@ void test_tokens()
 
 void test_diagnostics()
 {
-    auto result = ParserResult::from_source(std::string("self = 1; nil = 2"));
+    auto result = ParserResult::from_source(std::string("self = 1; nil = 2"), ParserOptions());
 
     assert(result->diagnostics.size() == 2);
 
@@ -85,7 +85,7 @@ void test_diagnostics()
 
 void test_comments()
 {
-    auto result = ParserResult::from_source(std::string("# foo\n# bar\nbaz"));
+    auto result = ParserResult::from_source(std::string("# foo\n# bar\nbaz"), ParserOptions());
 
     assert(result->comments.size() == 2);
 
@@ -99,7 +99,9 @@ void test_comments()
 
 void test_magic_comments()
 {
-    auto result = ParserResult::from_source(std::string("# warn-indent: true\n# frozen-string-literal: true\n# encoding: utf-8\n"));
+    auto result = ParserResult::from_source(
+        std::string("# warn-indent: true\n# frozen-string-literal: true\n# encoding: utf-8\n"),
+        ParserOptions());
 
     assert(result->magic_comments.size() == 3);
 
@@ -119,7 +121,7 @@ void test_magic_comments()
 
 void test_range_source()
 {
-    auto result = ParserResult::from_source(std::string("100 + 200"));
+    auto result = ParserResult::from_source(std::string("100 + 200"), ParserOptions());
     auto send = result->ast->get<Send>();
     auto recv = send->recv->get<Int>();
     auto arg = send->args[0].get<Int>();
@@ -135,7 +137,7 @@ void test_parse_all()
     std::string source((std::istreambuf_iterator<char>(file)),
                        std::istreambuf_iterator<char>());
 
-    auto result = ParserResult::from_source(source);
+    auto result = ParserResult::from_source(source, ParserOptions());
     assert(result->ast != nullptr);
 }
 

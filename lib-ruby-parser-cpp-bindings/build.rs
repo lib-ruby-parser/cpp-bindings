@@ -32,6 +32,8 @@ fn build_bindings() {
     println!("cargo:rerun-if-changed=../includes/parser_result.h");
     println!("cargo:rerun-if-changed=../includes/range.h");
     println!("cargo:rerun-if-changed=../includes/token.h");
+    println!("cargo:rerun-if-changed=../includes/decoder.h");
+    println!("cargo:rerun-if-changed=../includes/token_rewriter.h");
     println!("cargo:rerun-if-changed=../includes/types.h");
 
     let bindings_h = relative_path("../includes/gen.h");

@@ -7,6 +7,7 @@
 #include "diagnostic.h"
 #include "comment.h"
 #include "magic_comment.h"
+#include "parser_options.h"
 
 namespace lib_ruby_parser
 {
@@ -34,12 +35,12 @@ namespace lib_ruby_parser
         std::vector<MagicComment> magic_comments;
         std::string input;
 
-        static std::unique_ptr<ParserResult> from_source(std::string source);
+        static std::unique_ptr<ParserResult> from_source(std::string source, ParserOptions options);
     };
 
     extern "C"
     {
-        extern ParserResult *parse(const char *code, size_t len);
+        extern ParserResult *parse(const char *code, size_t len, ParserOptions *options);
 
         ParserResult *make_parser_result(
             Node *ast,
@@ -64,9 +65,9 @@ namespace lib_ruby_parser
         }
     }
 
-    std::unique_ptr<ParserResult> ParserResult::from_source(std::string source)
+    std::unique_ptr<ParserResult> ParserResult::from_source(std::string source, ParserOptions options)
     {
-        return std::unique_ptr<ParserResult>(parse(source.c_str(), source.length()));
+        return std::unique_ptr<ParserResult>(parse(source.c_str(), source.length(), &options));
     }
 } // namespace lib_ruby_parser
 

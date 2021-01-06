@@ -28,7 +28,11 @@ mod range_ptr;
 pub use range_ptr::RangePtr;
 
 #[no_mangle]
-pub extern "C" fn parse(input: *const u8, length: usize) -> *const ParserResult {
+pub extern "C" fn parse(
+    input: *const u8,
+    length: usize,
+    options: *mut ParserOptions,
+) -> *const ParserResult {
     let input = unsafe { slice::from_raw_parts(input, length) };
     let options = lib_ruby_parser::ParserOptions {
         ..Default::default()
