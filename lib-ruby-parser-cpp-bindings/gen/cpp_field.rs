@@ -41,24 +41,11 @@ impl<'a> CppField<'a> {
     }
 
     pub fn raw_constructor_arg(&self) -> String {
-        let mut result = format!(
+        format!(
             "{ptr_type} {ptr_name}",
             ptr_type = self.cpp_field_type.as_raw_ptr(),
             ptr_name = self.field_name()
-        );
-
-        if self.cpp_field_type.needs_len() {
-            result.push_str(&format!(", size_t {}_len", self.field_name()));
-        }
-        result
-    }
-
-    pub fn raw_field_names(&self) -> Vec<String> {
-        let mut result = vec![self.field_name()];
-        if self.cpp_field_type.needs_len() {
-            result.push(format!("{}_len", self.field_name()));
-        }
-        result
+        )
     }
 
     pub fn initializer(&self) -> String {
@@ -83,7 +70,7 @@ impl<'a> CppField<'a> {
             }
 
             lib_ruby_parser_nodes::FieldType::Nodes => {
-                format!("ptr_to_vec({name}, {name}_len)", name = self.field_name())
+                format!("nodes_vec_to_cpp_vec({name})", name = self.field_name())
             }
             lib_ruby_parser_nodes::FieldType::Range
             | lib_ruby_parser_nodes::FieldType::MaybeRange => {
@@ -102,39 +89,5 @@ impl<'a> CppField<'a> {
                 format!("char_ptr_to_string({})", self.field_name())
             }
         }
-    }
-
-    pub fn raw_initializer(&self) -> String {
-        let construct = match self.field.field_type {
-            lib_ruby_parser_nodes::FieldType::Node
-            | lib_ruby_parser_nodes::FieldType::MaybeNode
-            | lib_ruby_parser_nodes::FieldType::RegexOptions => {
-                format!("std::unique_ptr<Node>({})", self.field_name())
-            }
-            lib_ruby_parser_nodes::FieldType::Nodes => {
-                format!("ptr_to_vec({name}, {name}_len)", name = self.field_name())
-            }
-            lib_ruby_parser_nodes::FieldType::Range
-            | lib_ruby_parser_nodes::FieldType::MaybeRange => {
-                format!("std::unique_ptr<Range>({})", self.field_name())
-            }
-            lib_ruby_parser_nodes::FieldType::Str
-            | lib_ruby_parser_nodes::FieldType::MaybeStr
-            | lib_ruby_parser_nodes::FieldType::Chars
-            | lib_ruby_parser_nodes::FieldType::StringValue
-            | lib_ruby_parser_nodes::FieldType::RawString => {
-                format!("std::move({name})", name = self.field_name())
-            }
-
-            lib_ruby_parser_nodes::FieldType::U8 | lib_ruby_parser_nodes::FieldType::Usize => {
-                format!("{}", self.field_name())
-            }
-        };
-
-        format!(
-            "{field_name}({construct})",
-            field_name = self.field_name(),
-            construct = construct
-        )
     }
 }

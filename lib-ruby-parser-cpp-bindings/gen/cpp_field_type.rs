@@ -49,7 +49,7 @@ impl<'a> CppFieldType<'a> {
     pub fn as_raw_ptr(&self) -> String {
         match &self.field_type {
             FieldType::Node => "Node *",
-            FieldType::Nodes => "Node **",
+            FieldType::Nodes => "NodeVec",
             FieldType::MaybeNode => "Node *",
             FieldType::Range => "Range *",
             FieldType::MaybeRange => "Range *",
@@ -63,28 +63,5 @@ impl<'a> CppFieldType<'a> {
             FieldType::RegexOptions => "Node *",
         }
         .to_owned()
-    }
-
-    pub fn needs_len(&self) -> bool {
-        match &self.field_type {
-            // uses Node **
-            FieldType::Nodes => true,
-
-            // uses char *
-            FieldType::Str
-            | FieldType::MaybeStr
-            | FieldType::Chars
-            | FieldType::StringValue
-            | FieldType::RawString => false,
-
-            // uses Node *
-            FieldType::Node | FieldType::MaybeNode | FieldType::RegexOptions => false,
-
-            // uses Range *
-            FieldType::Range | FieldType::MaybeRange => false,
-
-            // uses size_t
-            FieldType::U8 | FieldType::Usize => false,
-        }
     }
 }

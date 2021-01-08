@@ -45,7 +45,7 @@ pub fn vec_to_ptr(vec: Vec<u8>) -> (*mut i8, size_t) {
     (ptr as *mut i8, len)
 }
 
-pub fn nodes_to_ptr(nodes: Vec<lib_ruby_parser::Node>) -> (*mut *mut Node, size_t) {
+pub fn nodes_vec_to_cpp(nodes: Vec<lib_ruby_parser::Node>) -> bindings::NodeVec {
     let nodes: Vec<*mut Node> = nodes
         .into_iter()
         .map(|node| CppFromRust::convert(node))
@@ -55,7 +55,10 @@ pub fn nodes_to_ptr(nodes: Vec<lib_ruby_parser::Node>) -> (*mut *mut Node, size_
     let mut boxed_slice = nodes.into_boxed_slice();
     let ptr = boxed_slice.as_mut_ptr();
     std::mem::forget(boxed_slice);
-    (ptr, len)
+    bindings::NodeVec {
+        list: ptr,
+        length: len,
+    }
 }
 
 pub fn map_vec_to_c_list<T, Target>(vec: Vec<T>, f: fn(T) -> Target) -> (*mut Target, size_t) {

@@ -4,8 +4,8 @@ use crate::bindings::{
     MagicCommentKind, ParserResult, Range, Token,
 };
 use crate::helpers::string_to_char_ptr;
+use crate::helpers::{input_to_ptr, map_vec_to_c_list};
 use crate::NodePtr;
-use crate::{input_to_ptr, map_vec_to_c_list};
 
 pub trait CppFromRust<T> {
     fn convert(value: T) -> *mut Self;

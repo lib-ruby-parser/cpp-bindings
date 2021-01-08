@@ -54,7 +54,6 @@ namespace lib_ruby_parser
             size_t magic_comments_len,
             char *input)
         {
-            std::cout << "make_parser_result called" << std::endl;
             return new ParserResult(
                 std::unique_ptr<Node>(ast),
                 ptr_to_vec(tokens, tokens_len),

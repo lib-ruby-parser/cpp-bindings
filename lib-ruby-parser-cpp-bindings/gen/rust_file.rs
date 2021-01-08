@@ -1,4 +1,3 @@
-use super::CppFieldType;
 use lib_ruby_parser_nodes::{FieldType, Node};
 
 pub struct RustFile {
@@ -12,9 +11,9 @@ impl RustFile {
 
     pub fn code(&self) -> String {
         format!(
-            "use crate::{{CppFromRust, NodePtr, RangePtr, nodes_to_ptr}};
+            "use crate::{{CppFromRust, NodePtr, RangePtr}};
 use crate::bindings::*;
-use crate::helpers::{{string_to_char_ptr, maybe_string_to_char_ptr, string_value_to_char_ptr, chars_to_char_ptr}};
+use crate::helpers::{{string_to_char_ptr, maybe_string_to_char_ptr, string_value_to_char_ptr, chars_to_char_ptr, nodes_vec_to_cpp}};
 
 {impls}
 
@@ -103,7 +102,7 @@ impl<'a> CppFromRustImpl<'a> {
                     field_name = f.field_name
                 ),
                 FieldType::Nodes => format!(
-                    "let ({field_name}, {field_name}_len) = nodes_to_ptr({field_name});",
+                    "let {field_name} = nodes_vec_to_cpp({field_name});",
                     field_name = f.field_name
                 ),
                 FieldType::Range | FieldType::MaybeRange => format!(
@@ -139,15 +138,8 @@ impl<'a> CppFromRustImpl<'a> {
         self.node
             .fields
             .iter()
-            .map(|f| {
-                let mut result = vec![f.field_name.to_owned()];
-                if CppFieldType::new(&f.field_type).needs_len() {
-                    result.push(format!("{}_len", f.field_name));
-                }
-                result
-            })
+            .map(|f| f.field_name.to_owned())
             .collect::<Vec<_>>()
-            .concat()
             .join(", ")
     }
 }
