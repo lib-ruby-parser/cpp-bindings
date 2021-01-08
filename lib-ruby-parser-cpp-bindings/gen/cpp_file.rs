@@ -46,9 +46,6 @@ namespace lib_ruby_parser {{
 class Node;
 {class_forwards}
 
-template <typename T>
-std::vector<T> ptr_to_vec(T **ptr, size_t len);
-
 {classes}
 
 using node_variant_t = std::variant<

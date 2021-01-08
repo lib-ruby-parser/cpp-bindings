@@ -1,6 +1,6 @@
 use crate::bindings::{
-    make_comment, make_diagnostic, make_loc, make_magic_comment, make_parser_result, make_range,
-    make_token, size_t, Comment, CommentType, Diagnostic, ErrorLevel, MagicComment,
+    self, make_comment, make_diagnostic, make_loc, make_magic_comment, make_parser_result,
+    make_range, make_token, size_t, Comment, CommentType, Diagnostic, ErrorLevel, MagicComment,
     MagicCommentKind, ParserResult, Range, Token,
 };
 use crate::helpers::string_to_char_ptr;
@@ -23,27 +23,22 @@ impl CppFromRust<lib_ruby_parser::ParserResult> for ParserResult {
         } = parser_result;
 
         let ast = NodePtr::from(ast).unwrap();
-        let (tokens, tokens_len) = map_vec_to_c_list(tokens, CppFromRust::convert);
-        let (diagnostics, diagnostics_len) = map_vec_to_c_list(diagnostics, CppFromRust::convert);
-        let (comments, comments_len) = map_vec_to_c_list(comments, CppFromRust::convert);
-        let (magic_comments, magic_comments_len) =
-            map_vec_to_c_list(magic_comments, CppFromRust::convert);
+
+        let (list, length) = map_vec_to_c_list(tokens, CppFromRust::convert);
+        let tokens = bindings::TokenVec { list, length };
+
+        let (list, length) = map_vec_to_c_list(diagnostics, CppFromRust::convert);
+        let diagnostics = bindings::DiagnosticVec { list, length };
+
+        let (list, length) = map_vec_to_c_list(comments, CppFromRust::convert);
+        let comments = bindings::CommentVec { list, length };
+
+        let (list, length) = map_vec_to_c_list(magic_comments, CppFromRust::convert);
+        let magic_comments = bindings::MagicCommentVec { list, length };
+
         let input = input_to_ptr(input);
 
-        unsafe {
-            make_parser_result(
-                ast,
-                tokens,
-                tokens_len,
-                diagnostics,
-                diagnostics_len,
-                comments,
-                comments_len,
-                magic_comments,
-                magic_comments_len,
-                input,
-            )
-        }
+        unsafe { make_parser_result(ast, tokens, diagnostics, comments, magic_comments, input) }
     }
 }
 
