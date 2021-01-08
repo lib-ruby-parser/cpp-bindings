@@ -88,11 +88,11 @@ namespace lib_ruby_parser
             return new Loc(begin, end);
         }
 
-        Token *make_token(int token_type, char *token_value, size_t token_value_len, Loc *loc)
+        Token *make_token(int token_type, char *token_value, Loc *loc)
         {
             return new Token(
                 token_type,
-                char_ptr_to_string(token_value, token_value_len),
+                char_ptr_to_string(token_value),
                 std::unique_ptr<Loc>(loc));
         }
     }

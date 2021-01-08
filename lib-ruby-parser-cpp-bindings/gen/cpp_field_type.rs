@@ -67,20 +67,24 @@ impl<'a> CppFieldType<'a> {
 
     pub fn needs_len(&self) -> bool {
         match &self.field_type {
-            FieldType::Nodes
-            | FieldType::Str
+            // uses Node **
+            FieldType::Nodes => true,
+
+            // uses char *
+            FieldType::Str
             | FieldType::MaybeStr
             | FieldType::Chars
             | FieldType::StringValue
-            | FieldType::RawString => true,
+            | FieldType::RawString => false,
 
-            FieldType::Node
-            | FieldType::MaybeNode
-            | FieldType::Range
-            | FieldType::MaybeRange
-            | FieldType::U8
-            | FieldType::Usize
-            | FieldType::RegexOptions => false,
+            // uses Node *
+            FieldType::Node | FieldType::MaybeNode | FieldType::RegexOptions => false,
+
+            // uses Range *
+            FieldType::Range | FieldType::MaybeRange => false,
+
+            // uses size_t
+            FieldType::U8 | FieldType::Usize => false,
         }
     }
 }

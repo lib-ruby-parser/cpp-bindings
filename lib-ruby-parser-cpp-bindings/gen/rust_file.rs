@@ -12,8 +12,9 @@ impl RustFile {
 
     pub fn code(&self) -> String {
         format!(
-            "use crate::{{CppFromRust, StringPtr, NodePtr, RangePtr, nodes_to_ptr}};
+            "use crate::{{CppFromRust, NodePtr, RangePtr, nodes_to_ptr}};
 use crate::bindings::*;
+use crate::helpers::{{string_to_char_ptr, maybe_string_to_char_ptr, string_value_to_char_ptr, chars_to_char_ptr}};
 
 {impls}
 
@@ -96,29 +97,39 @@ impl<'a> CppFromRustImpl<'a> {
         self.node
             .fields
             .iter()
-            .map(|f| {
-                match f.field_type {
-                    FieldType::Node | FieldType::MaybeNode | FieldType::RegexOptions => format!(
-                        "let {field_name} = NodePtr::from({field_name}).unwrap();",
-                        field_name = f.field_name
-                    ),
-                    FieldType::Nodes => format!(
-                        "let ({field_name}, {field_name}_len) = nodes_to_ptr({field_name});",
-                        field_name = f.field_name
-                    ),
-                    FieldType::Range | FieldType::MaybeRange => format!(
-                        "let {field_name} = RangePtr::from({field_name}).unwrap();",
-                        field_name = f.field_name
-                    ),
-                    FieldType::Str | FieldType::MaybeStr | FieldType::Chars | FieldType::StringValue | FieldType::RawString => format!(
-                        "let ({field_name}, {field_name}_len) = StringPtr::from({field_name}).unwrap();",
-                        field_name = f.field_name
-                    ),
-                    FieldType::U8 | FieldType::Usize => format!(
-                        "let {field_name} = {field_name} as size_t;",
-                        field_name = f.field_name
-                    )
-                }
+            .map(|f| match f.field_type {
+                FieldType::Node | FieldType::MaybeNode | FieldType::RegexOptions => format!(
+                    "let {field_name} = NodePtr::from({field_name}).unwrap();",
+                    field_name = f.field_name
+                ),
+                FieldType::Nodes => format!(
+                    "let ({field_name}, {field_name}_len) = nodes_to_ptr({field_name});",
+                    field_name = f.field_name
+                ),
+                FieldType::Range | FieldType::MaybeRange => format!(
+                    "let {field_name} = RangePtr::from({field_name}).unwrap();",
+                    field_name = f.field_name
+                ),
+                FieldType::MaybeStr => format!(
+                    "let {field_name} = maybe_string_to_char_ptr({field_name});",
+                    field_name = f.field_name
+                ),
+                FieldType::StringValue => format!(
+                    "let {field_name} = string_value_to_char_ptr({field_name});",
+                    field_name = f.field_name
+                ),
+                FieldType::Chars => format!(
+                    "let {field_name} = chars_to_char_ptr({field_name});",
+                    field_name = f.field_name
+                ),
+                FieldType::Str | FieldType::RawString => format!(
+                    "let {field_name} = string_to_char_ptr({field_name});",
+                    field_name = f.field_name
+                ),
+                FieldType::U8 | FieldType::Usize => format!(
+                    "let {field_name} = {field_name} as size_t;",
+                    field_name = f.field_name
+                ),
             })
             .collect::<Vec<_>>()
             .join("\n        ")

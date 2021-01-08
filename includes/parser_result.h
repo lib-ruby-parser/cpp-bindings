@@ -52,8 +52,7 @@ namespace lib_ruby_parser
             size_t comments_len,
             MagicComment **magic_comments,
             size_t magic_comments_len,
-            char *input,
-            size_t input_len)
+            char *input)
         {
             std::cout << "make_parser_result called" << std::endl;
             return new ParserResult(
@@ -62,7 +61,7 @@ namespace lib_ruby_parser
                 ptr_to_vec(diagnostics, diagnostics_len),
                 ptr_to_vec(comments, comments_len),
                 ptr_to_vec(magic_comments, magic_comments_len),
-                char_ptr_to_string(input, input_len));
+                char_ptr_to_string(input));
         }
     }
 

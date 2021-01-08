@@ -3,8 +3,9 @@ use crate::bindings::{
     make_token, size_t, Comment, CommentType, Diagnostic, ErrorLevel, MagicComment,
     MagicCommentKind, ParserResult, Range, Token,
 };
+use crate::helpers::string_to_char_ptr;
 use crate::NodePtr;
-use crate::{input_to_ptr, map_vec_to_c_list, string_to_ptr};
+use crate::{input_to_ptr, map_vec_to_c_list};
 
 pub trait CppFromRust<T> {
     fn convert(value: T) -> *mut Self;
@@ -27,7 +28,7 @@ impl CppFromRust<lib_ruby_parser::ParserResult> for ParserResult {
         let (comments, comments_len) = map_vec_to_c_list(comments, CppFromRust::convert);
         let (magic_comments, magic_comments_len) =
             map_vec_to_c_list(magic_comments, CppFromRust::convert);
-        let (input, input_len) = input_to_ptr(input);
+        let input = input_to_ptr(input);
 
         unsafe {
             make_parser_result(
@@ -41,7 +42,6 @@ impl CppFromRust<lib_ruby_parser::ParserResult> for ParserResult {
                 magic_comments,
                 magic_comments_len,
                 input,
-                input_len,
             )
         }
     }
@@ -49,13 +49,12 @@ impl CppFromRust<lib_ruby_parser::ParserResult> for ParserResult {
 
 impl CppFromRust<lib_ruby_parser::Token> for Token {
     fn convert(token: lib_ruby_parser::Token) -> *mut Self {
-        let (token_value, token_value_len) = string_to_ptr(token.token_value.to_string_lossy());
+        let token_value = string_to_char_ptr(token.token_value.to_string_lossy());
 
         unsafe {
             make_token(
                 token.token_type,
                 token_value,
-                token_value_len,
                 make_loc(token.loc.begin as size_t, token.loc.end as size_t),
             )
         }
@@ -68,9 +67,9 @@ impl CppFromRust<lib_ruby_parser::Diagnostic> for Diagnostic {
             lib_ruby_parser::ErrorLevel::Warning => ErrorLevel::WARNING,
             lib_ruby_parser::ErrorLevel::Error => ErrorLevel::ERROR,
         };
-        let (message, message_len) = string_to_ptr(diagnostic.render_message());
+        let message = string_to_char_ptr(diagnostic.render_message());
         let range = CppFromRust::convert(diagnostic.range);
-        unsafe { make_diagnostic(level, message, message_len, range) }
+        unsafe { make_diagnostic(level, message, range) }
     }
 }
 

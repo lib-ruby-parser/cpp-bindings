@@ -48,7 +48,6 @@ class Node;
 
 template <typename T>
 std::vector<T> ptr_to_vec(T **ptr, size_t len);
-std::string char_ptr_to_string(char *ptr, size_t len);
 
 {classes}
 

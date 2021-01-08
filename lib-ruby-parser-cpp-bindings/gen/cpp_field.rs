@@ -74,6 +74,36 @@ impl<'a> CppField<'a> {
         )
     }
 
+    pub fn c_to_cpp(&self) -> String {
+        match self.field.field_type {
+            lib_ruby_parser_nodes::FieldType::Node
+            | lib_ruby_parser_nodes::FieldType::MaybeNode
+            | lib_ruby_parser_nodes::FieldType::RegexOptions => {
+                format!("std::unique_ptr<Node>({})", self.field_name())
+            }
+
+            lib_ruby_parser_nodes::FieldType::Nodes => {
+                format!("ptr_to_vec({name}, {name}_len)", name = self.field_name())
+            }
+            lib_ruby_parser_nodes::FieldType::Range
+            | lib_ruby_parser_nodes::FieldType::MaybeRange => {
+                format!("std::unique_ptr<Range>({})", self.field_name())
+            }
+
+            lib_ruby_parser_nodes::FieldType::U8 | lib_ruby_parser_nodes::FieldType::Usize => {
+                self.field_name()
+            }
+
+            lib_ruby_parser_nodes::FieldType::Str
+            | lib_ruby_parser_nodes::FieldType::MaybeStr
+            | lib_ruby_parser_nodes::FieldType::Chars
+            | lib_ruby_parser_nodes::FieldType::StringValue
+            | lib_ruby_parser_nodes::FieldType::RawString => {
+                format!("char_ptr_to_string({})", self.field_name())
+            }
+        }
+    }
+
     pub fn raw_initializer(&self) -> String {
         let construct = match self.field.field_type {
             lib_ruby_parser_nodes::FieldType::Node
@@ -92,10 +122,9 @@ impl<'a> CppField<'a> {
             | lib_ruby_parser_nodes::FieldType::MaybeStr
             | lib_ruby_parser_nodes::FieldType::Chars
             | lib_ruby_parser_nodes::FieldType::StringValue
-            | lib_ruby_parser_nodes::FieldType::RawString => format!(
-                "char_ptr_to_string({name}, {name}_len)",
-                name = self.field_name()
-            ),
+            | lib_ruby_parser_nodes::FieldType::RawString => {
+                format!("std::move({name})", name = self.field_name())
+            }
 
             lib_ruby_parser_nodes::FieldType::U8 | lib_ruby_parser_nodes::FieldType::Usize => {
                 format!("{}", self.field_name())

@@ -7,8 +7,8 @@ pub struct StringPtr {
 }
 
 impl StringPtr {
-    pub fn unwrap(self) -> (*mut i8, size_t) {
-        (self.ptr, self.len)
+    pub fn unwrap(self) -> crate::bindings::string {
+        unimplemented!()
     }
 }
 

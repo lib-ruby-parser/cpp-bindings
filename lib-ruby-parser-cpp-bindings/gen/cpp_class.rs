@@ -27,7 +27,6 @@ impl<'a> CppClass<'a> {
 public:
 {fields}
 {constructor}
-{raw_constructor}
     {class_name}() = delete;
     {class_name}({class_name} &&) = default;
     {class_name}(const {class_name} &) = delete;
@@ -35,8 +34,7 @@ public:
 ",
             class_name = self.class_name(),
             fields = self.fields_declaration(),
-            constructor = self.constructor(),
-            raw_constructor = self.raw_constructor()
+            constructor = self.constructor()
         )
     }
 
@@ -80,30 +78,29 @@ public:
             .join(",\n")
     }
 
-    fn raw_constructor(&self) -> String {
-        let raw_initializer_list = self
-            .cpp_fields
-            .iter()
-            .map(CppField::raw_initializer)
-            .collect::<Vec<_>>()
-            .join(", ");
+    //     fn raw_constructor(&self) -> String {
+    //         let raw_initializer_list = self
+    //             .cpp_fields
+    //             .iter()
+    //             .map(CppField::raw_initializer)
+    //             .collect::<Vec<_>>()
+    //             .join(", ");
 
-        format!(
-            "    explicit {constructor_name}(
-{raw_constructor_args}) : {raw_initializer_list} {{}}",
-            constructor_name = self.class_name(),
-            raw_constructor_args = self.raw_constructor_args(),
-            raw_initializer_list = raw_initializer_list,
-        )
-    }
+    //         format!(
+    //             "    explicit {constructor_name}(
+    // {raw_constructor_args}) : {raw_initializer_list} {{}}",
+    //             constructor_name = self.class_name(),
+    //             raw_constructor_args = self.raw_constructor_args(),
+    //             raw_initializer_list = raw_initializer_list,
+    //         )
+    //     }
 
     pub fn make_fn(&self) -> String {
         let args = self
             .cpp_fields
             .iter()
-            .map(CppField::raw_field_names)
+            .map(CppField::c_to_cpp)
             .collect::<Vec<_>>()
-            .concat()
             .join(", ");
         format!(
             "Node *make_{fn_name}(
