@@ -33,7 +33,7 @@ fn build_bindings() {
     println!("cargo:rerun-if-changed=../includes/parser_options.h");
     println!("cargo:rerun-if-changed=../includes/range.h");
     println!("cargo:rerun-if-changed=../includes/token.h");
-    println!("cargo:rerun-if-changed=../includes/decoder.h");
+    println!("cargo:rerun-if-changed=../includes/custom_decoder.h");
     println!("cargo:rerun-if-changed=../includes/token_rewriter.h");
     println!("cargo:rerun-if-changed=../includes/types.h");
 

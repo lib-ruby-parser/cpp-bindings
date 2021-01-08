@@ -8,7 +8,7 @@
 #include "diagnostic.h"
 #include "comment.h"
 #include "magic_comment.h"
-#include "decoder.h"
+#include "custom_decoder.h"
 #include "token_rewriter.h"
 
 #endif // LIB_RUBY_PARSER_TYPES_H
