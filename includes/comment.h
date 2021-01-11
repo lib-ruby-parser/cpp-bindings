@@ -22,8 +22,7 @@ namespace lib_ruby_parser
         Comment() = delete;
         Comment(Comment &&) = default;
         Comment(const Comment &) = delete;
-        explicit Comment(CommentType kind,
-                         std::unique_ptr<Range> location) : kind(kind), location(std::move(location)) {}
+        explicit Comment(CommentType kind, std::unique_ptr<Range> location);
 
         inline bool operator==(const Comment &other)
         {
@@ -38,10 +37,7 @@ namespace lib_ruby_parser
 
     extern "C"
     {
-        Comment *make_comment(CommentType kind, Range *location)
-        {
-            return new Comment(kind, std::unique_ptr<Range>(location));
-        }
+        Comment *make_comment(CommentType kind, Range *location);
     }
 } // namespace lib_ruby_parser
 

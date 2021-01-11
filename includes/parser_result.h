@@ -2,7 +2,7 @@
 #define LIB_RUBY_PARSER_PARSER_RESULT_H
 
 #include <string>
-#include "gen.h"
+#include "node.h"
 #include "token.h"
 #include "diagnostic.h"
 #include "comment.h"

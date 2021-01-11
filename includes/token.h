@@ -7,21 +7,16 @@
 
 namespace lib_ruby_parser
 {
-    extern "C"
-    {
-        extern char *token_name(int id);
-    }
-
     class Loc
     {
     public:
+        size_t begin;
+        size_t end;
+
         Loc() = delete;
         Loc(Loc &&) = default;
         Loc(const Loc &) = delete;
-        explicit Loc(size_t begin, size_t end) : begin(begin), end(end) {}
-
-        size_t begin;
-        size_t end;
+        explicit Loc(size_t begin, size_t end);
         friend std::ostream &operator<<(std::ostream &os, const Loc &loc)
         {
             os << loc.begin << "..." << loc.end;
@@ -42,19 +37,17 @@ namespace lib_ruby_parser
     class Token
     {
     public:
+        int token_type;
+        std::string token_value;
+        std::unique_ptr<Loc> loc;
+
         Token() = delete;
         Token(Token &&) = default;
         Token(const Token &) = delete;
         explicit Token(
             int token_type,
             std::string token_value,
-            std::unique_ptr<Loc> loc) : token_type(token_type),
-                                        token_value(token_value),
-                                        loc(std::move(loc)) {}
-
-        int token_type;
-        std::string token_value;
-        std::unique_ptr<Loc> loc;
+            std::unique_ptr<Loc> loc);
 
         friend std::ostream &operator<<(std::ostream &os, const Token &token)
         {
@@ -72,29 +65,14 @@ namespace lib_ruby_parser
             return !(*this == other);
         }
 
-        std::string name()
-        {
-            char *ptr = token_name(token_type);
-            std::string result = std::string(ptr);
-            free(ptr);
-            return result;
-        }
+        std::string name();
     };
 
     extern "C"
     {
-        Loc *make_loc(size_t begin, size_t end)
-        {
-            return new Loc(begin, end);
-        }
-
-        Token *make_token(int token_type, char *token_value, Loc *loc)
-        {
-            return new Token(
-                token_type,
-                char_ptr_to_string(token_value),
-                std::unique_ptr<Loc>(loc));
-        }
+        Loc *make_loc(size_t begin, size_t end);
+        Token *make_token(int token_type, char *token_value, Loc *loc);
+        extern char *token_name(int id);
     }
 } // namespace lib_ruby_parser
 

@@ -14,14 +14,9 @@ impl<'a> CppFile<'a> {
         Self { cpp_classes }
     }
 
-    pub fn classes_code(&self) -> String {
-        let class_forwards: Vec<String> = self
-            .cpp_classes
-            .iter()
-            .map(CppClass::forward_decl)
-            .collect();
-
-        let classes: Vec<String> = self.cpp_classes.iter().map(CppClass::code).collect();
+    pub fn node_h(&self) -> String {
+        let class_forwards: Vec<String> =
+            self.cpp_classes.iter().map(CppClass::definition).collect();
 
         let variants: Vec<String> = self
             .cpp_classes
@@ -29,11 +24,9 @@ impl<'a> CppFile<'a> {
             .map(|c| format!("std::unique_ptr<{}>", CppClass::class_name(c)))
             .collect();
 
-        let make_fns: Vec<String> = self.cpp_classes.iter().map(CppClass::make_fn).collect();
-
         format!(
-            "#ifndef LIB_RUBY_PARSER_GEN_H
-#define LIB_RUBY_PARSER_GEN_H
+            "#ifndef LIB_RUBY_PARSER_NODE_H
+#define LIB_RUBY_PARSER_NODE_H
 
 #include <memory>
 #include <vector>
@@ -45,8 +38,6 @@ namespace lib_ruby_parser {{
 
 class Node;
 {class_forwards}
-
-{classes}
 
 using node_variant_t = std::variant<
     {variants}>;
@@ -73,21 +64,89 @@ public:
     }}
 }};
 
+extern \"C\"
+{{
+    struct NodeVec
+    {{
+        Node **list;
+        size_t length;
+
+        NodeVec(Node **list, size_t length)
+        {{
+            this->list = list;
+            this->length = length;
+        }}
+    }};
 }}
 
-#include \"parser_result.h\"
+}}
+#endif // LIB_RUBY_PARSER_NODE_H
+",
+            class_forwards = class_forwards.join("\n"),
+            variants = variants.join(",\n    "),
+        )
+    }
+
+    pub fn node_cpp(&self) -> String {
+        let implementations = self
+            .cpp_classes
+            .iter()
+            .map(CppClass::implementation)
+            .collect::<Vec<_>>();
+
+        format!(
+            "#include \"node.h\"
+namespace lib_ruby_parser {{
+{implementations}
+}}
+",
+            implementations = implementations.join("\n")
+        )
+    }
+
+    pub fn make_node_h(&self) -> String {
+        let make_fn_decls: Vec<String> = self
+            .cpp_classes
+            .iter()
+            .map(CppClass::make_fn_decl)
+            .collect();
+
+        format!(
+            "#ifndef LIB_RUBY_PARSER_MAKE_NODE_H
+#define LIB_RUBY_PARSER_MAKE_NODE_H
+
+#include \"node.h\"
 
 namespace lib_ruby_parser {{
 extern \"C\" {{
-    {make_fns}
+
+{make_fn_decls}
+
 }}
 }}
 
-#endif // LIB_RUBY_PARSER_GEN_H",
-            class_forwards = class_forwards.join("\n"),
-            classes = classes.join("\n"),
-            variants = variants.join(",\n    "),
-            make_fns = make_fns.join("\n    ")
+#endif // LIB_RUBY_PARSER_MAKE_NODE_H",
+            make_fn_decls = make_fn_decls.join("\n")
+        )
+    }
+
+    pub fn make_node_cpp(&self) -> String {
+        let make_fns: Vec<String> = self.cpp_classes.iter().map(CppClass::make_fn).collect();
+
+        format!(
+            "
+#include \"make_node.h\"
+#include \"helpers.h\"
+
+namespace lib_ruby_parser {{
+extern \"C\" {{
+
+{make_fns}
+
+}}
+}}
+",
+            make_fns = make_fns.join("\n")
         )
     }
 }

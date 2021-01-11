@@ -49,4 +49,6 @@ jobs:
           override: true
 
       - name: run tests
-        run: CC=${{ matrix.compiler.cc }} CXX=${{ matrix.compiler.cxx }} make test-all
+        run: |
+          mkdir -p target
+          CC=${{ matrix.compiler.cc }} CXX=${{ matrix.compiler.cxx }} make test-all

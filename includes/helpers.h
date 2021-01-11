@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include "node.h"
 
 namespace lib_ruby_parser
 {
@@ -19,32 +20,12 @@ namespace lib_ruby_parser
         {
             free(ptr);
         }
-        return std::move(v);
+        return v;
     }
 
-    std::string char_ptr_to_string(char *ptr)
-    {
-        std::string result(ptr);
-        free(ptr);
-        return result;
-    }
+    std::string char_ptr_to_string(char *ptr);
 
-    class Node;
-    extern "C"
-    {
-        struct NodeVec
-        {
-            Node **list;
-            size_t length;
-
-            NodeVec(Node **list, size_t length) : list(list), length(length) {}
-        };
-    }
-
-    std::vector<Node> nodes_vec_to_cpp_vec(NodeVec nodes)
-    {
-        return ptr_to_vec<Node>(nodes.list, nodes.length);
-    }
+    std::vector<Node> nodes_vec_to_cpp_vec(NodeVec nodes);
 } // namespace lib_ruby_parser
 
 #endif // LIB_RUBY_PARSER_HELPERS_H

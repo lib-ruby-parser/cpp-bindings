@@ -40,24 +40,25 @@ impl<'a> CppField<'a> {
         )
     }
 
+    pub fn constructor_code(&self) -> String {
+        let mut arg_value = self.field_name();
+
+        if self.cpp_field_type.must_be_moved() {
+            arg_value = format!("std::move({})", arg_value)
+        }
+
+        format!(
+            "this->{field_name} = {arg_value};",
+            field_name = self.field_name(),
+            arg_value = arg_value
+        )
+    }
+
     pub fn raw_constructor_arg(&self) -> String {
         format!(
             "{ptr_type} {ptr_name}",
             ptr_type = self.cpp_field_type.as_raw_ptr(),
             ptr_name = self.field_name()
-        )
-    }
-
-    pub fn initializer(&self) -> String {
-        let arg_value = if self.cpp_field_type.must_be_moved() {
-            format!("std::move({})", self.field_name())
-        } else {
-            self.field_name()
-        };
-        format!(
-            "{field_name}({arg_value})",
-            field_name = self.field_name(),
-            arg_value = arg_value
         )
     }
 
