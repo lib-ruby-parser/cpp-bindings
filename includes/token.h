@@ -72,8 +72,12 @@ namespace lib_ruby_parser
     {
         Loc *make_loc(size_t begin, size_t end);
         Token *make_token(int token_type, char *token_value, Loc *loc);
-        extern char *token_name(int id);
     }
 } // namespace lib_ruby_parser
+
+extern "C"
+{
+    extern char *token_name(int id);
+}
 
 #endif // LIB_RUBY_PARSER_TOKEN_H
