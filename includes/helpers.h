@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include "node.h"
 
 namespace lib_ruby_parser
 {
@@ -19,15 +20,12 @@ namespace lib_ruby_parser
         {
             free(ptr);
         }
-        return std::move(v);
+        return v;
     }
 
-    std::string char_ptr_to_string(char *ptr, size_t len)
-    {
-        std::string result(ptr, len);
-        free(ptr);
-        return result;
-    }
+    std::string char_ptr_to_string(char *ptr);
+
+    std::vector<Node> nodes_vec_to_cpp_vec(NodeVec nodes);
 } // namespace lib_ruby_parser
 
 #endif // LIB_RUBY_PARSER_HELPERS_H

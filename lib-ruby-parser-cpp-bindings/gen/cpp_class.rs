@@ -20,80 +20,53 @@ impl<'a> CppClass<'a> {
         self.node.struct_name.to_owned()
     }
 
-    pub fn code(&self) -> String {
-        format!(
-            "class {class_name}
-{{
-public:
-{fields}
-{constructor}
-{raw_constructor}
-    {class_name}() = delete;
-    {class_name}({class_name} &&) = default;
-    {class_name}(const {class_name} &) = delete;
-}};
-",
-            class_name = self.class_name(),
-            fields = self.fields_declaration(),
-            constructor = self.constructor(),
-            raw_constructor = self.raw_constructor()
-        )
-    }
-
-    fn fields_declaration(&self) -> String {
-        self.cpp_fields
-            .iter()
-            .map(CppField::declaration)
-            .collect::<Vec<_>>()
-            .join("\n")
-    }
-
-    fn constructor(&self) -> String {
-        let constructor_args = self
+    pub fn implementation(&self) -> String {
+        let args = self
             .cpp_fields
             .iter()
-            .map(|f| format!("        {}", f.constructor_arg()))
-            .collect::<Vec<_>>()
-            .join(",\n");
-
-        let initializer_list = self
-            .cpp_fields
-            .iter()
-            .map(CppField::initializer)
+            .map(CppField::constructor_arg)
             .collect::<Vec<_>>()
             .join(", ");
 
+        let constructor = self
+            .cpp_fields
+            .iter()
+            .map(CppField::constructor_code)
+            .collect::<Vec<_>>()
+            .join("\n");
+
         format!(
-            "    {constructor_name}(
-{constructor_args}) : {initializer_list} {{}}",
-            constructor_name = self.class_name(),
-            constructor_args = constructor_args,
-            initializer_list = initializer_list,
+            "{class_name}::{class_name}({args})
+{{
+{constructor}
+}}
+",
+            class_name = self.class_name(),
+            args = args,
+            constructor = constructor
         )
+    }
+
+    fn constructor_args(&self) -> Vec<String> {
+        self.cpp_fields
+            .iter()
+            .map(|f| f.constructor_arg())
+            .collect::<Vec<_>>()
     }
 
     fn raw_constructor_args(&self) -> String {
         self.cpp_fields
             .iter()
-            .map(|f| format!("        {}", f.raw_constructor_arg()))
+            .map(|f| format!("{}", f.raw_constructor_arg()))
             .collect::<Vec<_>>()
-            .join(",\n")
+            .join(", ")
     }
 
-    fn raw_constructor(&self) -> String {
-        let raw_initializer_list = self
-            .cpp_fields
-            .iter()
-            .map(CppField::raw_initializer)
-            .collect::<Vec<_>>()
-            .join(", ");
-
+    pub fn make_fn_decl(&self) -> String {
         format!(
-            "    explicit {constructor_name}(
-{raw_constructor_args}) : {raw_initializer_list} {{}}",
-            constructor_name = self.class_name(),
-            raw_constructor_args = self.raw_constructor_args(),
-            raw_initializer_list = raw_initializer_list,
+            "Node *make_{fn_name}({arglist});",
+            fn_name = self.node.filename,
+            arglist = self.raw_constructor_args(),
         )
     }
 
@@ -101,13 +74,11 @@ public:
         let args = self
             .cpp_fields
             .iter()
-            .map(CppField::raw_field_names)
+            .map(CppField::c_to_cpp)
             .collect::<Vec<_>>()
-            .concat()
             .join(", ");
         format!(
-            "Node *make_{fn_name}(
-{arglist}) {{
+            "Node *make_{fn_name}({arglist}) {{
     node_variant_t inner = std::make_unique<{class_name}>({args});
     return new Node(std::move(inner));
 }}",
@@ -118,7 +89,29 @@ public:
         )
     }
 
-    pub fn forward_decl(&self) -> String {
-        format!("class {};", self.class_name())
+    pub fn definition(&self) -> String {
+        let fields = self
+            .cpp_fields
+            .iter()
+            .map(CppField::declaration)
+            .collect::<Vec<_>>()
+            .join("\n");
+
+        format!(
+            "
+class {class_name}
+{{
+public:
+{fields}
+
+    {class_name}() = delete;
+    {class_name}({class_name} &&) = default;
+    {class_name}(const {class_name} &) = delete;
+    explicit {class_name}({constructor_args});
+}};",
+            class_name = self.class_name(),
+            fields = fields,
+            constructor_args = self.constructor_args().join(", ")
+        )
     }
 }

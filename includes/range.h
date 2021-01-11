@@ -15,7 +15,7 @@ namespace lib_ruby_parser
         Range() = delete;
         Range(Range &&) = default;
         Range(const Range &) = delete;
-        explicit Range(size_t begin_pos, size_t end_pos) : begin_pos(begin_pos), end_pos(end_pos) {}
+        explicit Range(size_t begin_pos, size_t end_pos);
 
         inline bool operator==(const Range &other)
         {
@@ -32,18 +32,12 @@ namespace lib_ruby_parser
             return end_pos - begin_pos;
         }
 
-        std::string source(const std::string &input)
-        {
-            return input.substr(begin_pos, size());
-        }
+        std::string source(const std::string &input);
     };
 
     extern "C"
     {
-        Range *make_range(size_t begin_pos, size_t end_pos)
-        {
-            return new Range(begin_pos, end_pos);
-        }
+        Range *make_range(size_t begin_pos, size_t end_pos);
     }
 } // namespace lib_ruby_parser
 

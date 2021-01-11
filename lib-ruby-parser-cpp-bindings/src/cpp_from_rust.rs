@@ -1,12 +1,11 @@
 use crate::bindings::{
-    make_comment, make_diagnostic, make_loc, make_magic_comment, make_parser_result, make_range,
-    make_token, size_t, Comment, CommentType_DOCUMENT, CommentType_INLINE, CommentType_UNKNOWN,
-    Diagnostic, ErrorLevel_ERROR, ErrorLevel_WARNING, MagicComment, MagicCommentKind_ENCODING,
-    MagicCommentKind_FROZEN_STRING_LITERAL, MagicCommentKind_SHAREABLE_CONSTANT_VALUE,
-    MagicCommentKind_WARN_INDENT, ParserResult, Range, Token,
+    self, make_comment, make_diagnostic, make_loc, make_magic_comment, make_parser_result,
+    make_range, make_token, size_t, Comment, CommentType, Diagnostic, ErrorLevel, MagicComment,
+    MagicCommentKind, ParserResult, Range, Token,
 };
+use crate::helpers::string_to_char_ptr;
+use crate::helpers::{input_to_ptr, map_vec_to_c_list};
 use crate::NodePtr;
-use crate::{input_to_ptr, map_vec_to_c_list, string_to_ptr};
 
 pub trait CppFromRust<T> {
     fn convert(value: T) -> *mut Self;
@@ -24,40 +23,33 @@ impl CppFromRust<lib_ruby_parser::ParserResult> for ParserResult {
         } = parser_result;
 
         let ast = NodePtr::from(ast).unwrap();
-        let (tokens, tokens_len) = map_vec_to_c_list(tokens, CppFromRust::convert);
-        let (diagnostics, diagnostics_len) = map_vec_to_c_list(diagnostics, CppFromRust::convert);
-        let (comments, comments_len) = map_vec_to_c_list(comments, CppFromRust::convert);
-        let (magic_comments, magic_comments_len) =
-            map_vec_to_c_list(magic_comments, CppFromRust::convert);
-        let (input, input_len) = input_to_ptr(input);
 
-        unsafe {
-            make_parser_result(
-                ast,
-                tokens,
-                tokens_len,
-                diagnostics,
-                diagnostics_len,
-                comments,
-                comments_len,
-                magic_comments,
-                magic_comments_len,
-                input,
-                input_len,
-            )
-        }
+        let (list, length) = map_vec_to_c_list(tokens, CppFromRust::convert);
+        let tokens = bindings::TokenVec { list, length };
+
+        let (list, length) = map_vec_to_c_list(diagnostics, CppFromRust::convert);
+        let diagnostics = bindings::DiagnosticVec { list, length };
+
+        let (list, length) = map_vec_to_c_list(comments, CppFromRust::convert);
+        let comments = bindings::CommentVec { list, length };
+
+        let (list, length) = map_vec_to_c_list(magic_comments, CppFromRust::convert);
+        let magic_comments = bindings::MagicCommentVec { list, length };
+
+        let input = input_to_ptr(input);
+
+        unsafe { make_parser_result(ast, tokens, diagnostics, comments, magic_comments, input) }
     }
 }
 
 impl CppFromRust<lib_ruby_parser::Token> for Token {
     fn convert(token: lib_ruby_parser::Token) -> *mut Self {
-        let (token_value, token_value_len) = string_to_ptr(token.token_value.to_string_lossy());
+        let token_value = string_to_char_ptr(token.token_value.to_string_lossy());
 
         unsafe {
             make_token(
                 token.token_type,
                 token_value,
-                token_value_len,
                 make_loc(token.loc.begin as size_t, token.loc.end as size_t),
             )
         }
@@ -67,12 +59,12 @@ impl CppFromRust<lib_ruby_parser::Token> for Token {
 impl CppFromRust<lib_ruby_parser::Diagnostic> for Diagnostic {
     fn convert(diagnostic: lib_ruby_parser::Diagnostic) -> *mut Self {
         let level = match diagnostic.level {
-            lib_ruby_parser::ErrorLevel::Warning => ErrorLevel_WARNING,
-            lib_ruby_parser::ErrorLevel::Error => ErrorLevel_ERROR,
+            lib_ruby_parser::ErrorLevel::Warning => ErrorLevel::WARNING,
+            lib_ruby_parser::ErrorLevel::Error => ErrorLevel::ERROR,
         };
-        let (message, message_len) = string_to_ptr(diagnostic.render_message());
+        let message = string_to_char_ptr(diagnostic.render_message());
         let range = CppFromRust::convert(diagnostic.range);
-        unsafe { make_diagnostic(level, message, message_len, range) }
+        unsafe { make_diagnostic(level, message, range) }
     }
 }
 
@@ -85,9 +77,9 @@ impl CppFromRust<lib_ruby_parser::source::Range> for Range {
 impl CppFromRust<lib_ruby_parser::source::Comment> for Comment {
     fn convert(comment: lib_ruby_parser::source::Comment) -> *mut Self {
         let kind = match comment.kind {
-            lib_ruby_parser::source::CommentType::Inline => CommentType_INLINE,
-            lib_ruby_parser::source::CommentType::Document => CommentType_DOCUMENT,
-            lib_ruby_parser::source::CommentType::Unknown => CommentType_UNKNOWN,
+            lib_ruby_parser::source::CommentType::Inline => CommentType::INLINE,
+            lib_ruby_parser::source::CommentType::Document => CommentType::DOCUMENT,
+            lib_ruby_parser::source::CommentType::Unknown => CommentType::UNKNOWN,
         };
         unsafe { make_comment(kind, CppFromRust::convert(comment.location)) }
     }
@@ -96,13 +88,13 @@ impl CppFromRust<lib_ruby_parser::source::Comment> for Comment {
 impl CppFromRust<lib_ruby_parser::source::MagicComment> for MagicComment {
     fn convert(magic_comment: lib_ruby_parser::source::MagicComment) -> *mut Self {
         let kind = match magic_comment.kind {
-            lib_ruby_parser::source::MagicCommentKind::Encoding => MagicCommentKind_ENCODING,
+            lib_ruby_parser::source::MagicCommentKind::Encoding => MagicCommentKind::ENCODING,
             lib_ruby_parser::source::MagicCommentKind::FrozenStringLiteral => {
-                MagicCommentKind_FROZEN_STRING_LITERAL
+                MagicCommentKind::FROZEN_STRING_LITERAL
             }
-            lib_ruby_parser::source::MagicCommentKind::WarnIndent => MagicCommentKind_WARN_INDENT,
+            lib_ruby_parser::source::MagicCommentKind::WarnIndent => MagicCommentKind::WARN_INDENT,
             lib_ruby_parser::source::MagicCommentKind::ShareableContstantValue => {
-                MagicCommentKind_SHAREABLE_CONSTANT_VALUE
+                MagicCommentKind::SHAREABLE_CONSTANT_VALUE
             }
         };
         unsafe {

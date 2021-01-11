@@ -40,9 +40,9 @@ namespace lib_ruby_parser
 
     extern "C"
     {
-        Diagnostic *make_diagnostic(ErrorLevel level, char *message, size_t message_len, Range *range)
+        Diagnostic *make_diagnostic(ErrorLevel level, char *message, Range *range)
         {
-            return new Diagnostic(level, char_ptr_to_string(message, message_len), std::unique_ptr<Range>(range));
+            return new Diagnostic(level, char_ptr_to_string(message), std::unique_ptr<Range>(range));
         }
     }
 } // namespace lib_ruby_parser

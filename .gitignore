@@ -1,7 +1,8 @@
 target/
-includes/gen.h
-includes/make.h
-includes/bindings.h
+includes/node.h
+includes/node.cpp
+includes/make_node.h
+includes/make_node.cpp
 lib-ruby-parser-cpp-bindings/target
 lib-ruby-parser-cpp-bindings/src/bindings.rs
 lib-ruby-parser-cpp-bindings/src/cpp_from_rust_gen.rs
