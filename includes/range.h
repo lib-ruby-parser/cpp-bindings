@@ -17,21 +17,9 @@ namespace lib_ruby_parser
         Range(const Range &) = delete;
         explicit Range(size_t begin_pos, size_t end_pos);
 
-        inline bool operator==(const Range &other)
-        {
-            return (begin_pos == other.begin_pos) && (end_pos == other.end_pos);
-        }
-
-        inline bool operator!=(const Range &other)
-        {
-            return !(*this == other);
-        }
-
-        inline size_t size()
-        {
-            return end_pos - begin_pos;
-        }
-
+        bool operator==(const Range &other);
+        bool operator!=(const Range &other);
+        size_t size();
         std::string source(const std::string &input);
     };
 

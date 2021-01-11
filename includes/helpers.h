@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 #include "node.h"
 
 namespace lib_ruby_parser

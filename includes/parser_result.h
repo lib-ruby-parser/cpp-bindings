@@ -2,22 +2,14 @@
 #define LIB_RUBY_PARSER_PARSER_RESULT_H
 
 #include <string>
+#include <memory>
+#include <cstddef>
 #include "node.h"
 #include "token.h"
 #include "diagnostic.h"
 #include "comment.h"
 #include "magic_comment.h"
 #include "parser_options.h"
-
-namespace lib_ruby_parser
-{
-    class ParserResult;
-}
-
-extern "C"
-{
-    lib_ruby_parser::ParserResult *parse(const char *code, size_t len, lib_ruby_parser::ParserOptions *options);
-}
 
 namespace lib_ruby_parser
 {
@@ -31,12 +23,7 @@ namespace lib_ruby_parser
             std::vector<Diagnostic> diagnostics,
             std::vector<Comment> comments,
             std::vector<MagicComment> magic_comments,
-            std::string input) : ast(std::move(ast)),
-                                 tokens(std::move(tokens)),
-                                 diagnostics(std::move(diagnostics)),
-                                 comments(std::move(comments)),
-                                 magic_comments(std::move(magic_comments)),
-                                 input(input) {}
+            std::string input);
 
         std::unique_ptr<Node> ast;
         std::vector<Token> tokens;
@@ -75,25 +62,10 @@ namespace lib_ruby_parser
         };
     }
 
-    std::vector<Token> tokens_vec_to_cpp_vec(TokenVec tokens)
-    {
-        return ptr_to_vec<Token>(tokens.list, tokens.length);
-    }
-
-    std::vector<Diagnostic> diagnostics_vec_to_cpp_vec(DiagnosticVec diagnostics)
-    {
-        return ptr_to_vec<Diagnostic>(diagnostics.list, diagnostics.length);
-    }
-
-    std::vector<Comment> comments_vec_to_cpp_vec(CommentVec comments)
-    {
-        return ptr_to_vec<Comment>(comments.list, comments.length);
-    }
-
-    std::vector<MagicComment> magic_comments_vec_to_cpp_vec(MagicCommentVec magic_comments)
-    {
-        return ptr_to_vec<MagicComment>(magic_comments.list, magic_comments.length);
-    }
+    // std::vector<Token> tokens_vec_to_cpp_vec(TokenVec tokens);
+    // std::vector<Diagnostic> diagnostics_vec_to_cpp_vec(DiagnosticVec diagnostics);
+    // std::vector<Comment> comments_vec_to_cpp_vec(CommentVec comments);
+    // std::vector<MagicComment> magic_comments_vec_to_cpp_vec(MagicCommentVec magic_comments);
 
     ParserResult *make_parser_result(
         Node *ast,
@@ -101,21 +73,12 @@ namespace lib_ruby_parser
         DiagnosticVec diagnostics,
         CommentVec comments,
         MagicCommentVec magic_comments,
-        char *input)
-    {
-        return new ParserResult(
-            std::unique_ptr<Node>(ast),
-            tokens_vec_to_cpp_vec(tokens),
-            diagnostics_vec_to_cpp_vec(diagnostics),
-            comments_vec_to_cpp_vec(comments),
-            magic_comments_vec_to_cpp_vec(magic_comments),
-            char_ptr_to_string(input));
-    }
-
-    std::unique_ptr<ParserResult> ParserResult::from_source(std::string source, ParserOptions options)
-    {
-        return std::unique_ptr<ParserResult>(parse(source.c_str(), source.length(), &options));
-    }
+        char *input);
 } // namespace lib_ruby_parser
+
+extern "C"
+{
+    lib_ruby_parser::ParserResult *parse(const char *code, size_t len, lib_ruby_parser::ParserOptions *options);
+}
 
 #endif // LIB_RUBY_PARSER_PARSER_RESULT_H

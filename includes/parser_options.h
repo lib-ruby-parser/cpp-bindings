@@ -2,8 +2,7 @@
 #define LIB_RUBY_PARSER_PARSER_OPTIONS_H
 
 #include <string>
-#include <cstring>
-#include <iostream>
+#include <memory>
 #include "custom_decoder.h"
 #include "token_rewriter.h"
 

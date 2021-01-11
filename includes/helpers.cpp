@@ -1,5 +1,3 @@
-#include <vector>
-#include <string>
 #include "helpers.h"
 
 namespace lib_ruby_parser

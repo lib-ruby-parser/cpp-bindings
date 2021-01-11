@@ -2,6 +2,7 @@
 #define LIB_RUBY_PARSER_TOKEN_H
 
 #include <string>
+#include <cstddef>
 #include "helpers.h"
 #include <iostream>
 
@@ -19,8 +20,8 @@ namespace lib_ruby_parser
         explicit Loc(size_t begin, size_t end);
         friend std::ostream &operator<<(std::ostream &os, const Loc &loc);
 
-        inline bool operator==(const Loc &other);
-        inline bool operator!=(const Loc &other);
+        bool operator==(const Loc &other);
+        bool operator!=(const Loc &other);
     };
 
     class Token
@@ -40,8 +41,8 @@ namespace lib_ruby_parser
 
         friend std::ostream &operator<<(std::ostream &os, const Token &token);
 
-        inline bool operator==(const Token &other);
-        inline bool operator!=(const Token &other);
+        bool operator==(const Token &other);
+        bool operator!=(const Token &other);
 
         std::string name();
     };

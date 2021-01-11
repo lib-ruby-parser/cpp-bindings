@@ -14,12 +14,12 @@ namespace lib_ruby_parser
         return os;
     }
 
-    inline bool Loc::operator==(const Loc &other)
+    bool Loc::operator==(const Loc &other)
     {
         return (begin == other.begin) && (end == other.end);
     }
 
-    inline bool Loc::operator!=(const Loc &other)
+    bool Loc::operator!=(const Loc &other)
     {
         return (begin != other.begin) || (end != other.end);
     }
@@ -48,12 +48,12 @@ namespace lib_ruby_parser
         return os;
     }
 
-    inline bool Token::operator==(const Token &other)
+    bool Token::operator==(const Token &other)
     {
         return (token_type == other.token_type) && (token_value == other.token_value) && (*(loc.get()) == *(other.loc.get()));
     }
 
-    inline bool Token::operator!=(const Token &other)
+    bool Token::operator!=(const Token &other)
     {
         return !(*this == other);
     }

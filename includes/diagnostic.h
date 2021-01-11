@@ -2,8 +2,8 @@
 #define LIB_RUBY_PARSER_DIAGNOSTIC_H
 
 #include <string>
+#include <memory>
 #include "range.h"
-#include "helpers.h"
 
 namespace lib_ruby_parser
 {
@@ -25,25 +25,15 @@ namespace lib_ruby_parser
         Diagnostic(const Diagnostic &) = delete;
         explicit Diagnostic(ErrorLevel level,
                             std::string message,
-                            std::unique_ptr<Range> range) : level(level), message(message), range(std::move(range)) {}
+                            std::unique_ptr<Range> range);
 
-        inline bool operator==(const Diagnostic &other)
-        {
-            return (level == other.level) && (message == other.message) && (*(range.get()) == *(other.range.get()));
-        }
-
-        inline bool operator!=(const Diagnostic &other)
-        {
-            return !(*this == other);
-        }
+        bool operator==(const Diagnostic &other);
+        bool operator!=(const Diagnostic &other);
     };
 
     extern "C"
     {
-        Diagnostic *make_diagnostic(ErrorLevel level, char *message, Range *range)
-        {
-            return new Diagnostic(level, char_ptr_to_string(message), std::unique_ptr<Range>(range));
-        }
+        Diagnostic *make_diagnostic(ErrorLevel level, char *message, Range *range);
     }
 } // namespace lib_ruby_parser
 

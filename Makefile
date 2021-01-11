@@ -25,6 +25,10 @@ $(TARGET_DIR)/comment.o: includes/comment.h includes/comment.cpp
 	$(CXX) includes/comment.cpp $(CC_DEFAULT_FLAGS) -c -o $(TARGET_DIR)/comment.o
 OBJECTS += $(TARGET_DIR)/comment.o
 
+$(TARGET_DIR)/diagnostic.o: includes/diagnostic.h includes/diagnostic.cpp
+	$(CXX) includes/diagnostic.cpp $(CC_DEFAULT_FLAGS) -c -o $(TARGET_DIR)/diagnostic.o
+OBJECTS += $(TARGET_DIR)/diagnostic.o
+
 $(TARGET_DIR)/helpers.o: includes/helpers.h includes/helpers.cpp
 	$(CXX) includes/helpers.cpp $(CC_DEFAULT_FLAGS) -c -o $(TARGET_DIR)/helpers.o
 OBJECTS += $(TARGET_DIR)/helpers.o
@@ -33,6 +37,10 @@ $(TARGET_DIR)/node.o: includes/node.h includes/node.cpp
 	$(CXX) includes/node.cpp $(CC_DEFAULT_FLAGS) -c -o $(TARGET_DIR)/node.o
 OBJECTS += $(TARGET_DIR)/node.o
 
+$(TARGET_DIR)/magic_comment.o: includes/magic_comment.h includes/magic_comment.cpp
+	$(CXX) includes/magic_comment.cpp $(CC_DEFAULT_FLAGS) -c -o $(TARGET_DIR)/magic_comment.o
+OBJECTS += $(TARGET_DIR)/magic_comment.o
+
 $(TARGET_DIR)/make_node.o: includes/make_node.h includes/make_node.cpp
 	$(CXX) includes/make_node.cpp $(CC_DEFAULT_FLAGS) -c -o $(TARGET_DIR)/make_node.o
 OBJECTS += $(TARGET_DIR)/make_node.o
@@ -40,6 +48,10 @@ OBJECTS += $(TARGET_DIR)/make_node.o
 $(TARGET_DIR)/parser_options.o: includes/parser_options.h includes/parser_options.cpp
 	$(CXX) includes/parser_options.cpp $(CC_DEFAULT_FLAGS) -c -o $(TARGET_DIR)/parser_options.o
 OBJECTS += $(TARGET_DIR)/parser_options.o
+
+$(TARGET_DIR)/parser_result.o: includes/parser_result.h includes/parser_result.cpp
+	$(CXX) includes/parser_result.cpp $(CC_DEFAULT_FLAGS) -c -o $(TARGET_DIR)/parser_result.o
+OBJECTS += $(TARGET_DIR)/parser_result.o
 
 $(TARGET_DIR)/range.o: includes/range.h includes/range.cpp
 	$(CXX) includes/range.cpp $(CC_DEFAULT_FLAGS) -c -o $(TARGET_DIR)/range.o
@@ -50,10 +62,7 @@ $(TARGET_DIR)/token.o: includes/token.h includes/token.cpp
 OBJECTS += $(TARGET_DIR)/token.o
 
 HEADERS = includes/custom_decoder.h \
-	includes/diagnostic.h \
 	includes/lib-ruby-parser.h \
-	includes/magic_comment.h \
-	includes/parser_result.h \
 	includes/token_rewriter.h
 
 LIB_RUBY_PARSER_O = $(TARGET_DIR)/lib-ruby-parser.o

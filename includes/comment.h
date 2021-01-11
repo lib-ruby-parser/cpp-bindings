@@ -1,8 +1,8 @@
 #ifndef LIB_RUBY_PARSER_COMMENT_H
 #define LIB_RUBY_PARSER_COMMENT_H
 
+#include <memory>
 #include "range.h"
-#include "helpers.h"
 
 namespace lib_ruby_parser
 {
@@ -24,15 +24,8 @@ namespace lib_ruby_parser
         Comment(const Comment &) = delete;
         explicit Comment(CommentType kind, std::unique_ptr<Range> location);
 
-        inline bool operator==(const Comment &other)
-        {
-            return (kind == other.kind) && (*(location.get()) == *(other.location.get()));
-        }
-
-        inline bool operator!=(const Comment &other)
-        {
-            return !(*this == other);
-        }
+        bool operator==(const Comment &other);
+        bool operator!=(const Comment &other);
     };
 
     extern "C"

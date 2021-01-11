@@ -1,8 +1,8 @@
 #ifndef LIB_RUBY_PARSER_MAGIC_COMMENT_H
 #define LIB_RUBY_PARSER_MAGIC_COMMENT_H
 
+#include <memory>
 #include "range.h"
-#include "helpers.h"
 
 namespace lib_ruby_parser
 {
@@ -26,25 +26,15 @@ namespace lib_ruby_parser
         MagicComment(const MagicComment &) = delete;
         explicit MagicComment(MagicCommentKind kind,
                               std::unique_ptr<Range> key_l,
-                              std::unique_ptr<Range> value_l) : kind(kind), key_l(std::move(key_l)), value_l(std::move(value_l)) {}
+                              std::unique_ptr<Range> value_l);
 
-        inline bool operator==(const MagicComment &other)
-        {
-            return (kind == other.kind) && (*(key_l.get()) == *(other.key_l.get())) && (*(value_l.get()) == *(other.value_l.get()));
-        }
-
-        inline bool operator!=(const MagicComment &other)
-        {
-            return !(*this == other);
-        }
+        bool operator==(const MagicComment &other);
+        bool operator!=(const MagicComment &other);
     };
 
     extern "C"
     {
-        MagicComment *make_magic_comment(MagicCommentKind kind, Range *key_l, Range *value_l)
-        {
-            return new MagicComment(kind, std::unique_ptr<Range>(key_l), std::unique_ptr<Range>(value_l));
-        }
+        MagicComment *make_magic_comment(MagicCommentKind kind, Range *key_l, Range *value_l);
     }
 } // namespace lib_ruby_parser
 

@@ -8,6 +8,16 @@ namespace lib_ruby_parser
         this->location = std::move(location);
     }
 
+    bool Comment::operator==(const Comment &other)
+    {
+        return (kind == other.kind) && (*(location.get()) == *(other.location.get()));
+    }
+
+    bool Comment::operator!=(const Comment &other)
+    {
+        return !(*this == other);
+    }
+
     extern "C"
     {
         Comment *make_comment(CommentType kind, Range *location)
