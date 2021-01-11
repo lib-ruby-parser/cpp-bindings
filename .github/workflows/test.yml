@@ -30,6 +30,8 @@ jobs:
         run: |
           which ${{ matrix.compiler.cc }}
           which ${{ matrix.compiler.cxx }}
+          ls -l $(dirname $(which clang))
+          die
 
       - name: install valgrind
         run: |

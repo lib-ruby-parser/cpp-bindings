@@ -55,7 +55,7 @@ HEADERS = includes/custom_decoder.h \
 
 LIB_RUBY_PARSER_O = $(TARGET_DIR)/lib-ruby-parser.o
 $(LIB_RUBY_PARSER_O): $(DEBUG_RUST_OBJ) $(OBJECTS)
-	ld -Ur $(DEBUG_RUST_OBJ) $(OBJECTS) -o $(LIB_RUBY_PARSER_O)
+	ld -r $(DEBUG_RUST_OBJ) $(OBJECTS) -o $(LIB_RUBY_PARSER_O)
 
 # // files
 
