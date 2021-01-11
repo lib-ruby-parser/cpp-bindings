@@ -39,7 +39,7 @@ namespace lib_ruby_parser
 
         ~ParserOptions()
         {
-            delete buffer_name;
+            delete[] buffer_name;
             delete custom_decoder;
             delete token_rewriter;
         }
