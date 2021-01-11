@@ -17,21 +17,20 @@ jobs:
       fail-fast: false
       matrix:
         compiler:
-          - { cc: clang-8,  cxx: clang++-8 }
-          - { cc: clang-9,  cxx: clang++-9 }
-          - { cc: clang-10, cxx: clang++-10 }
-          - { cc: gcc-7,    cxx: g++-7 }
-          - { cc: gcc-8,    cxx: g++-8 }
-          - { cc: gcc-9,    cxx: g++-9 }
-          - { cc: gcc-10,   cxx: g++-10 }
+          - { cc: clang-8,  cxx: clang++-8,  ld: ld.lld-8 }
+          - { cc: clang-9,  cxx: clang++-9,  ld: ld.lld-9 }
+          - { cc: clang-10, cxx: clang++-10, ld: ld.lld-10 }
+          - { cc: gcc-7,    cxx: g++-7,      ld: ld.lld-10 }
+          - { cc: gcc-8,    cxx: g++-8,      ld: ld.lld-10 }
+          - { cc: gcc-9,    cxx: g++-9,      ld: ld.lld-10 }
+          - { cc: gcc-10,   cxx: g++-10,     ld: ld.lld-10 }
 
     steps:
       - name: make sure compiler are available
         run: |
           which ${{ matrix.compiler.cc }}
           which ${{ matrix.compiler.cxx }}
-          ls -l $(dirname $(which clang))
-          die
+          which ${{ matrix.compiler.ld }}
 
       - name: install valgrind
         run: |
@@ -53,4 +52,4 @@ jobs:
       - name: run tests
         run: |
           mkdir -p target
-          CC=${{ matrix.compiler.cc }} CXX=${{ matrix.compiler.cxx }} make test-all
+          LD=${{ matrix.compiler.ld }} CC=${{ matrix.compiler.cc }} CXX=${{ matrix.compiler.cxx }} make test-all
