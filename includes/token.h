@@ -17,21 +17,10 @@ namespace lib_ruby_parser
         Loc(Loc &&) = default;
         Loc(const Loc &) = delete;
         explicit Loc(size_t begin, size_t end);
-        friend std::ostream &operator<<(std::ostream &os, const Loc &loc)
-        {
-            os << loc.begin << "..." << loc.end;
-            return os;
-        }
+        friend std::ostream &operator<<(std::ostream &os, const Loc &loc);
 
-        inline bool operator==(const Loc &other)
-        {
-            return (begin == other.begin) && (end == other.end);
-        }
-
-        inline bool operator!=(const Loc &other)
-        {
-            return (begin != other.begin) || (end != other.end);
-        }
+        inline bool operator==(const Loc &other);
+        inline bool operator!=(const Loc &other);
     };
 
     class Token
@@ -49,21 +38,10 @@ namespace lib_ruby_parser
             std::string token_value,
             std::unique_ptr<Loc> loc);
 
-        friend std::ostream &operator<<(std::ostream &os, const Token &token)
-        {
-            os << "[" << token.token_type << ", " << token.token_value << ", " << *(token.loc.get()) << "]";
-            return os;
-        }
+        friend std::ostream &operator<<(std::ostream &os, const Token &token);
 
-        inline bool operator==(const Token &other)
-        {
-            return (token_type == other.token_type) && (token_value == other.token_value) && (*(loc.get()) == *(other.loc.get()));
-        }
-
-        inline bool operator!=(const Token &other)
-        {
-            return !(*this == other);
-        }
+        inline bool operator==(const Token &other);
+        inline bool operator!=(const Token &other);
 
         std::string name();
     };

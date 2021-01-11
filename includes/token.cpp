@@ -8,6 +8,22 @@ namespace lib_ruby_parser
         this->end = end;
     }
 
+    std::ostream &operator<<(std::ostream &os, const Loc &loc)
+    {
+        os << loc.begin << "..." << loc.end;
+        return os;
+    }
+
+    inline bool Loc::operator==(const Loc &other)
+    {
+        return (begin == other.begin) && (end == other.end);
+    }
+
+    inline bool Loc::operator!=(const Loc &other)
+    {
+        return (begin != other.begin) || (end != other.end);
+    }
+
     Token::Token(
         int token_type,
         std::string token_value,
@@ -24,6 +40,22 @@ namespace lib_ruby_parser
         std::string result = std::string(ptr);
         free(ptr);
         return result;
+    }
+
+    std::ostream &operator<<(std::ostream &os, const Token &token)
+    {
+        os << "[" << token.token_type << ", " << token.token_value << ", " << *(token.loc.get()) << "]";
+        return os;
+    }
+
+    inline bool Token::operator==(const Token &other)
+    {
+        return (token_type == other.token_type) && (token_value == other.token_value) && (*(loc.get()) == *(other.loc.get()));
+    }
+
+    inline bool Token::operator!=(const Token &other)
+    {
+        return !(*this == other);
     }
 
     extern "C"
