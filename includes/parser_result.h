@@ -16,7 +16,7 @@ namespace lib_ruby_parser
 
 extern "C"
 {
-    extern lib_ruby_parser::ParserResult *parse(const char *code, size_t len, lib_ruby_parser::ParserOptions *options);
+    lib_ruby_parser::ParserResult *parse(const char *code, size_t len, lib_ruby_parser::ParserOptions *options);
 }
 
 namespace lib_ruby_parser
