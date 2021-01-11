@@ -3,6 +3,7 @@
 
 #include <string>
 #include <cstring>
+#include <iostream>
 #include "custom_decoder.h"
 #include "token_rewriter.h"
 
@@ -11,45 +12,27 @@ namespace lib_ruby_parser
     class ParserOptions
     {
     public:
-        ParserOptions()
-        {
-            buffer_name = new char[7];
-            memcpy(buffer_name, "(eval)", 6);
-            buffer_name[6] = '\0';
-            debug = false;
-            custom_decoder = nullptr;
-            token_rewriter = nullptr;
-            record_tokens = false;
-        }
+        explicit ParserOptions();
+        ParserOptions(const ParserOptions &options) = delete;
 
         explicit ParserOptions(
-            std::string buffer_name_,
+            std::string buffer_name,
             bool debug,
-            CustomDecoder *custom_decoder,
-            TokenRewriter *token_rewriter,
-            bool record_tokens) : debug(debug),
-                                  custom_decoder(custom_decoder),
-                                  token_rewriter(token_rewriter),
-                                  record_tokens(record_tokens)
-        {
-            buffer_name = new char[buffer_name_.size() + 1];
-            std::copy(buffer_name_.begin(), buffer_name_.end(), buffer_name);
-            buffer_name[buffer_name_.size()] = '\0';
-        }
+            std::unique_ptr<CustomDecoder> custom_decoder,
+            std::unique_ptr<TokenRewriter> token_rewriter,
+            bool record_tokens);
 
-        ~ParserOptions()
-        {
-            delete[] buffer_name;
-            delete custom_decoder;
-            delete token_rewriter;
-        }
-
-        char *buffer_name;
+        std::string buffer_name;
         bool debug;
-        CustomDecoder *custom_decoder;
-        TokenRewriter *token_rewriter;
+        std::unique_ptr<CustomDecoder> custom_decoder;
+        std::unique_ptr<TokenRewriter> token_rewriter;
         bool record_tokens;
     };
+
+    extern "C"
+    {
+        const char *parser_options_buffer_name(ParserOptions *options);
+    }
 } // namespace lib_ruby_parser
 
 #endif // LIB_RUBY_PARSER_PARSER_OPTIONS_H

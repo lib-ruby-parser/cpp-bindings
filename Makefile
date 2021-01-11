@@ -37,6 +37,10 @@ $(TARGET_DIR)/make_node.o: includes/make_node.h includes/make_node.cpp
 	$(CXX) includes/make_node.cpp $(CC_DEFAULT_FLAGS) -c -o $(TARGET_DIR)/make_node.o
 OBJECTS += $(TARGET_DIR)/make_node.o
 
+$(TARGET_DIR)/parser_options.o: includes/parser_options.h includes/parser_options.cpp
+	$(CXX) includes/parser_options.cpp $(CC_DEFAULT_FLAGS) -c -o $(TARGET_DIR)/parser_options.o
+OBJECTS += $(TARGET_DIR)/parser_options.o
+
 $(TARGET_DIR)/range.o: includes/range.h includes/range.cpp
 	$(CXX) includes/range.cpp $(CC_DEFAULT_FLAGS) -c -o $(TARGET_DIR)/range.o
 OBJECTS += $(TARGET_DIR)/range.o
@@ -49,7 +53,6 @@ HEADERS = includes/custom_decoder.h \
 	includes/diagnostic.h \
 	includes/lib-ruby-parser.h \
 	includes/magic_comment.h \
-	includes/parser_options.h \
 	includes/parser_result.h \
 	includes/token_rewriter.h
 

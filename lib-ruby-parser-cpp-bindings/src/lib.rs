@@ -28,9 +28,11 @@ pub extern "C" fn parse(
     options: *mut ParserOptions,
 ) -> *const ParserResult {
     let input = unsafe { std::slice::from_raw_parts(input, length) };
-    let options = unsafe { options.as_ref() }
-        .map(|options| lib_ruby_parser::ParserOptions::from(options))
-        .unwrap_or_else(|| lib_ruby_parser::ParserOptions::default());
+    let options = if options.is_null() {
+        lib_ruby_parser::ParserOptions::default()
+    } else {
+        convert_parser_options(options)
+    };
     let rust_parser_result = lib_ruby_parser::Parser::new(input, options).do_parse();
     CppFromRust::convert(rust_parser_result)
 }
@@ -40,20 +42,28 @@ pub extern "C" fn token_name(id: i32) -> *mut i8 {
     helpers::string_to_char_ptr(lib_ruby_parser::token_name(id).to_owned())
 }
 
-impl From<&ParserOptions> for lib_ruby_parser::ParserOptions {
-    fn from(options: &ParserOptions) -> Self {
-        let buffer_name = unsafe { std::ffi::CStr::from_ptr(options.buffer_name) }
-            .to_owned()
-            .into_string()
-            .unwrap();
-        let debug = options.debug;
-        let record_tokens = options.record_tokens;
-        Self {
-            buffer_name,
-            debug,
-            decoder: lib_ruby_parser::source::CustomDecoder::default(),
-            token_rewriter: None,
-            record_tokens,
-        }
+fn convert_parser_options(options: *mut ParserOptions) -> lib_ruby_parser::ParserOptions {
+    if options.is_null() {
+        return lib_ruby_parser::ParserOptions::default();
+    }
+
+    let buffer_name = unsafe {
+        let ptr = bindings::parser_options_buffer_name(options);
+        std::ffi::CStr::from_ptr(ptr)
+    }
+    .to_owned()
+    .into_string()
+    .unwrap();
+
+    let options = unsafe { options.as_ref() }.unwrap();
+
+    let debug = options.debug;
+    let record_tokens = options.record_tokens;
+    lib_ruby_parser::ParserOptions {
+        buffer_name,
+        debug,
+        decoder: lib_ruby_parser::source::CustomDecoder::default(),
+        token_rewriter: None,
+        record_tokens,
     }
 }
