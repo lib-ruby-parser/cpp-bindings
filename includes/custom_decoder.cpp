@@ -1,9 +1,10 @@
+#include <cstring>
 #include "custom_decoder.h"
 #include "helpers.h"
 
 namespace lib_ruby_parser
 {
-    CustomDecoder::Result CustomDecoder::Result::Ok(std::string output)
+    CustomDecoder::Result CustomDecoder::Result::Ok(Bytes output)
     {
         CustomDecoder::Result result;
         result.success = true;
@@ -41,15 +42,16 @@ namespace lib_ruby_parser
 
         CustomDecoderResult rewrite(CustomDecoder *decoder, const char *encoding_ptr, size_t encoding_length, const char *input_ptr, size_t input_length)
         {
-            auto encoding = std::string(encoding_ptr, encoding_length);
-            auto input = std::string(input_ptr, input_length);
+            auto encoding = std::string((char *)encoding_ptr, encoding_length);
+            auto input = Bytes(input_ptr, input_length);
 
             auto cpp_result = decoder->rewrite(std::move(encoding), std::move(input));
 
             if (cpp_result.success)
             {
-                auto output = string_to_char_ptr(cpp_result.output);
-                auto length = cpp_result.output.length();
+                auto length = cpp_result.output.size();
+                auto output = (char *)malloc(length);
+                memcpy(output, cpp_result.output.ptr(), length);
                 return CustomDecoderResult::Ok(output, length);
             }
             else

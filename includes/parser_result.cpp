@@ -18,9 +18,9 @@ namespace lib_ruby_parser
         this->input = input;
     }
 
-    std::unique_ptr<ParserResult> ParserResult::from_source(std::string source, ParserOptions options)
+    std::unique_ptr<ParserResult> ParserResult::from_source(Bytes source, ParserOptions options)
     {
-        return std::unique_ptr<ParserResult>(parse(source.c_str(), source.length(), &options));
+        return std::unique_ptr<ParserResult>(parse(source.ptr(), source.size(), &options));
     }
 
     std::vector<Token> tokens_vec_to_cpp_vec(TokenVec tokens)

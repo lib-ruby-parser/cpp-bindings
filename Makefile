@@ -21,6 +21,10 @@ CC_RELEASE_FLAGS = $(CC_DEFAULT_FLAGS) $(LINK_FLAGS) -O2
 # files
 OBJECTS =
 
+$(TARGET_DIR)/bytes.o: includes/bytes.h includes/bytes.cpp
+	$(CXX) includes/bytes.cpp $(CC_DEFAULT_FLAGS) -c -o $(TARGET_DIR)/bytes.o
+OBJECTS += $(TARGET_DIR)/bytes.o
+
 $(TARGET_DIR)/comment.o: includes/comment.h includes/comment.cpp
 	$(CXX) includes/comment.cpp $(CC_DEFAULT_FLAGS) -c -o $(TARGET_DIR)/comment.o
 OBJECTS += $(TARGET_DIR)/comment.o

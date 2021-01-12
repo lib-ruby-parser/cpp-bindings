@@ -15,7 +15,7 @@ namespace lib_ruby_parser
 
         Range() = delete;
         Range(Range &&) = default;
-        Range(const Range &) = delete;
+        Range(const Range &) = default;
         explicit Range(size_t begin_pos, size_t end_pos);
 
         bool operator==(const Range &other);

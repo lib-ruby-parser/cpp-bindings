@@ -2,7 +2,9 @@
 #define LIB_RUBY_PARSER_TOKEN_CUSTOM_DECODER_H
 
 #include <string>
+#include <vector>
 #include "range.h"
+#include "bytes.h"
 
 namespace lib_ruby_parser
 {
@@ -13,18 +15,18 @@ namespace lib_ruby_parser
         {
         public:
             bool success;
-            std::string output;
+            Bytes output;
             std::string error_message;
 
             Result() = default;
             Result(Result &&) = default;
             Result(const Result &) = delete;
 
-            static Result Ok(std::string output);
+            static Result Ok(Bytes output);
             static Result Error(std::string error_message);
         };
 
-        virtual Result rewrite(std::string encoding, std::string input) = 0;
+        virtual Result rewrite(std::string encoding, Bytes input) = 0;
         virtual ~CustomDecoder(){};
     };
 

@@ -37,7 +37,7 @@ void test_node()
 
 void test_parse()
 {
-    auto result = ParserResult::from_source(std::string("42"), ParserOptions());
+    auto result = ParserResult::from_source(Bytes("42"), ParserOptions());
 
     assert(result->ast != nullptr);
     auto ast = std::move(result->ast);
@@ -62,7 +62,7 @@ void test_tokens()
     options.buffer_name = "(test_tokens)";
     options.record_tokens = true;
 
-    auto result = ParserResult::from_source(std::string("42"), std::move(options));
+    auto result = ParserResult::from_source(Bytes("42"), std::move(options));
 
     assert(result->tokens.size() == 2);
 
@@ -72,7 +72,7 @@ void test_tokens()
 
 void test_diagnostics()
 {
-    auto result = ParserResult::from_source(std::string("self = 1; nil = 2"), ParserOptions());
+    auto result = ParserResult::from_source(Bytes("self = 1; nil = 2"), ParserOptions());
 
     assert(result->diagnostics.size() == 2);
 
@@ -89,7 +89,7 @@ void test_diagnostics()
 
 void test_comments()
 {
-    auto result = ParserResult::from_source(std::string("# foo\n# bar\nbaz"), ParserOptions());
+    auto result = ParserResult::from_source(Bytes("# foo\n# bar\nbaz"), ParserOptions());
 
     assert(result->comments.size() == 2);
 
@@ -104,7 +104,7 @@ void test_comments()
 void test_magic_comments()
 {
     auto result = ParserResult::from_source(
-        std::string("# warn-indent: true\n# frozen-string-literal: true\n# encoding: utf-8\n"),
+        Bytes("# warn-indent: true\n# frozen-string-literal: true\n# encoding: utf-8\n"),
         ParserOptions());
 
     assert(result->magic_comments.size() == 3);
@@ -125,7 +125,7 @@ void test_magic_comments()
 
 void test_range_source()
 {
-    auto result = ParserResult::from_source(std::string("100 + 200"), ParserOptions());
+    auto result = ParserResult::from_source(Bytes("100 + 200"), ParserOptions());
     auto send = result->ast->get<Send>();
     auto recv = send->recv->get<Int>();
     auto arg = send->args[0].get<Int>();
@@ -141,7 +141,7 @@ void test_parse_all()
     std::string source((std::istreambuf_iterator<char>(file)),
                        std::istreambuf_iterator<char>());
 
-    auto result = ParserResult::from_source(source, ParserOptions());
+    auto result = ParserResult::from_source(Bytes(source), ParserOptions());
     assert(result->ast != nullptr);
 }
 
@@ -149,14 +149,14 @@ class DummyDecoderState
 {
 public:
     std::string encoding;
-    std::string input;
+    Bytes input;
 };
 
 class DummyDecoder : public CustomDecoder
 {
 public:
     bool return_error;
-    std::string output_to_return;
+    Bytes output_to_return;
     std::string error_to_return;
 
     std::shared_ptr<DummyDecoderState> state;
@@ -164,7 +164,7 @@ public:
     DummyDecoder()
     {
         this->return_error = false;
-        this->output_to_return = "";
+        this->output_to_return = Bytes("");
         this->error_to_return = "";
         this->state = std::make_shared<DummyDecoderState>();
     }
@@ -178,18 +178,18 @@ public:
         return result;
     }
 
-    static std::unique_ptr<DummyDecoder> AlwaysRewriteTo(std::string output_to_return)
+    static std::unique_ptr<DummyDecoder> AlwaysRewriteTo(Bytes output_to_return)
     {
         auto result = std::make_unique<DummyDecoder>();
         result->return_error = false;
-        result->output_to_return = output_to_return;
+        result->output_to_return = std::move(output_to_return);
         return result;
     }
 
-    virtual CustomDecoder::Result rewrite(std::string encoding, std::string input)
+    virtual CustomDecoder::Result rewrite(std::string encoding, Bytes input)
     {
         this->state->encoding = encoding;
-        this->state->input = input;
+        this->state->input = input.clone();
 
         if (return_error)
         {
@@ -197,7 +197,7 @@ public:
         }
         else
         {
-            return Result::Ok(output_to_return);
+            return Result::Ok(std::move(output_to_return));
         }
     }
 };
@@ -205,13 +205,13 @@ public:
 void test_custom_decoder_ok()
 {
     ParserOptions options;
-    auto decoder = DummyDecoder::AlwaysRewriteTo("# encoding: foo\n3 + 5");
+    auto decoder = DummyDecoder::AlwaysRewriteTo(Bytes("# encoding: foo\n3 + 5"));
     auto state = decoder->state;
 
     options.custom_decoder = std::move(decoder);
     options.record_tokens = true;
-    std::string input = "# encoding: bar\n2 + 2";
-    auto result = ParserResult::from_source(input, std::move(options));
+    auto input = Bytes("# encoding: bar\n2 + 2");
+    auto result = ParserResult::from_source(input.clone(), std::move(options));
 
     auto ast = std::move(result->ast);
     assert(ast->is<Send>());
@@ -232,8 +232,8 @@ void test_custom_decoder_error()
     auto state = decoder->state;
 
     options.custom_decoder = std::move(decoder);
-    std::string input = "# encoding: bar\n2 + 3";
-    auto result = ParserResult::from_source(input, std::move(options));
+    auto input = Bytes("# encoding: bar\n2 + 3");
+    auto result = ParserResult::from_source(input.clone(), std::move(options));
 
     assert(result->ast == nullptr);
     assert(result->diagnostics.size() == 1);

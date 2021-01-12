@@ -99,12 +99,13 @@ fn convert_custom_decoder(
                 )
             }
             .to_vec();
-            unsafe { free_str(cpp_result.output) };
+            unsafe { free_str(cpp_result.output as *mut i8) };
             Ok(output)
         } else {
-            let error_message = unsafe { std::ffi::CString::from_raw(cpp_result.error_message) }
-                .to_string_lossy()
-                .into_owned();
+            let error_message =
+                unsafe { std::ffi::CString::from_raw(cpp_result.error_message as *mut i8) }
+                    .to_string_lossy()
+                    .into_owned();
             Err(lib_ruby_parser::source::InputError::DecodingError(
                 error_message,
             ))

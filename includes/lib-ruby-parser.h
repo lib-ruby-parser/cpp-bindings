@@ -1,6 +1,7 @@
 #ifndef LIB_RUBY_PARSER_H
 #define LIB_RUBY_PARSER_H
 
+#include "bytes.h"
 #include "comment.h"
 #include "custom_decoder.h"
 #include "diagnostic.h"

@@ -4,6 +4,7 @@
 #include <string>
 #include <memory>
 #include <cstddef>
+#include "bytes.h"
 #include "node.h"
 #include "token.h"
 #include "diagnostic.h"
@@ -32,7 +33,7 @@ namespace lib_ruby_parser
         std::vector<MagicComment> magic_comments;
         std::string input;
 
-        static std::unique_ptr<ParserResult> from_source(std::string source, ParserOptions options);
+        static std::unique_ptr<ParserResult> from_source(Bytes source, ParserOptions options);
     };
 
     extern "C"
