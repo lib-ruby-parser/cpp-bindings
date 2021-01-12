@@ -58,7 +58,11 @@ void test_parse()
 
 void test_tokens()
 {
-    auto result = ParserResult::from_source(std::string("42"), ParserOptions("(eval)", false, nullptr, nullptr, true));
+    ParserOptions options;
+    options.buffer_name = "(test_tokens)";
+    options.record_tokens = true;
+
+    auto result = ParserResult::from_source(std::string("42"), std::move(options));
 
     assert(result->tokens.size() == 2);
 
@@ -141,6 +145,108 @@ void test_parse_all()
     assert(result->ast != nullptr);
 }
 
+class DummyDecoderState
+{
+public:
+    std::string encoding;
+    std::string input;
+};
+
+class DummyDecoder : public CustomDecoder
+{
+public:
+    bool return_error;
+    std::string output_to_return;
+    std::string error_to_return;
+
+    std::shared_ptr<DummyDecoderState> state;
+
+    DummyDecoder()
+    {
+        this->return_error = false;
+        this->output_to_return = "";
+        this->error_to_return = "";
+        this->state = std::make_shared<DummyDecoderState>();
+    }
+    virtual ~DummyDecoder() = default;
+
+    static std::unique_ptr<DummyDecoder> AlwaysFailWith(std::string error_to_return)
+    {
+        auto result = std::make_unique<DummyDecoder>();
+        result->return_error = true;
+        result->error_to_return = error_to_return;
+        return result;
+    }
+
+    static std::unique_ptr<DummyDecoder> AlwaysRewriteTo(std::string output_to_return)
+    {
+        auto result = std::make_unique<DummyDecoder>();
+        result->return_error = false;
+        result->output_to_return = output_to_return;
+        return result;
+    }
+
+    virtual CustomDecoder::Result rewrite(std::string encoding, std::string input)
+    {
+        this->state->encoding = encoding;
+        this->state->input = input;
+
+        if (return_error)
+        {
+            return Result::Error(error_to_return);
+        }
+        else
+        {
+            return Result::Ok(output_to_return);
+        }
+    }
+};
+
+void test_custom_decoder_ok()
+{
+    ParserOptions options;
+    auto decoder = DummyDecoder::AlwaysRewriteTo("# encoding: foo\n3 + 5");
+    auto state = decoder->state;
+
+    options.custom_decoder = std::move(decoder);
+    options.record_tokens = true;
+    std::string input = "# encoding: bar\n2 + 2";
+    auto result = ParserResult::from_source(input, std::move(options));
+
+    auto ast = std::move(result->ast);
+    assert(ast->is<Send>());
+    assert(ast->get<Send>()->recv->is<Int>());
+    assert(ast->get<Send>()->recv->get<Int>()->value == "3");
+    assert(ast->get<Send>()->args.size() == 1);
+    assert(ast->get<Send>()->args[0].is<Int>());
+    assert(ast->get<Send>()->args[0].get<Int>()->value == "5");
+
+    assert(state->input == input);
+    assert(state->encoding == "BAR");
+}
+
+void test_custom_decoder_error()
+{
+    ParserOptions options;
+    auto decoder = DummyDecoder::AlwaysFailWith("test error");
+    auto state = decoder->state;
+
+    options.custom_decoder = std::move(decoder);
+    std::string input = "# encoding: bar\n2 + 3";
+    auto result = ParserResult::from_source(input, std::move(options));
+
+    assert(result->ast == nullptr);
+    assert(result->diagnostics.size() == 1);
+
+    assert(result->diagnostics[0] == Diagnostic(
+                                         ErrorLevel::ERROR,
+                                         std::string("encoding error: DecodingError(\"test error\")"),
+                                         std::make_unique<Range>(12, 15)));
+
+    assert(state->input == input);
+    assert(state->encoding == "BAR");
+}
+
 int main()
 {
     test_range();
@@ -153,6 +259,9 @@ int main()
     test_range_source();
 
     test_parse_all();
+
+    test_custom_decoder_ok();
+    test_custom_decoder_error();
 
     std::cout << "all tests passed.\n";
 }

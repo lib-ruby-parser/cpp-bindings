@@ -25,6 +25,11 @@ namespace lib_ruby_parser
     }
 
     std::string char_ptr_to_string(char *ptr);
+    char *string_to_char_ptr(std::string s);
+    extern "C"
+    {
+        void free_str(char *s);
+    }
 
     std::vector<Node> nodes_vec_to_cpp_vec(NodeVec nodes);
 } // namespace lib_ruby_parser

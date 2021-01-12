@@ -29,6 +29,11 @@ namespace lib_ruby_parser
         return input.substr(begin_pos, size());
     }
 
+    std::ostream &operator<<(std::ostream &os, const Range &range)
+    {
+        return os << "(" << range.begin_pos << "..." << range.end_pos << ")";
+    }
+
     extern "C"
     {
         Range *make_range(size_t begin_pos, size_t end_pos)

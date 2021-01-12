@@ -3,6 +3,7 @@
 
 #include <string>
 #include <memory>
+#include <iostream>
 #include "range.h"
 
 namespace lib_ruby_parser
@@ -29,6 +30,8 @@ namespace lib_ruby_parser
 
         bool operator==(const Diagnostic &other);
         bool operator!=(const Diagnostic &other);
+
+        friend std::ostream &operator<<(std::ostream &os, const Diagnostic &diagnostic);
     };
 
     extern "C"

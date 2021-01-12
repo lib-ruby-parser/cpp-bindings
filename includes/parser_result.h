@@ -62,11 +62,6 @@ namespace lib_ruby_parser
         };
     }
 
-    // std::vector<Token> tokens_vec_to_cpp_vec(TokenVec tokens);
-    // std::vector<Diagnostic> diagnostics_vec_to_cpp_vec(DiagnosticVec diagnostics);
-    // std::vector<Comment> comments_vec_to_cpp_vec(CommentVec comments);
-    // std::vector<MagicComment> magic_comments_vec_to_cpp_vec(MagicCommentVec magic_comments);
-
     ParserResult *make_parser_result(
         Node *ast,
         TokenVec tokens,

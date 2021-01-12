@@ -13,6 +13,7 @@ namespace lib_ruby_parser
     public:
         explicit ParserOptions();
         ParserOptions(const ParserOptions &options) = delete;
+        ParserOptions(ParserOptions &&options) = default;
 
         explicit ParserOptions(
             std::string buffer_name,
@@ -31,6 +32,7 @@ namespace lib_ruby_parser
     extern "C"
     {
         const char *parser_options_buffer_name(ParserOptions *options);
+        CustomDecoder *parser_options_custom_decoder(ParserOptions *options);
     }
 } // namespace lib_ruby_parser
 

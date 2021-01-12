@@ -23,6 +23,11 @@ namespace lib_ruby_parser
         return !(*this == other);
     }
 
+    std::ostream &operator<<(std::ostream &os, const Diagnostic &diagnostic)
+    {
+        return os << diagnostic.level << ": " << diagnostic.message << *(diagnostic.range.get());
+    }
+
     extern "C"
     {
         Diagnostic *make_diagnostic(ErrorLevel level, char *message, Range *range)

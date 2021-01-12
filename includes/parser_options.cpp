@@ -32,5 +32,10 @@ namespace lib_ruby_parser
         {
             return options->buffer_name.c_str();
         }
+
+        CustomDecoder *parser_options_custom_decoder(ParserOptions *options)
+        {
+            return options->custom_decoder.get();
+        }
     }
 } // namespace lib_ruby_parser

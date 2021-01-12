@@ -25,6 +25,10 @@ $(TARGET_DIR)/comment.o: includes/comment.h includes/comment.cpp
 	$(CXX) includes/comment.cpp $(CC_DEFAULT_FLAGS) -c -o $(TARGET_DIR)/comment.o
 OBJECTS += $(TARGET_DIR)/comment.o
 
+$(TARGET_DIR)/custom_decoder.o: includes/custom_decoder.h includes/custom_decoder.cpp
+	$(CXX) includes/custom_decoder.cpp $(CC_DEFAULT_FLAGS) -c -o $(TARGET_DIR)/custom_decoder.o
+OBJECTS += $(TARGET_DIR)/custom_decoder.o
+
 $(TARGET_DIR)/diagnostic.o: includes/diagnostic.h includes/diagnostic.cpp
 	$(CXX) includes/diagnostic.cpp $(CC_DEFAULT_FLAGS) -c -o $(TARGET_DIR)/diagnostic.o
 OBJECTS += $(TARGET_DIR)/diagnostic.o
@@ -61,8 +65,7 @@ $(TARGET_DIR)/token.o: includes/token.h includes/token.cpp
 	$(CXX) includes/token.cpp $(CC_DEFAULT_FLAGS) -c -o $(TARGET_DIR)/token.o
 OBJECTS += $(TARGET_DIR)/token.o
 
-HEADERS = includes/custom_decoder.h \
-	includes/lib-ruby-parser.h \
+HEADERS = includes/lib-ruby-parser.h \
 	includes/token_rewriter.h
 
 LIB_RUBY_PARSER_O = $(TARGET_DIR)/lib-ruby-parser.o

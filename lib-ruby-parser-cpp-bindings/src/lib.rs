@@ -55,15 +55,61 @@ fn convert_parser_options(options: *mut ParserOptions) -> lib_ruby_parser::Parse
     .into_string()
     .unwrap();
 
+    let decoder =
+        convert_custom_decoder(unsafe { bindings::parser_options_custom_decoder(options) });
+
     let options = unsafe { options.as_ref() }.unwrap();
 
     let debug = options.debug;
     let record_tokens = options.record_tokens;
+
     lib_ruby_parser::ParserOptions {
         buffer_name,
         debug,
-        decoder: lib_ruby_parser::source::CustomDecoder::default(),
+        decoder,
         token_rewriter: None,
         record_tokens,
     }
+}
+
+fn convert_custom_decoder(
+    decoder_ptr: *mut CustomDecoder,
+) -> lib_ruby_parser::source::CustomDecoder {
+    if decoder_ptr.is_null() {
+        return lib_ruby_parser::source::CustomDecoder::default();
+    }
+
+    let decode = move |encoding: &str,
+                       input: &[u8]|
+          -> Result<Vec<u8>, lib_ruby_parser::source::InputError> {
+        let cpp_result = unsafe {
+            bindings::rewrite(
+                decoder_ptr,
+                encoding.as_ptr() as *const i8,
+                encoding.len() as size_t,
+                input.as_ptr() as *const i8,
+                input.len() as size_t,
+            )
+        };
+        if cpp_result.success {
+            let output = unsafe {
+                std::slice::from_raw_parts(
+                    cpp_result.output as *mut u8,
+                    cpp_result.output_length as usize,
+                )
+            }
+            .to_vec();
+            unsafe { free_str(cpp_result.output) };
+            Ok(output)
+        } else {
+            let error_message = unsafe { std::ffi::CString::from_raw(cpp_result.error_message) }
+                .to_string_lossy()
+                .into_owned();
+            Err(lib_ruby_parser::source::InputError::DecodingError(
+                error_message,
+            ))
+        }
+    };
+
+    lib_ruby_parser::source::CustomDecoder::new(Box::new(decode))
 }
