@@ -37,5 +37,10 @@ namespace lib_ruby_parser
         {
             return options->custom_decoder.get();
         }
+
+        TokenRewriter *parser_options_token_rewriter(ParserOptions *options)
+        {
+            return options->token_rewriter.get();
+        }
     }
 } // namespace lib_ruby_parser

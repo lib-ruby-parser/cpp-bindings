@@ -33,6 +33,7 @@ namespace lib_ruby_parser
     {
         const char *parser_options_buffer_name(ParserOptions *options);
         CustomDecoder *parser_options_custom_decoder(ParserOptions *options);
+        TokenRewriter *parser_options_token_rewriter(ParserOptions *options);
     }
 } // namespace lib_ruby_parser
 

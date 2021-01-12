@@ -67,6 +67,8 @@ fn build_bindings() {
         .rustified_enum("lib_ruby_parser::CommentType")
         .rustified_enum("lib_ruby_parser::MagicCommentKind")
         .rustified_enum("lib_ruby_parser::ErrorLevel")
+        .rustified_enum("lib_ruby_parser::RawRewriteAction")
+        .rustified_enum("lib_ruby_parser::RawLexStateAction")
         .layout_tests(false)
         .generate()
         .expect("Unable to generate bindings");

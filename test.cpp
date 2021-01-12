@@ -247,6 +247,37 @@ void test_custom_decoder_error()
     assert(state->encoding == "BAR");
 }
 
+class CustomTokenRewriter : public TokenRewriter
+{
+public:
+    virtual Result rewrite_token(Token token, Bytes input)
+    {
+        (void)input; // suppress the warning
+
+        if (token.token_value == "2")
+        {
+            token.token_value = "3";
+        }
+
+        return Result(std::move(token), RewriteAction::KEEP, LexStateAction::Keep());
+    }
+    virtual ~CustomTokenRewriter() {}
+};
+
+void test_custom_rewriter()
+{
+    ParserOptions options;
+    options.token_rewriter = std::make_unique<CustomTokenRewriter>();
+    options.record_tokens = true;
+
+    auto result = ParserResult::from_source(Bytes("2"), std::move(options));
+
+    assert(result->tokens.size() == 2);
+
+    assert_token(result->tokens[0], "tINTEGER", "3", 0, 1);
+    assert_token(result->tokens[1], "EOF", "", 1, 1);
+}
+
 int main()
 {
     test_range();
@@ -262,6 +293,8 @@ int main()
 
     test_custom_decoder_ok();
     test_custom_decoder_error();
+
+    test_custom_rewriter();
 
     std::cout << "all tests passed.\n";
 }

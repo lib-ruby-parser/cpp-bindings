@@ -65,12 +65,15 @@ $(TARGET_DIR)/range.o: includes/range.h includes/range.cpp
 	$(CXX) includes/range.cpp $(CC_DEFAULT_FLAGS) -c -o $(TARGET_DIR)/range.o
 OBJECTS += $(TARGET_DIR)/range.o
 
+$(TARGET_DIR)/token_rewriter.o: includes/token_rewriter.h includes/token_rewriter.cpp
+	$(CXX) includes/token_rewriter.cpp $(CC_DEFAULT_FLAGS) -c -o $(TARGET_DIR)/token_rewriter.o
+OBJECTS += $(TARGET_DIR)/token_rewriter.o
+
 $(TARGET_DIR)/token.o: includes/token.h includes/token.cpp
 	$(CXX) includes/token.cpp $(CC_DEFAULT_FLAGS) -c -o $(TARGET_DIR)/token.o
 OBJECTS += $(TARGET_DIR)/token.o
 
-HEADERS = includes/lib-ruby-parser.h \
-	includes/token_rewriter.h
+HEADERS = includes/lib-ruby-parser.h
 
 LIB_RUBY_PARSER_O = $(TARGET_DIR)/lib-ruby-parser.o
 $(LIB_RUBY_PARSER_O): $(DEBUG_RUST_OBJ) $(OBJECTS)

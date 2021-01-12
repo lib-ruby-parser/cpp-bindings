@@ -16,7 +16,7 @@ namespace lib_ruby_parser
 
         Loc() = delete;
         Loc(Loc &&) = default;
-        Loc(const Loc &) = delete;
+        Loc(const Loc &) = default;
         explicit Loc(size_t begin, size_t end);
         friend std::ostream &operator<<(std::ostream &os, const Loc &loc);
 
@@ -31,9 +31,10 @@ namespace lib_ruby_parser
         std::string token_value;
         std::unique_ptr<Loc> loc;
 
-        Token() = delete;
+        Token() = default;
         Token(Token &&) = default;
         Token(const Token &) = delete;
+        Token &operator=(Token &&) = default;
         explicit Token(
             int token_type,
             std::string token_value,
