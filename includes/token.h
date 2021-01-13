@@ -5,6 +5,7 @@
 #include <cstddef>
 #include "helpers.h"
 #include <iostream>
+#include <memory>
 
 namespace lib_ruby_parser
 {

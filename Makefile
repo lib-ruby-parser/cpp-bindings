@@ -82,13 +82,13 @@ $(LIB_RUBY_PARSER_O): $(RUST_OBJ) $(OBJECTS)
 DEPS = $(LIB_RUBY_PARSER_O) $(HEADERS)
 
 $(TARGET_DIR)/test-runner: $(DEPS) make-clean-includes
-	$(CXX) $(LIB_RUBY_PARSER_O) test.cpp $(CXXFLAGS) -o $(TARGET_DIR)/test-runner
+	$(CXX) $(LIB_RUBY_PARSER_O) test.cpp $(CXXFLAGS) $(LINK_FLAGS) -o $(TARGET_DIR)/test-runner
 
 test: $(TARGET_DIR)/test-runner
 	$(TARGET_DIR)/test-runner
 
 test-asan: $(DEPS)
-	$(CXX) $(LIB_RUBY_PARSER_O) test.cpp -fsanitize=address $(CXXFLAGS) -o $(TARGET_DIR)/test-asan-runner
+	$(CXX) $(LIB_RUBY_PARSER_O) test.cpp -fsanitize=address $(CXXFLAGS) $(LINK_FLAGS) -o $(TARGET_DIR)/test-asan-runner
 	$(TARGET_DIR)/test-asan-runner
 
 test-valgrind: $(TARGET_DIR)/test-runner
@@ -110,7 +110,7 @@ clean:
 	rm -f target/dl-test-runner
 
 test-cov:
-	$(CXX) test.cpp $(RUST_OBJ) $(CXXFLAGS) -fprofile-instr-generate -fcoverage-mapping -o $(TARGET_DIR)/test
+	$(CXX) test.cpp $(RUST_OBJ) $(CXXFLAGS) $(LINK_FLAGS) -fprofile-instr-generate -fcoverage-mapping -o $(TARGET_DIR)/test
 	LLVM_PROFILE_FILE="$(TARGET_DIR)/test.profraw" $(TARGET_DIR)/test
 	llvm-profdata merge -sparse $(TARGET_DIR)/test.profraw -o $(TARGET_DIR)/test.profdata
 	llvm-cov report $(TARGET_DIR)/test-runner -instr-profile=$(TARGET_DIR)/test.profdata
@@ -151,14 +151,22 @@ make-clean-includes:
 		>> target/lib-ruby-parser.h
 	echo "#endif // LIB_RUBY_PARSER_H" >> target/lib-ruby-parser.h
 
+DYNAMIC_LIB = $(TARGET_DIR)/lib-ruby-parser.dynamic
+STATIC_LIB = $(TARGET_DIR)/lib-ruby-parser.static
 
-mac-release-dynamic: $(DEPS)
-	$(CXX) -fPIC -O2 -shared target/lib-ruby-parser.o -o target/lib-ruby-parser.dylib
+$(DYNAMIC_LIB): $(DEPS)
+	$(CXX) -fPIC -O2 -shared $(LIB_RUBY_PARSER_O) -o $(DYNAMIC_LIB)
+	# test
+	$(CXX) $(CXXFLAGS) $(LINK_FLAGS) test.cpp $(DYNAMIC_LIB) -o $(TARGET_DIR)/dynamic-test-runner
+	otool -L $(TARGET_DIR)/dynamic-test-runner
+	$(TARGET_DIR)/dynamic-test-runner
 
-mac-release-static: $(DEPS)
-	ar -rv lib-ruby-parser.a target/lib-ruby-parser.o
+$(STATIC_LIB): $(DEPS)
+	ar -rv $(STATIC_LIB) $(LIB_RUBY_PARSER_O)
+	# test
+	$(CXX) $(CXXFLAGS) $(LINK_FLAGS) test.cpp $(STATIC_LIB) -o $(TARGET_DIR)/static-test-runner
+	otool -L $(TARGET_DIR)/static-test-runner
+	$(TARGET_DIR)/static-test-runner
 
-mac-test-dynamic: mac-release-dynamic
-	$(CXX) $(CXXFLAGS) test.cpp $(TARGET_DIR)/lib-ruby-parser.dylib -lpthread -ldl -o $(TARGET_DIR)/dl-test-runner
-	otool -L $(TARGET_DIR)/dl-test-runner
-	$(TARGET_DIR)/dl-test-runner
+release-dynamic: $(DYNAMIC_LIB)
+release-static: $(STATIC_LIB)
