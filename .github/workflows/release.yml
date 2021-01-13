@@ -29,7 +29,7 @@ jobs:
       - name: generate env artifact
         run: |
           echo "RELEASE_UPLOAD_URL=${{ steps.create_release.outputs.upload_url }}" > artifact-env
-          echo "GITHUB_TAG=$GITHUB_TAG" > artifact-env
+          echo "GITHUB_TAG=$GITHUB_TAG" >> artifact-env
 
       - name: save env artifact
         uses: actions/upload-artifact@v1
@@ -65,7 +65,7 @@ jobs:
           path: artifact-env
 
       - name: load env artifact
-        run: echo artifact-env >> $GITHUB_ENV
+        run: cat artifact-env/artifact-env >> $GITHUB_ENV
 
       - name: install rust
         uses: actions-rs/toolchain@v1
@@ -110,7 +110,7 @@ jobs:
           path: artifact-env
 
       - name: load env artifact
-        run: echo artifact-env >> $GITHUB_ENV
+        run: cat artifact-env/artifact-env >> $GITHUB_ENV
 
       - name: install rust
         uses: actions-rs/toolchain@v1
