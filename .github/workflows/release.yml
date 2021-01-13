@@ -52,10 +52,10 @@ jobs:
       fail-fast: false
       matrix:
         build:
-          - { os: ubuntu-latest, name: linux-x86_64.so,     make_command: release-dynamic, output: lib-ruby-parser.dynamic }
-          - { os: ubuntu-latest, name: linux-x86_64.a,      make_command: release-static,  output: lib-ruby-parser.static }
-          - { os: mac-latest,    name: darwin-x86_64.dylib, make_command: release-dynamic, output: lib-ruby-parser.dynamic }
-          - { os: mac-latest,    name: darwin-x86_64.a,     make_command: release-static,  output: lib-ruby-parser.static }
+          - { os: ubuntu-latest, name: linux-x86_64.so,     make_command: build-dynamic, output: lib-ruby-parser.dynamic }
+          - { os: ubuntu-latest, name: linux-x86_64.a,      make_command: build-static,  output: lib-ruby-parser.static }
+          - { os: macos-latest,    name: darwin-x86_64.dylib, make_command: build-dynamic, output: lib-ruby-parser.dynamic }
+          - { os: macos-latest,    name: darwin-x86_64.a,     make_command: build-static,  output: lib-ruby-parser.static }
     steps:
       - name: checkout
         uses: actions/checkout@v2
