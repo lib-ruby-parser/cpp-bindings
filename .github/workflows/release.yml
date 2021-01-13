@@ -52,10 +52,10 @@ jobs:
       fail-fast: false
       matrix:
         build:
-          - { os: ubuntu-20.04, name: linux-x86_64.so,     make_command: build-dynamic, output: lib-ruby-parser.dynamic }
-          - { os: ubuntu-20.04, name: linux-x86_64.a,      make_command: build-static,  output: lib-ruby-parser.static  }
-          - { os: macos-latest, name: darwin-x86_64.dylib, make_command: build-dynamic, output: lib-ruby-parser.dynamic }
-          - { os: macos-latest, name: darwin-x86_64.a,     make_command: build-static,  output: lib-ruby-parser.static  }
+          - { os: ubuntu-20.04, name: linux-x86_64.so,     make_command: build-dynamic, output: lib-ruby-parser.dynamic, ld: ld.lld }
+          - { os: ubuntu-20.04, name: linux-x86_64.a,      make_command: build-static,  output: lib-ruby-parser.static , ld: ld.lld }
+          - { os: macos-latest, name: darwin-x86_64.dylib, make_command: build-dynamic, output: lib-ruby-parser.dynamic, ld: ld }
+          - { os: macos-latest, name: darwin-x86_64.a,     make_command: build-static,  output: lib-ruby-parser.static , ld: ld }
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -80,7 +80,7 @@ jobs:
           override: true
 
       - name: build
-        run: make ${{ matrix.build.make_command }}
+        run: LD=${{ matrix.build.ld }} make ${{ matrix.build.make_command }}
 
       - name: show asset
         run: ls -l target/release/${{ matrix.build.output }}
