@@ -174,18 +174,26 @@ clean-includes:
 DYNAMIC_LIB = $(TARGET_DIR)/lib-ruby-parser.dynamic
 STATIC_LIB = $(TARGET_DIR)/lib-ruby-parser.static
 
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+	LIST_DEPS = ldd
+endif
+ifeq ($(UNAME_S),Darwin)
+	LIST_DEPS = otool -L
+endif
+
 $(DYNAMIC_LIB): $(DEPS) clean-includes
 	$(CXX) -fPIC -O2 -shared $(LIB_RUBY_PARSER_O) -o $(DYNAMIC_LIB)
 	# test
 	$(CXX) $(CXXFLAGS) $(LINK_FLAGS) test.cpp $(DYNAMIC_LIB) -o $(TARGET_DIR)/dynamic-test-runner
-	otool -L $(TARGET_DIR)/dynamic-test-runner
+	$(LIST_DEPS) $(TARGET_DIR)/dynamic-test-runner
 	$(TARGET_DIR)/dynamic-test-runner
 
 $(STATIC_LIB): $(DEPS) clean-includes
 	ar -rv $(STATIC_LIB) $(LIB_RUBY_PARSER_O)
 	# test
 	$(CXX) $(CXXFLAGS) $(LINK_FLAGS) test.cpp $(STATIC_LIB) -o $(TARGET_DIR)/static-test-runner
-	otool -L $(TARGET_DIR)/static-test-runner
+	$(LIST_DEPS) $(TARGET_DIR)/static-test-runner
 	$(TARGET_DIR)/static-test-runner
 
 build-dynamic: $(DYNAMIC_LIB)
