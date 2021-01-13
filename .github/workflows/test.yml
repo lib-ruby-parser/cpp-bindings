@@ -50,4 +50,4 @@ jobs:
 
       - name: run tests
         run: |
-          LD=${{ matrix.compiler.ld }} CC=${{ matrix.compiler.cc }} CXX=${{ matrix.compiler.cxx }} make test-all
+          CXXFLAGS="-g" LD=${{ matrix.compiler.ld }} CC=${{ matrix.compiler.cc }} CXX=${{ matrix.compiler.cxx }} make test-all
