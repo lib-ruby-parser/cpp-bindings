@@ -31,6 +31,7 @@ setup:
 RUST_OBJ = $(TARGET_DIR)/lib-ruby-parser-rust-static
 $(RUST_OBJ):
 	cd $(BINDINGS_DIR) && cargo build $(CARGOFLAGS)
+	ls -l $(BINDINGS_DIR)/target/$(RUST_ENV)/
 	cp $(BINDINGS_DIR)/target/$(RUST_ENV)/liblib_ruby_parser_cpp_bindings.a $(RUST_OBJ)
 
 gen-headers: $(RUST_OBJ)
