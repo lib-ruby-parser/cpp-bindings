@@ -1,15 +1,41 @@
-TARGET_DIR = target
 BINDINGS_DIR = lib-ruby-parser-cpp-bindings
-RUST_OBJ = $(TARGET_DIR)/lib-ruby-parser-rust-static
-
-$(RUST_OBJ):
-	cd $(BINDINGS_DIR) && cargo build $(CARGOFLAGS)
-	cp $(BINDINGS_DIR)/target/debug/liblib_ruby_parser_cpp_bindings.a $(RUST_OBJ)
 
 LINK_FLAGS = -lpthread -ldl
 CXXFLAGS += -std=c++17 -Wall -Wextra
 
-# files
+ifndef BUILD_ENV
+	BUILD_ENV = debug
+endif
+
+ifeq ($(BUILD_ENV), debug)
+	CXXFLAGS += -g -O0
+	RUST_ENV = debug
+	TARGET_DIR = target/debug
+	CARGOFLAGS =
+else
+	CXXFLAGS += -O2
+	RUST_ENV = release
+	TARGET_DIR = target/release
+	CARGOFLAGS = --release
+endif
+
+print-env:
+	echo "BUILD_ENV = $(BUILD_ENV)"
+	echo "CXXFLAGS = $(CXXFLAGS)"
+	echo "RUST_ENV = $(RUST_ENV)"
+
+setup:
+	mkdir -p target/debug
+	mkdir -p target/release
+
+RUST_OBJ = $(TARGET_DIR)/lib-ruby-parser-rust-static
+$(RUST_OBJ):
+	cd $(BINDINGS_DIR) && cargo build $(CARGOFLAGS)
+	cp $(BINDINGS_DIR)/target/$(RUST_ENV)/liblib_ruby_parser_cpp_bindings.a $(RUST_OBJ)
+
+gen-headers: $(RUST_OBJ)
+
+# objects
 OBJECTS =
 
 $(TARGET_DIR)/bytes.o: includes/bytes.h includes/bytes.cpp
@@ -97,17 +123,8 @@ test-valgrind: $(TARGET_DIR)/test-runner
 test-all: test test-valgrind test-asan
 
 clean:
-	rm -f includes/node.h
-	rm -f includes/node.cpp
-	rm -f includes/make_node.h
-	rm -f includes/make_node.cpp
-	rm -f $(BINDINGS_DIR)/src/bindings.rs
-	rm -f $(BINDINGS_DIR)/src/cpp_from_rust_gen.rs
-	rm -f target/*.o || false
-	rm -f target/*.dylib || false
-	rm -f target/*.a || false
-	rm -f target/test-runner
-	rm -f target/dl-test-runner
+	rm -rf $(TARGET_DIR)
+	mkdir -p $(TARGET_DIR)
 
 test-cov:
 	$(CXX) test.cpp $(RUST_OBJ) $(CXXFLAGS) $(LINK_FLAGS) -fprofile-instr-generate -fcoverage-mapping -o $(TARGET_DIR)/test
@@ -118,38 +135,40 @@ test-cov:
 
 # // releases
 
+LIB_RUBY_PARSER_TMP_H = target/lib-ruby-parser-tmp.h
+LIB_RUBY_PARSER_H = target/lib-ruby-parser.h
 clean-includes:
-	cat includes/comment_type.h > target/lib-ruby-parser-all.h
-	cat includes/error_level.h >> target/lib-ruby-parser-all.h
-	cat includes/magic_comment_kind.h >> target/lib-ruby-parser-all.h
+	cat includes/comment_type.h > $(LIB_RUBY_PARSER_TMP_H)
+	cat includes/error_level.h >> $(LIB_RUBY_PARSER_TMP_H)
+	cat includes/magic_comment_kind.h >> $(LIB_RUBY_PARSER_TMP_H)
 
-	cat includes/bytes.h >> target/lib-ruby-parser-all.h
-	cat includes/range.h >> target/lib-ruby-parser-all.h
-	cat includes/token.h >> target/lib-ruby-parser-all.h
+	cat includes/bytes.h >> $(LIB_RUBY_PARSER_TMP_H)
+	cat includes/range.h >> $(LIB_RUBY_PARSER_TMP_H)
+	cat includes/token.h >> $(LIB_RUBY_PARSER_TMP_H)
 
-	cat includes/node.h >> target/lib-ruby-parser-all.h
-	cat includes/make_node.h >> target/lib-ruby-parser-all.h
+	cat includes/node.h >> $(LIB_RUBY_PARSER_TMP_H)
+	cat includes/make_node.h >> $(LIB_RUBY_PARSER_TMP_H)
 
-	cat includes/comment.h >> target/lib-ruby-parser-all.h
-	cat includes/custom_decoder.h >> target/lib-ruby-parser-all.h
-	cat includes/diagnostic.h >> target/lib-ruby-parser-all.h
-	cat includes/helpers.h >> target/lib-ruby-parser-all.h
-	cat includes/magic_comment.h >> target/lib-ruby-parser-all.h
-	cat includes/token_rewriter.h >> target/lib-ruby-parser-all.h
+	cat includes/comment.h >> $(LIB_RUBY_PARSER_TMP_H)
+	cat includes/custom_decoder.h >> $(LIB_RUBY_PARSER_TMP_H)
+	cat includes/diagnostic.h >> $(LIB_RUBY_PARSER_TMP_H)
+	cat includes/helpers.h >> $(LIB_RUBY_PARSER_TMP_H)
+	cat includes/magic_comment.h >> $(LIB_RUBY_PARSER_TMP_H)
+	cat includes/token_rewriter.h >> $(LIB_RUBY_PARSER_TMP_H)
 
-	cat includes/parser_options.h >> target/lib-ruby-parser-all.h
-	cat includes/parser_result.h >> target/lib-ruby-parser-all.h
+	cat includes/parser_options.h >> $(LIB_RUBY_PARSER_TMP_H)
+	cat includes/parser_result.h >> $(LIB_RUBY_PARSER_TMP_H)
 
-	echo "#ifndef LIB_RUBY_PARSER_H" > target/lib-ruby-parser.h
-	echo "#define LIB_RUBY_PARSER_H" >> target/lib-ruby-parser.h
+	echo "#ifndef LIB_RUBY_PARSER_H" > $(LIB_RUBY_PARSER_H)
+	echo "#define LIB_RUBY_PARSER_H" >> $(LIB_RUBY_PARSER_H)
 
-	cat target/lib-ruby-parser-all.h | \
+	cat $(LIB_RUBY_PARSER_TMP_H) | \
 		grep -v "#include \"" | \
 		grep -v "#ifndef LIB_RUBY_PARSER_" | \
 		grep -v "#define LIB_RUBY_PARSER_" | \
 		grep -v "#endif // LIB_RUBY_PARSER_" \
-		>> target/lib-ruby-parser.h
-	echo "#endif // LIB_RUBY_PARSER_H" >> target/lib-ruby-parser.h
+		>> $(LIB_RUBY_PARSER_H)
+	echo "#endif // LIB_RUBY_PARSER_H" >> $(LIB_RUBY_PARSER_H)
 
 DYNAMIC_LIB = $(TARGET_DIR)/lib-ruby-parser.dynamic
 STATIC_LIB = $(TARGET_DIR)/lib-ruby-parser.static
@@ -168,5 +187,5 @@ $(STATIC_LIB): $(DEPS)
 	otool -L $(TARGET_DIR)/static-test-runner
 	$(TARGET_DIR)/static-test-runner
 
-release-dynamic: $(DYNAMIC_LIB)
-release-static: $(STATIC_LIB)
+build-dynamic: $(DYNAMIC_LIB)
+build-static: $(STATIC_LIB)

@@ -56,4 +56,4 @@
 
 #       - name: run tests
 #         run: |
-#           CXXFLAGS="-g -O0" make test-all
+#           make test-all

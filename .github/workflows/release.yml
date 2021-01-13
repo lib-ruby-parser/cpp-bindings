@@ -47,8 +47,7 @@ jobs:
       CC: clang
       CXX: clang++
       LD: ld.lld
-      CXXFLAGS: "-O2"
-      CARGOFLAGS: "--release"
+      BUILD_ENV: release
     strategy:
       fail-fast: false
       matrix:
@@ -81,7 +80,7 @@ jobs:
         run: make ${{ matrix.build.make_command }}
 
       - name: show asset
-        run: ls -l target/${{ matrix.build.output }}
+        run: ls -l target/release/${{ matrix.build.output }}
 
       # - name: upload assets
       #   uses: actions/upload-release-asset@v1.0.1
@@ -89,7 +88,7 @@ jobs:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       #   with:
       #     upload_url: ${{ env.RELEASE_UPLOAD_URL }}
-      #     asset_path: target/${{ matrix.build.output }}
+      #     asset_path: target/release/${{ matrix.build.output }}
       #     asset_name: ${{ matrix.build.name }}
       #     asset_content_type: application/octet-stream
 
@@ -97,6 +96,8 @@ jobs:
     name: upload-headers
     # needs: ['create-release']
     runs-on: ubuntu-latest
+    env:
+      BUILD_ENV: release
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -118,7 +119,7 @@ jobs:
           override: true
 
       - name: generate .h files
-        run: make target/lib-ruby-parser-rust-static
+        run: make gen-headers
 
       - name: merge headers
         run: make clean-includes
