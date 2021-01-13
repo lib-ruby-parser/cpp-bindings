@@ -44,9 +44,9 @@ jobs:
     # needs: ['create-release']
     runs-on: ${{ matrix.build.os }}
     env:
-      CC: clang
-      CXX: clang++
-      LD: ld.lld
+      # CC: clang
+      # CXX: clang++
+      # LD: ld.lld
       BUILD_ENV: release
     strategy:
       fail-fast: false
