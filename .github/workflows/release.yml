@@ -53,9 +53,9 @@ jobs:
       matrix:
         build:
           - { os: ubuntu-20.04, name: linux-x86_64.so,     make_command: build-dynamic, output: lib-ruby-parser.dynamic }
-          - { os: ubuntu-20.04, name: linux-x86_64.a,      make_command: build-static,  output: lib-ruby-parser.static }
+          - { os: ubuntu-20.04, name: linux-x86_64.a,      make_command: build-static,  output: lib-ruby-parser.static  }
           - { os: macos-latest, name: darwin-x86_64.dylib, make_command: build-dynamic, output: lib-ruby-parser.dynamic }
-          - { os: macos-latest, name: darwin-x86_64.a,     make_command: build-static,  output: lib-ruby-parser.static }
+          - { os: macos-latest, name: darwin-x86_64.a,     make_command: build-static,  output: lib-ruby-parser.static  }
     steps:
       - name: checkout
         uses: actions/checkout@v2

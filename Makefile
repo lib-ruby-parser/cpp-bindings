@@ -40,59 +40,59 @@ gen-headers: $(RUST_OBJ)
 OBJECTS =
 
 $(TARGET_DIR)/bytes.o: includes/bytes.h includes/bytes.cpp
-	$(CXX) includes/bytes.cpp $(CXXFLAGS) -c -o $(TARGET_DIR)/bytes.o
+	$(CXX) includes/bytes.cpp $(CXXFLAGS) -fPIC -c -o $(TARGET_DIR)/bytes.o
 OBJECTS += $(TARGET_DIR)/bytes.o
 
 $(TARGET_DIR)/comment.o: includes/comment.h includes/comment.cpp
-	$(CXX) includes/comment.cpp $(CXXFLAGS) -c -o $(TARGET_DIR)/comment.o
+	$(CXX) includes/comment.cpp $(CXXFLAGS) -fPIC -c -o $(TARGET_DIR)/comment.o
 OBJECTS += $(TARGET_DIR)/comment.o
 
 $(TARGET_DIR)/custom_decoder.o: includes/custom_decoder.h includes/custom_decoder.cpp
-	$(CXX) includes/custom_decoder.cpp $(CXXFLAGS) -c -o $(TARGET_DIR)/custom_decoder.o
+	$(CXX) includes/custom_decoder.cpp $(CXXFLAGS) -fPIC -c -o $(TARGET_DIR)/custom_decoder.o
 OBJECTS += $(TARGET_DIR)/custom_decoder.o
 
 $(TARGET_DIR)/diagnostic.o: includes/diagnostic.h includes/diagnostic.cpp
-	$(CXX) includes/diagnostic.cpp $(CXXFLAGS) -c -o $(TARGET_DIR)/diagnostic.o
+	$(CXX) includes/diagnostic.cpp $(CXXFLAGS) -fPIC -c -o $(TARGET_DIR)/diagnostic.o
 OBJECTS += $(TARGET_DIR)/diagnostic.o
 
 $(TARGET_DIR)/helpers.o: includes/helpers.h includes/helpers.cpp
-	$(CXX) includes/helpers.cpp $(CXXFLAGS) -c -o $(TARGET_DIR)/helpers.o
+	$(CXX) includes/helpers.cpp $(CXXFLAGS) -fPIC -c -o $(TARGET_DIR)/helpers.o
 OBJECTS += $(TARGET_DIR)/helpers.o
 
 $(TARGET_DIR)/low_level.o: includes/low_level.h includes/low_level.cpp
-	$(CXX) includes/low_level.cpp $(CXXFLAGS) -c -o $(TARGET_DIR)/low_level.o
+	$(CXX) includes/low_level.cpp $(CXXFLAGS) -fPIC -c -o $(TARGET_DIR)/low_level.o
 OBJECTS += $(TARGET_DIR)/low_level.o
 
 $(TARGET_DIR)/node.o: includes/node.h includes/node.cpp
-	$(CXX) includes/node.cpp $(CXXFLAGS) -c -o $(TARGET_DIR)/node.o
+	$(CXX) includes/node.cpp $(CXXFLAGS) -fPIC -c -o $(TARGET_DIR)/node.o
 OBJECTS += $(TARGET_DIR)/node.o
 
 $(TARGET_DIR)/magic_comment.o: includes/magic_comment.h includes/magic_comment.cpp
-	$(CXX) includes/magic_comment.cpp $(CXXFLAGS) -c -o $(TARGET_DIR)/magic_comment.o
+	$(CXX) includes/magic_comment.cpp $(CXXFLAGS) -fPIC -c -o $(TARGET_DIR)/magic_comment.o
 OBJECTS += $(TARGET_DIR)/magic_comment.o
 
 $(TARGET_DIR)/make_node.o: includes/make_node.h includes/make_node.cpp
-	$(CXX) includes/make_node.cpp $(CXXFLAGS) -c -o $(TARGET_DIR)/make_node.o
+	$(CXX) includes/make_node.cpp $(CXXFLAGS) -fPIC -c -o $(TARGET_DIR)/make_node.o
 OBJECTS += $(TARGET_DIR)/make_node.o
 
 $(TARGET_DIR)/parser_options.o: includes/parser_options.h includes/parser_options.cpp
-	$(CXX) includes/parser_options.cpp $(CXXFLAGS) -c -o $(TARGET_DIR)/parser_options.o
+	$(CXX) includes/parser_options.cpp $(CXXFLAGS) -fPIC -c -o $(TARGET_DIR)/parser_options.o
 OBJECTS += $(TARGET_DIR)/parser_options.o
 
 $(TARGET_DIR)/parser_result.o: includes/parser_result.h includes/parser_result.cpp
-	$(CXX) includes/parser_result.cpp $(CXXFLAGS) -c -o $(TARGET_DIR)/parser_result.o
+	$(CXX) includes/parser_result.cpp $(CXXFLAGS) -fPIC -c -o $(TARGET_DIR)/parser_result.o
 OBJECTS += $(TARGET_DIR)/parser_result.o
 
 $(TARGET_DIR)/range.o: includes/range.h includes/range.cpp
-	$(CXX) includes/range.cpp $(CXXFLAGS) -c -o $(TARGET_DIR)/range.o
+	$(CXX) includes/range.cpp $(CXXFLAGS) -fPIC -c -o $(TARGET_DIR)/range.o
 OBJECTS += $(TARGET_DIR)/range.o
 
 $(TARGET_DIR)/token_rewriter.o: includes/token_rewriter.h includes/token_rewriter.cpp
-	$(CXX) includes/token_rewriter.cpp $(CXXFLAGS) -c -o $(TARGET_DIR)/token_rewriter.o
+	$(CXX) includes/token_rewriter.cpp $(CXXFLAGS) -fPIC -c -o $(TARGET_DIR)/token_rewriter.o
 OBJECTS += $(TARGET_DIR)/token_rewriter.o
 
 $(TARGET_DIR)/token.o: includes/token.h includes/token.cpp
-	$(CXX) includes/token.cpp $(CXXFLAGS) -c -o $(TARGET_DIR)/token.o
+	$(CXX) includes/token.cpp $(CXXFLAGS) -fPIC -c -o $(TARGET_DIR)/token.o
 OBJECTS += $(TARGET_DIR)/token.o
 
 HEADERS = includes/lib-ruby-parser.h \
