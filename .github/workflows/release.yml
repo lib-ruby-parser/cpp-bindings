@@ -52,10 +52,10 @@ jobs:
       fail-fast: false
       matrix:
         build:
-          - { os: ubuntu-20.04, name: linux-x86_64.so,     make_command: build-dynamic, output: lib-ruby-parser.dynamic, cxx: clang++-10, ld: ld.lld-10 }
-          - { os: ubuntu-20.04, name: linux-x86_64.a,      make_command: build-static,  output: lib-ruby-parser.static , cxx: clang++-10, ld: ld.lld-10 }
-          - { os: macos-latest, name: darwin-x86_64.dylib, make_command: build-dynamic, output: lib-ruby-parser.dynamic, cxx: clang++,    ld: ld        }
-          - { os: macos-latest, name: darwin-x86_64.a,     make_command: build-static,  output: lib-ruby-parser.static , cxx: clang++,    ld: ld        }
+          - { os: ubuntu-20.04, name: linux-x86_64.so,     make_command: build-dynamic, output: lib-ruby-parser.dynamic, cc: clang-10, cxx: clang++-10, ld: ld.lld-10 }
+          - { os: ubuntu-20.04, name: linux-x86_64.a,      make_command: build-static,  output: lib-ruby-parser.static , cc: clang-10, cxx: clang++-10, ld: ld.lld-10 }
+          - { os: macos-latest, name: darwin-x86_64.dylib, make_command: build-dynamic, output: lib-ruby-parser.dynamic, cc: clang   , cxx: clang++,    ld: ld        }
+          - { os: macos-latest, name: darwin-x86_64.a,     make_command: build-static,  output: lib-ruby-parser.static , cc: clang   , cxx: clang++,    ld: ld        }
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -80,7 +80,7 @@ jobs:
           override: true
 
       - name: build
-        run: LD=${{ matrix.build.ld }} CXX=${{ matrix.build.cxx }} make ${{ matrix.build.make_command }}
+        run: LD=${{ matrix.build.ld }} CXX=${{ matrix.build.cxx }} CC=${{ matrix.build.cc }} make ${{ matrix.build.make_command }}
 
       - name: show asset
         run: ls -l target/release/${{ matrix.build.output }}
