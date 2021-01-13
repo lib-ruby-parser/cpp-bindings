@@ -22,11 +22,17 @@ jobs:
           - { cc: clang-10, cxx: clang++-10, ld: ld.lld-10 }
 
     steps:
+      - name: setup compiler
+        run: |
+          echo "CC=${{ matrix.compiler.cc }}" >> $GITHUB_ENV
+          echo "CXX=${{ matrix.compiler.cxx }}" >> $GITHUB_ENV
+          echo "LD=${{ matrix.compiler.ld }}" >> $GITHUB_ENV
+
       - name: make sure compiler are available
         run: |
-          which ${{ matrix.compiler.cc }}
-          which ${{ matrix.compiler.cxx }}
-          which ${{ matrix.compiler.ld }}
+          which "$CC"
+          which "$CXX"
+          which "$LD"
 
       - name: install valgrind
         run: |
@@ -50,4 +56,4 @@ jobs:
 
       - name: run tests
         run: |
-          CXXFLAGS="-g -O0" LD=${{ matrix.compiler.ld }} CC=${{ matrix.compiler.cc }} CXX=${{ matrix.compiler.cxx }} make test-all
+          CXXFLAGS="-g -O0" make test-all
