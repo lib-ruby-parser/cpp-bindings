@@ -81,7 +81,7 @@ $(LIB_RUBY_PARSER_O): $(RUST_OBJ) $(OBJECTS)
 
 DEPS = $(LIB_RUBY_PARSER_O) $(HEADERS)
 
-$(TARGET_DIR)/test-runner: $(DEPS) make-clean-includes
+$(TARGET_DIR)/test-runner: $(DEPS) clean-includes
 	$(CXX) $(LIB_RUBY_PARSER_O) test.cpp $(CXXFLAGS) $(LINK_FLAGS) -o $(TARGET_DIR)/test-runner
 
 test: $(TARGET_DIR)/test-runner
@@ -118,7 +118,7 @@ test-cov:
 
 # // releases
 
-make-clean-includes:
+clean-includes:
 	cat includes/comment_type.h > target/lib-ruby-parser-all.h
 	cat includes/error_level.h >> target/lib-ruby-parser-all.h
 	cat includes/magic_comment_kind.h >> target/lib-ruby-parser-all.h

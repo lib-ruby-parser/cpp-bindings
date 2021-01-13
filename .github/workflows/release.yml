@@ -1,0 +1,138 @@
+name: release
+on:
+  # push:
+  #   tags:
+  #     - '[0-9]+.[0-9]+.[0-9]+'
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  # create-release:
+  #   name: create-release
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: get version number
+  #       run: |
+  #         echo "GITHUB_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+  #     - name: print version number
+  #       run: |
+  #         echo "tag = ${{ env.GITHUB_TAG }}"
+
+  #     - name: create release on github
+  #       id: create_release
+  #       uses: actions/create-release@v1
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       with:
+  #         tag_name: ${{ env.GITHUB_TAG }}
+  #         release_name: ${{ env.GITHUB_TAG }}
+
+  #     - name: generate env artifact
+  #       run: |
+  #         echo "RELEASE_UPLOAD_URL=${{ steps.create_release.outputs.upload_url }}" > artifact-env
+  #         echo "GITHUB_TAG=$GITHUB_TAG" > artifact-env
+
+  #     - name: save env artifact
+  #       uses: actions/upload-artifact@v1
+  #       with:
+  #         name: artifact-env
+  #         path: artifact-env
+
+  upload-release:
+    name: upload-release
+    # needs: ['create-release']
+    runs-on: ${{ matrix.build.os }}
+    env:
+      CC: clang
+      CXX: clang++
+      LD: ld.lld
+      CXXFLAGS: "-O2"
+      CARGOFLAGS: "--release"
+    strategy:
+      fail-fast: false
+      matrix:
+        build:
+          - { os: ubuntu-latest, name: linux-x86_64.so,     make_command: release-dynamic, output: lib-ruby-parser.dynamic }
+          - { os: ubuntu-latest, name: linux-x86_64.a,      make_command: release-static,  output: lib-ruby-parser.static }
+          - { os: mac-latest,    name: darwin-x86_64.dylib, make_command: release-dynamic, output: lib-ruby-parser.dynamic }
+          - { os: mac-latest,    name: darwin-x86_64.a,     make_command: release-static,  output: lib-ruby-parser.static }
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      # - name: download env artifact
+      #   uses: actions/download-artifact@v1
+      #   with:
+      #     name: artifact-env
+      #     path: artifact-env
+
+      # - name: load env artifact
+      #   run: echo artifact-env >> $GITHUB_ENV
+
+      - name: install rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+
+      - name: build
+        run: make ${{ matrix.build.make_command }}
+
+      - name: show asset
+        run: ls -l target/${{ matrix.build.output }}
+
+      # - name: upload assets
+      #   uses: actions/upload-release-asset@v1.0.1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ env.RELEASE_UPLOAD_URL }}
+      #     asset_path: target/${{ matrix.build.output }}
+      #     asset_name: ${{ matrix.build.name }}
+      #     asset_content_type: application/octet-stream
+
+  upload-headers:
+    name: upload-headers
+    # needs: ['create-release']
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      # - name: download env artifact
+      #   uses: actions/download-artifact@v1
+      #   with:
+      #     name: artifact-env
+      #     path: artifact-env
+
+      # - name: load env artifact
+      #   run: echo artifact-env >> $GITHUB_ENV
+
+      - name: install rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+
+      - name: generate .h files
+        run: make target/lib-ruby-parser-rust-static
+
+      - name: merge headers
+        run: make clean-includes
+
+      - name: show asset
+        run: ls -l target/lib-ruby-parser.h
+
+      # - name: upload assets
+      #   uses: actions/upload-release-asset@v1.0.1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ env.RELEASE_UPLOAD_URL }}
+      #     asset_path: target/lib-ruby-parser.h
+      #     asset_name: lib-ruby-parser.h
+      #     asset_content_type: application/octet-stream
+

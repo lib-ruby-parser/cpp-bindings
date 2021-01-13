@@ -1,59 +1,59 @@
-name: test
+# name: test
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+# on:
+#   push:
+#     branches: [ master ]
+#   pull_request:
+#     branches: [ master ]
 
-env:
-  CARGO_TERM_COLOR: always
+# env:
+#   CARGO_TERM_COLOR: always
 
-jobs:
-  test:
-    name: ${{ matrix.compiler.cxx }}
-    runs-on: ubuntu-20.04
-    strategy:
-      fail-fast: false
-      matrix:
-        compiler:
-          - { cc: clang-8,  cxx: clang++-8,  ld: ld.lld-8 }
-          - { cc: clang-9,  cxx: clang++-9,  ld: ld.lld-9 }
-          - { cc: clang-10, cxx: clang++-10, ld: ld.lld-10 }
+# jobs:
+#   test:
+#     name: ${{ matrix.compiler.cxx }}
+#     runs-on: ubuntu-20.04
+#     strategy:
+#       fail-fast: false
+#       matrix:
+#         compiler:
+#           - { cc: clang-8,  cxx: clang++-8,  ld: ld.lld-8 }
+#           - { cc: clang-9,  cxx: clang++-9,  ld: ld.lld-9 }
+#           - { cc: clang-10, cxx: clang++-10, ld: ld.lld-10 }
 
-    steps:
-      - name: setup compiler
-        run: |
-          echo "CC=${{ matrix.compiler.cc }}" >> $GITHUB_ENV
-          echo "CXX=${{ matrix.compiler.cxx }}" >> $GITHUB_ENV
-          echo "LD=${{ matrix.compiler.ld }}" >> $GITHUB_ENV
+#     steps:
+#       - name: setup compiler
+#         run: |
+#           echo "CC=${{ matrix.compiler.cc }}" >> $GITHUB_ENV
+#           echo "CXX=${{ matrix.compiler.cxx }}" >> $GITHUB_ENV
+#           echo "LD=${{ matrix.compiler.ld }}" >> $GITHUB_ENV
 
-      - name: make sure compiler are available
-        run: |
-          which "$CC"
-          which "$CXX"
-          which "$LD"
+#       - name: make sure compiler are available
+#         run: |
+#           which "$CC"
+#           which "$CXX"
+#           which "$LD"
 
-      - name: install valgrind
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y valgrind
+#       - name: install valgrind
+#         run: |
+#           sudo apt-get update
+#           sudo apt-get install -y valgrind
 
-      - name: checkout
-        uses: actions/checkout@v2
-        with:
-          submodules: true
+#       - name: checkout
+#         uses: actions/checkout@v2
+#         with:
+#           submodules: true
 
-      - name: install rust
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          override: true
+#       - name: install rust
+#         uses: actions-rs/toolchain@v1
+#         with:
+#           profile: minimal
+#           toolchain: stable
+#           override: true
 
-      - name: create target dir
-        run: mkdir target
+#       - name: create target dir
+#         run: mkdir target
 
-      - name: run tests
-        run: |
-          CXXFLAGS="-g -O0" make test-all
+#       - name: run tests
+#         run: |
+#           CXXFLAGS="-g -O0" make test-all
