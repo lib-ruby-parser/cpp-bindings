@@ -51,9 +51,8 @@ jobs:
           toolchain: stable
           override: true
 
-      - name: create target dir
-        run: mkdir target
+      - name: setup
+        run: make setup
 
       - name: run tests
-        run: |
-          CXXFLAGS="-g -O0" make test-all
+        run: make test-all
