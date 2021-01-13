@@ -26,10 +26,6 @@ namespace lib_ruby_parser
         friend std::ostream &operator<<(std::ostream &os, const Range &range);
     };
 
-    extern "C"
-    {
-        Range *make_range(size_t begin_pos, size_t end_pos);
-    }
 } // namespace lib_ruby_parser
 
 #endif // LIB_RUBY_PARSER_RANGE_H

@@ -17,12 +17,4 @@ namespace lib_ruby_parser
     {
         return !(*this == other);
     }
-
-    extern "C"
-    {
-        Comment *make_comment(CommentType kind, Range *location)
-        {
-            return new Comment(kind, std::unique_ptr<Range>(location));
-        }
-    }
 } // namespace lib_ruby_parser

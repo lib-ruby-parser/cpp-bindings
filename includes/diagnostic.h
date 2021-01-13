@@ -5,15 +5,10 @@
 #include <memory>
 #include <iostream>
 #include "range.h"
+#include "error_level.h"
 
 namespace lib_ruby_parser
 {
-    enum ErrorLevel
-    {
-        WARNING,
-        ERROR
-    };
-
     class Diagnostic
     {
     public:
@@ -34,10 +29,6 @@ namespace lib_ruby_parser
         friend std::ostream &operator<<(std::ostream &os, const Diagnostic &diagnostic);
     };
 
-    extern "C"
-    {
-        Diagnostic *make_diagnostic(ErrorLevel level, char *message, Range *range);
-    }
 } // namespace lib_ruby_parser
 
 #endif // LIB_RUBY_PARSER_DIAGNOSTIC_H

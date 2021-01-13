@@ -25,14 +25,17 @@ namespace lib_ruby_parser
 
     std::ostream &operator<<(std::ostream &os, const Diagnostic &diagnostic)
     {
-        return os << diagnostic.level << ": " << diagnostic.message << *(diagnostic.range.get());
-    }
-
-    extern "C"
-    {
-        Diagnostic *make_diagnostic(ErrorLevel level, char *message, Range *range)
+        switch (diagnostic.level)
         {
-            return new Diagnostic(level, char_ptr_to_string(message), std::unique_ptr<Range>(range));
+        case ErrorLevel::WARNING:
+            os << "WARNING";
+            break;
+        case ErrorLevel::ERROR:
+            os << "ERROR";
+            break;
+        default:
+            break;
         }
+        return os << ": " << diagnostic.message << *(diagnostic.range.get());
     }
 } // namespace lib_ruby_parser

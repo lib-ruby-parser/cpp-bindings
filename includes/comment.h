@@ -3,16 +3,10 @@
 
 #include <memory>
 #include "range.h"
+#include "comment_type.h"
 
 namespace lib_ruby_parser
 {
-    enum CommentType
-    {
-        INLINE,
-        DOCUMENT,
-        UNKNOWN
-    };
-
     class Comment
     {
     public:
@@ -27,11 +21,6 @@ namespace lib_ruby_parser
         bool operator==(const Comment &other);
         bool operator!=(const Comment &other);
     };
-
-    extern "C"
-    {
-        Comment *make_comment(CommentType kind, Range *location);
-    }
 } // namespace lib_ruby_parser
 
 #endif // LIB_RUBY_PARSER_COMMENT_H

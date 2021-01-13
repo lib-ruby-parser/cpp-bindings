@@ -64,21 +64,6 @@ public:
     }}
 }};
 
-extern \"C\"
-{{
-    struct NodeVec
-    {{
-        Node **list;
-        size_t length;
-
-        NodeVec(Node **list, size_t length)
-        {{
-            this->list = list;
-            this->length = length;
-        }}
-    }};
-}}
-
 }}
 #endif // LIB_RUBY_PARSER_NODE_H
 ",
@@ -115,10 +100,26 @@ namespace lib_ruby_parser {{
             "#ifndef LIB_RUBY_PARSER_MAKE_NODE_H
 #define LIB_RUBY_PARSER_MAKE_NODE_H
 
-#include \"node.h\"
+#include <cstddef>
 
 namespace lib_ruby_parser {{
+
+class Node;
+class Range;
+
 extern \"C\" {{
+
+struct NodeVec
+{{
+    Node **list;
+    size_t length;
+
+    NodeVec(Node **list, size_t length)
+    {{
+        this->list = list;
+        this->length = length;
+    }}
+}};
 
 {make_fn_decls}
 

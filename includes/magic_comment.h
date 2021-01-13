@@ -3,17 +3,10 @@
 
 #include <memory>
 #include "range.h"
+#include "magic_comment_kind.h"
 
 namespace lib_ruby_parser
 {
-    enum MagicCommentKind
-    {
-        ENCODING,
-        FROZEN_STRING_LITERAL,
-        WARN_INDENT,
-        SHAREABLE_CONSTANT_VALUE,
-    };
-
     class MagicComment
     {
     public:
@@ -32,10 +25,6 @@ namespace lib_ruby_parser
         bool operator!=(const MagicComment &other);
     };
 
-    extern "C"
-    {
-        MagicComment *make_magic_comment(MagicCommentKind kind, Range *key_l, Range *value_l);
-    }
 } // namespace lib_ruby_parser
 
 #endif // LIB_RUBY_PARSER_MAGIC_COMMENT_H

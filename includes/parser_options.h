@@ -29,12 +29,6 @@ namespace lib_ruby_parser
         bool record_tokens;
     };
 
-    extern "C"
-    {
-        const char *parser_options_buffer_name(ParserOptions *options);
-        CustomDecoder *parser_options_custom_decoder(ParserOptions *options);
-        TokenRewriter *parser_options_token_rewriter(ParserOptions *options);
-    }
 } // namespace lib_ruby_parser
 
 #endif // LIB_RUBY_PARSER_PARSER_OPTIONS_H

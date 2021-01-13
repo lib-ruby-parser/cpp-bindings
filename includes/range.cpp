@@ -33,12 +33,4 @@ namespace lib_ruby_parser
     {
         return os << "(" << range.begin_pos << "..." << range.end_pos << ")";
     }
-
-    extern "C"
-    {
-        Range *make_range(size_t begin_pos, size_t end_pos)
-        {
-            return new Range(begin_pos, end_pos);
-        }
-    }
 } // namespace lib_ruby_parser

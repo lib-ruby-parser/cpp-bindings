@@ -30,24 +30,6 @@ namespace lib_ruby_parser
         virtual ~CustomDecoder(){};
     };
 
-    extern "C"
-    {
-        struct CustomDecoderResult
-        {
-            bool success;
-
-            char *output;
-            size_t output_length;
-
-            char *error_message;
-            size_t error_message_length;
-
-            static CustomDecoderResult Ok(char *output, size_t length);
-            static CustomDecoderResult Error(char *error_message, size_t length);
-        };
-
-        CustomDecoderResult rewrite(CustomDecoder *decoder, const char *encoding_ptr, size_t encoding_length, const char *input_ptr, size_t input_length);
-    }
 } // namespace lib_ruby_parser
 
 #endif // LIB_RUBY_PARSER_TOKEN_CUSTOM_DECODER_H

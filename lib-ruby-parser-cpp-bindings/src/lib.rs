@@ -61,10 +61,10 @@ fn convert_parser_options(options: *mut ParserOptions) -> lib_ruby_parser::Parse
     let token_rewriter =
         convert_token_rewriter(unsafe { bindings::parser_options_token_rewriter(options) });
 
-    let options = unsafe { options.as_ref() }.unwrap();
+    // let options = unsafe { options.as_ref() }.unwrap();
 
-    let debug = options.debug;
-    let record_tokens = options.record_tokens;
+    let debug = unsafe { bindings::parser_options_debug(options) };
+    let record_tokens = unsafe { bindings::parser_options_record_tokens(options) };
 
     lib_ruby_parser::ParserOptions {
         buffer_name,

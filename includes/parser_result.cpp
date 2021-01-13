@@ -2,6 +2,11 @@
 
 namespace lib_ruby_parser
 {
+    extern "C"
+    {
+        ParserResult *parse(const char *code, size_t len, ParserOptions *options);
+    }
+
     ParserResult::ParserResult(
         std::unique_ptr<Node> ast,
         std::vector<Token> tokens,
@@ -22,42 +27,4 @@ namespace lib_ruby_parser
     {
         return std::unique_ptr<ParserResult>(parse(source.ptr(), source.size(), &options));
     }
-
-    std::vector<Token> tokens_vec_to_cpp_vec(TokenVec tokens)
-    {
-        return ptr_to_vec<Token>(tokens.list, tokens.length);
-    }
-
-    std::vector<Diagnostic> diagnostics_vec_to_cpp_vec(DiagnosticVec diagnostics)
-    {
-        return ptr_to_vec<Diagnostic>(diagnostics.list, diagnostics.length);
-    }
-
-    std::vector<Comment> comments_vec_to_cpp_vec(CommentVec comments)
-    {
-        return ptr_to_vec<Comment>(comments.list, comments.length);
-    }
-
-    std::vector<MagicComment> magic_comments_vec_to_cpp_vec(MagicCommentVec magic_comments)
-    {
-        return ptr_to_vec<MagicComment>(magic_comments.list, magic_comments.length);
-    }
-
-    ParserResult *make_parser_result(
-        Node *ast,
-        TokenVec tokens,
-        DiagnosticVec diagnostics,
-        CommentVec comments,
-        MagicCommentVec magic_comments,
-        char *input)
-    {
-        return new ParserResult(
-            std::unique_ptr<Node>(ast),
-            tokens_vec_to_cpp_vec(tokens),
-            diagnostics_vec_to_cpp_vec(diagnostics),
-            comments_vec_to_cpp_vec(comments),
-            magic_comments_vec_to_cpp_vec(magic_comments),
-            char_ptr_to_string(input));
-    }
-
 } // namespace lib_ruby_parser

@@ -25,22 +25,4 @@ namespace lib_ruby_parser
         this->token_rewriter = std::move(token_rewriter);
         this->record_tokens = record_tokens;
     }
-
-    extern "C"
-    {
-        const char *parser_options_buffer_name(ParserOptions *options)
-        {
-            return options->buffer_name.c_str();
-        }
-
-        CustomDecoder *parser_options_custom_decoder(ParserOptions *options)
-        {
-            return options->custom_decoder.get();
-        }
-
-        TokenRewriter *parser_options_token_rewriter(ParserOptions *options)
-        {
-            return options->token_rewriter.get();
-        }
-    }
 } // namespace lib_ruby_parser

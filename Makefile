@@ -41,6 +41,10 @@ $(TARGET_DIR)/helpers.o: includes/helpers.h includes/helpers.cpp
 	$(CXX) includes/helpers.cpp $(CC_DEFAULT_FLAGS) -c -o $(TARGET_DIR)/helpers.o
 OBJECTS += $(TARGET_DIR)/helpers.o
 
+$(TARGET_DIR)/low_level.o: includes/low_level.h includes/low_level.cpp
+	$(CXX) includes/low_level.cpp $(CC_DEFAULT_FLAGS) -c -o $(TARGET_DIR)/low_level.o
+OBJECTS += $(TARGET_DIR)/low_level.o
+
 $(TARGET_DIR)/node.o: includes/node.h includes/node.cpp
 	$(CXX) includes/node.cpp $(CC_DEFAULT_FLAGS) -c -o $(TARGET_DIR)/node.o
 OBJECTS += $(TARGET_DIR)/node.o
@@ -73,7 +77,10 @@ $(TARGET_DIR)/token.o: includes/token.h includes/token.cpp
 	$(CXX) includes/token.cpp $(CC_DEFAULT_FLAGS) -c -o $(TARGET_DIR)/token.o
 OBJECTS += $(TARGET_DIR)/token.o
 
-HEADERS = includes/lib-ruby-parser.h
+HEADERS = includes/lib-ruby-parser.h \
+	includes/comment_type.h \
+	includes/error_level.h \
+	includes/magic_comment_kind.h
 
 LIB_RUBY_PARSER_O = $(TARGET_DIR)/lib-ruby-parser.o
 $(LIB_RUBY_PARSER_O): $(DEBUG_RUST_OBJ) $(OBJECTS)

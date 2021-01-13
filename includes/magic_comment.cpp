@@ -20,12 +20,4 @@ namespace lib_ruby_parser
     {
         return !(*this == other);
     }
-
-    extern "C"
-    {
-        MagicComment *make_magic_comment(MagicCommentKind kind, Range *key_l, Range *value_l)
-        {
-            return new MagicComment(kind, std::unique_ptr<Range>(key_l), std::unique_ptr<Range>(value_l));
-        }
-    }
 } // namespace lib_ruby_parser

@@ -35,46 +35,6 @@ namespace lib_ruby_parser
 
         static std::unique_ptr<ParserResult> from_source(Bytes source, ParserOptions options);
     };
-
-    extern "C"
-    {
-        struct TokenVec
-        {
-            Token **list;
-            size_t length;
-        };
-
-        struct DiagnosticVec
-        {
-            Diagnostic **list;
-            size_t length;
-        };
-
-        struct CommentVec
-        {
-            Comment **list;
-            size_t length;
-        };
-
-        struct MagicCommentVec
-        {
-            MagicComment **list;
-            size_t length;
-        };
-    }
-
-    ParserResult *make_parser_result(
-        Node *ast,
-        TokenVec tokens,
-        DiagnosticVec diagnostics,
-        CommentVec comments,
-        MagicCommentVec magic_comments,
-        char *input);
 } // namespace lib_ruby_parser
-
-extern "C"
-{
-    lib_ruby_parser::ParserResult *parse(const char *code, size_t len, lib_ruby_parser::ParserOptions *options);
-}
 
 #endif // LIB_RUBY_PARSER_PARSER_RESULT_H
