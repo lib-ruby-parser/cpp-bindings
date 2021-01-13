@@ -60,6 +60,9 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
 
+      - name: setup
+        run: make setup
+
       # - name: download env artifact
       #   uses: actions/download-artifact@v1
       #   with:
@@ -101,6 +104,9 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+
+      - name: setup
+        run: make setup
 
       # - name: download env artifact
       #   uses: actions/download-artifact@v1
