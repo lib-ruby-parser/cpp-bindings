@@ -8,8 +8,11 @@ version = "0.1.0"
 [lib]
 crate-type = ["staticlib"]
 
-[dependencies]
+[target.'cfg(not(windows))'.dependencies]
 lib-ruby-parser = {version = "=3.0.0-3", features = ["onig"]}
+
+[target.'cfg(windows)'.dependencies]
+lib-ruby-parser = {version = "=3.0.0-3", features = []}
 
 [build-dependencies]
 bindgen = "0.53.1"

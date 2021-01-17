@@ -11,18 +11,56 @@ ifeq ($(BUILD_ENV), debug)
 	CXXFLAGS += -g -O0
 	RUST_ENV = debug
 	TARGET_DIR = target/debug
-	CARGOFLAGS =
+	CARGOFLAGS +=
 else
 	CXXFLAGS += -O2
 	RUST_ENV = release
 	TARGET_DIR = target/release
-	CARGOFLAGS = --release
+	CARGOFLAGS += --release
+endif
+
+ifeq ($(CARGO_BUILD_TARGET),)
+	# default target
+	RUST_TARGET_DIR = target
+else
+	RUST_TARGET_DIR = target/$(CARGO_BUILD_TARGET)
+endif
+
+ifeq ($(OS), Windows_NT)
+	DETECTED_OS = Windows
+else
+	UNAME_S := $(shell uname -s)
+	ifeq ($(UNAME_S), Linux)
+		DETECTED_OS = Linux
+	else
+		ifeq ($(UNAME_S), Darwin)
+			DETECTED_OS = Darwin
+		else
+			DETECTED_OS = Unknown
+		endif
+	endif
+endif
+
+ifeq ($(DETECTED_OS), Linux)
+	LIST_DEPS = ldd
+	CXX_PIC_FLAGS = -fPIC
+endif
+ifeq ($(DETECTED_OS), Darwin)
+	LIST_DEPS = otool -L
+	CXX_PIC_FLAGS = -fPIC
+endif
+ifeq ($(DETECTED_OS), Windows)
+	LIST_DEPS = echo
+	CXX_PIC_FLAGS =
 endif
 
 print-env:
-	echo "BUILD_ENV = $(BUILD_ENV)"
-	echo "CXXFLAGS = $(CXXFLAGS)"
-	echo "RUST_ENV = $(RUST_ENV)"
+	@echo "BUILD_ENV = $(BUILD_ENV)"
+	@echo "CXXFLAGS = $(CXXFLAGS)"
+	@echo "RUST_ENV = $(RUST_ENV)"
+	@echo "CARGOFLAGS = $(CARGOFLAGS)"
+	@echo "DETECTED_OS = $(DETECTED_OS)"
+	@echo "LIST_DEPS = $(LIST_DEPS)"
 
 setup:
 	mkdir -p target/debug
@@ -31,8 +69,10 @@ setup:
 RUST_OBJ = $(TARGET_DIR)/lib-ruby-parser-rust-static
 $(RUST_OBJ):
 	cd $(BINDINGS_DIR) && cargo build $(CARGOFLAGS)
-	ls -l $(BINDINGS_DIR)/target/$(RUST_ENV)/
-	cp $(BINDINGS_DIR)/target/$(RUST_ENV)/liblib_ruby_parser_cpp_bindings.a $(RUST_OBJ)
+	ls -l $(BINDINGS_DIR)/$(RUST_TARGET_DIR)/$(RUST_ENV)/
+	# find $(BINDINGS_DIR)/
+	# lib-ruby-parser-cpp-bindings/target/x86_64-pc-windows-gnu/debug/liblib_ruby_parser_cpp_bindings.a
+	cp $(BINDINGS_DIR)/$(RUST_TARGET_DIR)/$(RUST_ENV)/liblib_ruby_parser_cpp_bindings.a $(RUST_OBJ)
 
 gen-headers: $(RUST_OBJ)
 
@@ -40,59 +80,59 @@ gen-headers: $(RUST_OBJ)
 OBJECTS =
 
 $(TARGET_DIR)/bytes.o: includes/bytes.h includes/bytes.cpp
-	$(CXX) includes/bytes.cpp $(CXXFLAGS) -fPIC -c -o $(TARGET_DIR)/bytes.o
+	$(CXX) includes/bytes.cpp $(CXXFLAGS) $(CXX_PIC_FLAGS) -c -o $(TARGET_DIR)/bytes.o
 OBJECTS += $(TARGET_DIR)/bytes.o
 
 $(TARGET_DIR)/comment.o: includes/comment.h includes/comment.cpp
-	$(CXX) includes/comment.cpp $(CXXFLAGS) -fPIC -c -o $(TARGET_DIR)/comment.o
+	$(CXX) includes/comment.cpp $(CXXFLAGS) $(CXX_PIC_FLAGS) -c -o $(TARGET_DIR)/comment.o
 OBJECTS += $(TARGET_DIR)/comment.o
 
 $(TARGET_DIR)/custom_decoder.o: includes/custom_decoder.h includes/custom_decoder.cpp
-	$(CXX) includes/custom_decoder.cpp $(CXXFLAGS) -fPIC -c -o $(TARGET_DIR)/custom_decoder.o
+	$(CXX) includes/custom_decoder.cpp $(CXXFLAGS) $(CXX_PIC_FLAGS) -c -o $(TARGET_DIR)/custom_decoder.o
 OBJECTS += $(TARGET_DIR)/custom_decoder.o
 
 $(TARGET_DIR)/diagnostic.o: includes/diagnostic.h includes/diagnostic.cpp
-	$(CXX) includes/diagnostic.cpp $(CXXFLAGS) -fPIC -c -o $(TARGET_DIR)/diagnostic.o
+	$(CXX) includes/diagnostic.cpp $(CXXFLAGS) $(CXX_PIC_FLAGS) -c -o $(TARGET_DIR)/diagnostic.o
 OBJECTS += $(TARGET_DIR)/diagnostic.o
 
 $(TARGET_DIR)/helpers.o: includes/helpers.h includes/helpers.cpp
-	$(CXX) includes/helpers.cpp $(CXXFLAGS) -fPIC -c -o $(TARGET_DIR)/helpers.o
+	$(CXX) includes/helpers.cpp $(CXXFLAGS) $(CXX_PIC_FLAGS) -c -o $(TARGET_DIR)/helpers.o
 OBJECTS += $(TARGET_DIR)/helpers.o
 
 $(TARGET_DIR)/low_level.o: includes/low_level.h includes/low_level.cpp
-	$(CXX) includes/low_level.cpp $(CXXFLAGS) -fPIC -c -o $(TARGET_DIR)/low_level.o
+	$(CXX) includes/low_level.cpp $(CXXFLAGS) $(CXX_PIC_FLAGS) -c -o $(TARGET_DIR)/low_level.o
 OBJECTS += $(TARGET_DIR)/low_level.o
 
 $(TARGET_DIR)/node.o: includes/node.h includes/node.cpp
-	$(CXX) includes/node.cpp $(CXXFLAGS) -fPIC -c -o $(TARGET_DIR)/node.o
+	$(CXX) includes/node.cpp $(CXXFLAGS) $(CXX_PIC_FLAGS) -c -o $(TARGET_DIR)/node.o
 OBJECTS += $(TARGET_DIR)/node.o
 
 $(TARGET_DIR)/magic_comment.o: includes/magic_comment.h includes/magic_comment.cpp
-	$(CXX) includes/magic_comment.cpp $(CXXFLAGS) -fPIC -c -o $(TARGET_DIR)/magic_comment.o
+	$(CXX) includes/magic_comment.cpp $(CXXFLAGS) $(CXX_PIC_FLAGS) -c -o $(TARGET_DIR)/magic_comment.o
 OBJECTS += $(TARGET_DIR)/magic_comment.o
 
 $(TARGET_DIR)/make_node.o: includes/make_node.h includes/make_node.cpp
-	$(CXX) includes/make_node.cpp $(CXXFLAGS) -fPIC -c -o $(TARGET_DIR)/make_node.o
+	$(CXX) includes/make_node.cpp $(CXXFLAGS) $(CXX_PIC_FLAGS) -c -o $(TARGET_DIR)/make_node.o
 OBJECTS += $(TARGET_DIR)/make_node.o
 
 $(TARGET_DIR)/parser_options.o: includes/parser_options.h includes/parser_options.cpp
-	$(CXX) includes/parser_options.cpp $(CXXFLAGS) -fPIC -c -o $(TARGET_DIR)/parser_options.o
+	$(CXX) includes/parser_options.cpp $(CXXFLAGS) $(CXX_PIC_FLAGS) -c -o $(TARGET_DIR)/parser_options.o
 OBJECTS += $(TARGET_DIR)/parser_options.o
 
 $(TARGET_DIR)/parser_result.o: includes/parser_result.h includes/parser_result.cpp
-	$(CXX) includes/parser_result.cpp $(CXXFLAGS) -fPIC -c -o $(TARGET_DIR)/parser_result.o
+	$(CXX) includes/parser_result.cpp $(CXXFLAGS) $(CXX_PIC_FLAGS) -c -o $(TARGET_DIR)/parser_result.o
 OBJECTS += $(TARGET_DIR)/parser_result.o
 
 $(TARGET_DIR)/range.o: includes/range.h includes/range.cpp
-	$(CXX) includes/range.cpp $(CXXFLAGS) -fPIC -c -o $(TARGET_DIR)/range.o
+	$(CXX) includes/range.cpp $(CXXFLAGS) $(CXX_PIC_FLAGS) -c -o $(TARGET_DIR)/range.o
 OBJECTS += $(TARGET_DIR)/range.o
 
 $(TARGET_DIR)/token_rewriter.o: includes/token_rewriter.h includes/token_rewriter.cpp
-	$(CXX) includes/token_rewriter.cpp $(CXXFLAGS) -fPIC -c -o $(TARGET_DIR)/token_rewriter.o
+	$(CXX) includes/token_rewriter.cpp $(CXXFLAGS) $(CXX_PIC_FLAGS) -c -o $(TARGET_DIR)/token_rewriter.o
 OBJECTS += $(TARGET_DIR)/token_rewriter.o
 
 $(TARGET_DIR)/token.o: includes/token.h includes/token.cpp
-	$(CXX) includes/token.cpp $(CXXFLAGS) -fPIC -c -o $(TARGET_DIR)/token.o
+	$(CXX) includes/token.cpp $(CXXFLAGS) $(CXX_PIC_FLAGS) -c -o $(TARGET_DIR)/token.o
 OBJECTS += $(TARGET_DIR)/token.o
 
 HEADERS = includes/lib-ruby-parser.h \
@@ -100,22 +140,22 @@ HEADERS = includes/lib-ruby-parser.h \
 	includes/error_level.h \
 	includes/magic_comment_kind.h
 
-LIB_RUBY_PARSER_O = $(TARGET_DIR)/lib-ruby-parser.o
-$(LIB_RUBY_PARSER_O): $(RUST_OBJ) $(OBJECTS)
-	$(LD) -r $(RUST_OBJ) $(OBJECTS) -o $(LIB_RUBY_PARSER_O)
+# LIB_RUBY_PARSER_O = $(TARGET_DIR)/lib-ruby-parser.o
+# $(LIB_RUBY_PARSER_O): $(RUST_OBJ) $(OBJECTS)
+# 	$(LD) -r $(RUST_OBJ) $(OBJECTS) -o $(LIB_RUBY_PARSER_O)
 
 # // files
 
-DEPS = $(LIB_RUBY_PARSER_O) $(HEADERS)
+DEPS = $(RUST_OBJ) $(OBJECTS) $(HEADERS)
 
 $(TARGET_DIR)/test-runner: $(DEPS) clean-includes
-	$(CXX) $(LIB_RUBY_PARSER_O) test.cpp $(CXXFLAGS) $(LINK_FLAGS) -o $(TARGET_DIR)/test-runner
+	$(CXX) $(RUST_OBJ) $(OBJECTS) test.cpp $(CXXFLAGS) $(LINK_FLAGS) -o $(TARGET_DIR)/test-runner
 
 test: $(TARGET_DIR)/test-runner
 	$(TARGET_DIR)/test-runner
 
 test-asan: $(DEPS)
-	$(CXX) $(LIB_RUBY_PARSER_O) test.cpp -fsanitize=address $(CXXFLAGS) $(LINK_FLAGS) -o $(TARGET_DIR)/test-asan-runner
+	$(CXX) $(RUST_OBJ) $(OBJECTS) test.cpp -fsanitize=address $(CXXFLAGS) $(LINK_FLAGS) -o $(TARGET_DIR)/test-asan-runner
 	$(TARGET_DIR)/test-asan-runner
 
 test-valgrind: $(TARGET_DIR)/test-runner
@@ -174,23 +214,15 @@ clean-includes:
 DYNAMIC_LIB = $(TARGET_DIR)/lib-ruby-parser.dynamic
 STATIC_LIB = $(TARGET_DIR)/lib-ruby-parser.static
 
-UNAME_S := $(shell uname -s)
-ifeq ($(UNAME_S),Linux)
-	LIST_DEPS = ldd
-endif
-ifeq ($(UNAME_S),Darwin)
-	LIST_DEPS = otool -L
-endif
-
 $(DYNAMIC_LIB): $(DEPS) clean-includes
-	$(CXX) -fPIC -O2 -shared $(LIB_RUBY_PARSER_O) -o $(DYNAMIC_LIB)
+	$(CXX) $(CXX_PIC_FLAGS) -O2 -shared $(RUST_OBJ) $(OBJECTS) -o $(DYNAMIC_LIB)
 	# test
 	$(CXX) $(CXXFLAGS) $(LINK_FLAGS) test.cpp $(DYNAMIC_LIB) -o $(TARGET_DIR)/dynamic-test-runner
 	$(LIST_DEPS) $(TARGET_DIR)/dynamic-test-runner
 	$(TARGET_DIR)/dynamic-test-runner
 
 $(STATIC_LIB): $(DEPS) clean-includes
-	ar -rv $(STATIC_LIB) $(LIB_RUBY_PARSER_O)
+	ar -rv $(STATIC_LIB) $(RUST_OBJ) $(OBJECTS)
 	# test
 	$(CXX) $(CXXFLAGS) $(LINK_FLAGS) test.cpp $(STATIC_LIB) -o $(TARGET_DIR)/static-test-runner
 	$(LIST_DEPS) $(TARGET_DIR)/static-test-runner
