@@ -129,7 +129,6 @@ void test_range_source()
     auto send = result->ast->get<Send>();
     auto recv = send->recv->get<Int>();
     auto arg = send->args[0].get<Int>();
-    auto input = result->input;
 
     assert(recv->expression_l->source(result->input) == std::string("100"));
     assert(arg->expression_l->source(result->input) == std::string("200"));
@@ -221,7 +220,7 @@ void test_custom_decoder_ok()
     assert(ast->get<Send>()->args[0].is<Int>());
     assert(ast->get<Send>()->args[0].get<Int>()->value == "5");
 
-    assert(state->input == input);
+    assert(state->input.to_string() == input.to_string());
     assert(state->encoding == "BAR");
 }
 
@@ -243,7 +242,7 @@ void test_custom_decoder_error()
                                          std::string("encoding error: DecodingError(\"test error\")"),
                                          std::make_unique<Range>(12, 15)));
 
-    assert(state->input == input);
+    assert(state->input.to_string() == input.to_string());
     assert(state->encoding == "BAR");
 }
 
@@ -256,7 +255,7 @@ public:
 
         if (token.token_value == "2")
         {
-            token.token_value = "3";
+            token.token_value = Bytes("3");
         }
 
         return Result(std::move(token), RewriteAction::KEEP, LexStateAction::Keep());
@@ -280,21 +279,26 @@ void test_custom_rewriter()
 
 int main()
 {
-    test_range();
-    test_node();
-    test_parse();
-    test_tokens();
-    test_diagnostics();
-    test_comments();
-    test_magic_comments();
-    test_range_source();
+#define test(name)                         \
+    std::cout << "Running test_" << #name; \
+    test_##name();                         \
+    std::cout << "... OK\n";
 
-    test_parse_all();
+    test(range);
+    test(node);
+    test(parse);
+    test(tokens);
+    test(diagnostics);
+    test(comments);
+    test(magic_comments);
+    test(range_source);
 
-    test_custom_decoder_ok();
-    test_custom_decoder_error();
+    test(parse_all);
 
-    test_custom_rewriter();
+    test(custom_decoder_ok);
+    test(custom_decoder_error);
+
+    test(custom_rewriter);
 
     std::cout << "all tests passed.\n";
 }

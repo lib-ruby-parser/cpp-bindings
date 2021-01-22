@@ -1,15 +1,15 @@
 use lib_ruby_parser_nodes::FieldType;
 
-pub struct CppFieldType<'a> {
+pub(crate) struct CppFieldType<'a> {
     field_type: &'a FieldType,
 }
 
 impl<'a> CppFieldType<'a> {
-    pub fn new(field_type: &'a FieldType) -> Self {
+    pub(crate) fn new(field_type: &'a FieldType) -> Self {
         Self { field_type }
     }
 
-    pub fn as_cpp_ptr(&self) -> String {
+    pub(crate) fn as_cpp_ptr(&self) -> String {
         match &self.field_type {
             FieldType::Node => "std::unique_ptr<Node>",
             FieldType::Nodes => "std::vector<Node>",
@@ -19,7 +19,7 @@ impl<'a> CppFieldType<'a> {
             FieldType::Str => "std::string",
             FieldType::MaybeStr => "std::string",
             FieldType::Chars => "std::string",
-            FieldType::StringValue => "std::string",
+            FieldType::StringValue => "Bytes",
             FieldType::U8 => "size_t",
             FieldType::Usize => "size_t",
             FieldType::RawString => "std::string",
@@ -28,7 +28,7 @@ impl<'a> CppFieldType<'a> {
         .to_owned()
     }
 
-    pub fn must_be_moved(&self) -> bool {
+    pub(crate) fn must_be_moved(&self) -> bool {
         match &self.field_type {
             FieldType::Node
             | FieldType::MaybeNode
@@ -46,20 +46,20 @@ impl<'a> CppFieldType<'a> {
         }
     }
 
-    pub fn as_raw_ptr(&self) -> String {
+    pub(crate) fn as_raw_ptr(&self) -> String {
         match &self.field_type {
             FieldType::Node => "Node *",
             FieldType::Nodes => "NodeVec",
             FieldType::MaybeNode => "Node *",
             FieldType::Range => "Range *",
             FieldType::MaybeRange => "Range *",
-            FieldType::Str => "char *",
-            FieldType::MaybeStr => "char *",
-            FieldType::Chars => "char *",
-            FieldType::StringValue => "char *",
+            FieldType::Str => "BytePtr",
+            FieldType::MaybeStr => "BytePtr",
+            FieldType::Chars => "BytePtr",
+            FieldType::StringValue => "BytePtr",
             FieldType::U8 => "size_t ",
             FieldType::Usize => "size_t ",
-            FieldType::RawString => "char *",
+            FieldType::RawString => "BytePtr",
             FieldType::RegexOptions => "Node *",
         }
         .to_owned()

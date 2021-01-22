@@ -4,28 +4,42 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include "byte_ptr.h"
 
 namespace lib_ruby_parser
 {
     class Bytes
     {
-        std::vector<char> bytes;
+        char *bytes_;
+        size_t size_;
+        bool borrowed = false;
+
+        BytePtr borrow_ptr() const;
 
     public:
-        explicit Bytes() = default;
-        Bytes(Bytes &&) = default;
-        Bytes(const Bytes &) = delete;
-        Bytes &operator=(Bytes &&) = default;
+        Bytes();
+        ~Bytes();
 
         Bytes(std::string s);
-        Bytes(std::vector<char> data);
-        Bytes(const char *ptr, size_t length);
+        Bytes(char *ptr, size_t size);
+        Bytes(BytePtr byte_ptr);
 
-        const char *ptr();
+        Bytes(Bytes &&);
+        Bytes(const Bytes &) = delete;
+        Bytes &operator=(Bytes &&other);
+
+        BytePtr into_ptr();
         size_t size() const;
         Bytes clone() const;
+        char at(size_t idx) const;
+        Bytes range(size_t begin, size_t end) const;
+        std::string to_string() const;
+        std::string to_string_lossy() const;
+        void mark_borrowed();
 
         bool operator==(const Bytes &other);
+        bool operator==(const std::string &other);
+        bool operator==(const char *other);
         friend std::ostream &operator<<(std::ostream &os, const Bytes &range);
     };
 } // namespace lib_ruby_parser

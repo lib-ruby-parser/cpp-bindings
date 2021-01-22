@@ -1,12 +1,12 @@
 use super::CppClass;
 use lib_ruby_parser_nodes::Node;
 
-pub struct CppFile<'a> {
+pub(crate) struct CppFile<'a> {
     cpp_classes: Vec<CppClass<'a>>,
 }
 
 impl<'a> CppFile<'a> {
-    pub fn new(nodes: &'a Vec<Node>) -> Self {
+    pub(crate) fn new(nodes: &'a Vec<Node>) -> Self {
         let cpp_classes = nodes
             .iter()
             .map(|node| CppClass::new(node))
@@ -14,7 +14,7 @@ impl<'a> CppFile<'a> {
         Self { cpp_classes }
     }
 
-    pub fn node_h(&self) -> String {
+    pub(crate) fn node_h(&self) -> String {
         let class_forwards: Vec<String> =
             self.cpp_classes.iter().map(CppClass::definition).collect();
 
@@ -33,6 +33,7 @@ impl<'a> CppFile<'a> {
 #include <string>
 #include <variant>
 #include \"range.h\"
+#include \"bytes.h\"
 
 namespace lib_ruby_parser {{
 
@@ -72,7 +73,7 @@ public:
         )
     }
 
-    pub fn node_cpp(&self) -> String {
+    pub(crate) fn node_cpp(&self) -> String {
         let implementations = self
             .cpp_classes
             .iter()
@@ -89,7 +90,7 @@ namespace lib_ruby_parser {{
         )
     }
 
-    pub fn make_node_h(&self) -> String {
+    pub(crate) fn make_node_h(&self) -> String {
         let make_fn_decls: Vec<String> = self
             .cpp_classes
             .iter()
@@ -101,6 +102,8 @@ namespace lib_ruby_parser {{
 #define LIB_RUBY_PARSER_MAKE_NODE_H
 
 #include <cstddef>
+#include \"bytes.h\"
+#include \"byte_ptr.h\"
 
 namespace lib_ruby_parser {{
 
@@ -111,12 +114,12 @@ extern \"C\" {{
 
 struct NodeVec
 {{
-    Node **list;
+    Node **ptr;
     size_t length;
 
-    NodeVec(Node **list, size_t length)
+    NodeVec(Node **ptr, size_t length)
     {{
-        this->list = list;
+        this->ptr = ptr;
         this->length = length;
     }}
 }};
@@ -131,15 +134,32 @@ struct NodeVec
         )
     }
 
-    pub fn make_node_cpp(&self) -> String {
+    pub(crate) fn make_node_cpp(&self) -> String {
         let make_fns: Vec<String> = self.cpp_classes.iter().map(CppClass::make_fn).collect();
 
         format!(
             "
+#include <vector>
 #include \"make_node.h\"
-#include \"helpers.h\"
+#include \"node.h\"
 
 namespace lib_ruby_parser {{
+
+std::vector<Node> nodes_vec_to_cpp_vec(NodeVec nodes)
+{{
+    std::vector<Node> v;
+    for (size_t i = 0; i < nodes.length; i++)
+    {{
+        v.push_back(std::move(*nodes.ptr[i]));
+        delete (nodes.ptr[i]);
+    }}
+    if (nodes.length != 0)
+    {{
+        free(nodes.ptr);
+    }}
+    return v;
+}}
+
 extern \"C\" {{
 
 {make_fns}

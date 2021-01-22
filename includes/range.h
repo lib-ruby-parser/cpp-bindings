@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <string>
 #include <iostream>
+#include "bytes.h"
 
 namespace lib_ruby_parser
 {
@@ -21,7 +22,7 @@ namespace lib_ruby_parser
         bool operator==(const Range &other);
         bool operator!=(const Range &other);
         size_t size();
-        std::string source(const std::string &input);
+        Bytes source(Bytes &input);
 
         friend std::ostream &operator<<(std::ostream &os, const Range &range);
     };

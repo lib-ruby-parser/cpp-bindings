@@ -41,6 +41,7 @@ fn build_bindings() {
     println!("cargo:rerun-if-changed=../includes/comment_type.h");
     println!("cargo:rerun-if-changed=../includes/error_level.h");
     println!("cargo:rerun-if-changed=../includes/magic_comment_kind.h");
+    println!("cargo:rerun-if-changed=../includes/byte_ptr.h");
 
     let bindings_h = relative_path("../includes/low_level.h");
 

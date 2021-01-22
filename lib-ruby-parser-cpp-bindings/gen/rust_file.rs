@@ -1,24 +1,24 @@
 use lib_ruby_parser_nodes::{FieldType, Node};
 
-pub struct RustFile {
+pub(crate) struct RustFile {
     nodes: Vec<Node>,
 }
 
 impl RustFile {
-    pub fn new(nodes: Vec<Node>) -> Self {
+    pub(crate) fn new(nodes: Vec<Node>) -> Self {
         Self { nodes }
     }
 
-    pub fn code(&self) -> String {
+    pub(crate) fn code(&self) -> String {
         format!(
-            "use crate::{{CppFromRust, NodePtr, RangePtr}};
-use crate::bindings::*;
-use crate::helpers::{{string_to_char_ptr, maybe_string_to_char_ptr, string_value_to_char_ptr, chars_to_char_ptr, nodes_vec_to_cpp}};
+            "use crate::bindings;
+use crate::Ptr;
+use crate::BytePtr;
 
 {impls}
 
-impl CppFromRust<lib_ruby_parser::Node> for Node {{
-    fn convert(node: lib_ruby_parser::Node) -> *mut Self {{
+impl From<lib_ruby_parser::Node> for Ptr<bindings::Node> {{
+    fn from(node: lib_ruby_parser::Node) -> Self {{
         match node {{
             {match_branches}
         }}
@@ -42,7 +42,7 @@ impl CppFromRust<lib_ruby_parser::Node> for Node {{
             .iter()
             .map(|node| {
                 format!(
-                    "lib_ruby_parser::Node::{rust_struct_name}(inner) => Node::convert(inner),",
+                    "lib_ruby_parser::Node::{rust_struct_name}(inner) => inner.into(),",
                     rust_struct_name = node.struct_name
                 )
             })
@@ -55,19 +55,20 @@ struct CppFromRustImpl<'a> {
 }
 
 impl<'a> CppFromRustImpl<'a> {
-    pub fn new(node: &'a Node) -> Self {
+    pub(crate) fn new(node: &'a Node) -> Self {
         Self { node }
     }
 
-    pub fn code(&self) -> String {
+    pub(crate) fn code(&self) -> String {
         format!(
-            "impl CppFromRust<{rust_struct_name}> for Node {{
-    fn convert(node: {rust_struct_name}) -> *mut Self {{
+            "impl From<{rust_struct_name}> for Ptr<bindings::Node> {{
+    fn from(node: {rust_struct_name}) -> Self {{
         let {rust_struct_name} {{ {rust_fields_list} }} = node;
         {conversions}
-        unsafe {{
-            make_{make_fn}({cpp_fields_list})
-        }}
+        let ptr = unsafe {{
+            bindings::make_{make_fn}({cpp_fields_list})
+        }};
+        Ptr::new(ptr)
     }}
 }}
 ",
@@ -98,35 +99,35 @@ impl<'a> CppFromRustImpl<'a> {
             .iter()
             .map(|f| match f.field_type {
                 FieldType::Node | FieldType::MaybeNode | FieldType::RegexOptions => format!(
-                    "let {field_name} = NodePtr::from({field_name}).unwrap();",
+                    "let {field_name} = Ptr::<bindings::Node>::from({field_name}).unwrap();",
                     field_name = f.field_name
                 ),
                 FieldType::Nodes => format!(
-                    "let {field_name} = nodes_vec_to_cpp({field_name});",
+                    "let {field_name} = bindings::NodeVec::from({field_name});",
                     field_name = f.field_name
                 ),
                 FieldType::Range | FieldType::MaybeRange => format!(
-                    "let {field_name} = RangePtr::from({field_name}).unwrap();",
+                    "let {field_name} = Ptr::<bindings::Range>::from({field_name}).unwrap();",
                     field_name = f.field_name
                 ),
                 FieldType::MaybeStr => format!(
-                    "let {field_name} = maybe_string_to_char_ptr({field_name});",
+                    "let {field_name} = BytePtr::from({field_name});",
                     field_name = f.field_name
                 ),
                 FieldType::StringValue => format!(
-                    "let {field_name} = string_value_to_char_ptr({field_name});",
+                    "let {field_name} = BytePtr::from({field_name});",
                     field_name = f.field_name
                 ),
                 FieldType::Chars => format!(
-                    "let {field_name} = chars_to_char_ptr({field_name});",
+                    "let {field_name} = BytePtr::from({field_name});",
                     field_name = f.field_name
                 ),
                 FieldType::Str | FieldType::RawString => format!(
-                    "let {field_name} = string_to_char_ptr({field_name});",
+                    "let {field_name} = BytePtr::from({field_name});",
                     field_name = f.field_name
                 ),
                 FieldType::U8 | FieldType::Usize => format!(
-                    "let {field_name} = {field_name} as size_t;",
+                    "let {field_name} = {field_name} as bindings::size_t;",
                     field_name = f.field_name
                 ),
             })

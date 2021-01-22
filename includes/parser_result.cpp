@@ -4,7 +4,7 @@ namespace lib_ruby_parser
 {
     extern "C"
     {
-        ParserResult *parse(const char *code, size_t len, ParserOptions *options);
+        ParserResult *parse(BytePtr input, ParserOptions *options);
     }
 
     ParserResult::ParserResult(
@@ -13,18 +13,18 @@ namespace lib_ruby_parser
         std::vector<Diagnostic> diagnostics,
         std::vector<Comment> comments,
         std::vector<MagicComment> magic_comments,
-        std::string input)
+        Bytes input)
     {
         this->ast = std::move(ast);
         this->tokens = std::move(tokens);
         this->diagnostics = std::move(diagnostics);
         this->comments = std::move(comments);
         this->magic_comments = std::move(magic_comments);
-        this->input = input;
+        this->input = std::move(input);
     }
 
     std::unique_ptr<ParserResult> ParserResult::from_source(Bytes source, ParserOptions options)
     {
-        return std::unique_ptr<ParserResult>(parse(source.ptr(), source.size(), &options));
+        return std::unique_ptr<ParserResult>(parse(source.into_ptr(), &options));
     }
 } // namespace lib_ruby_parser

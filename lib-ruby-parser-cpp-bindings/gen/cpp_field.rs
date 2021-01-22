@@ -1,13 +1,13 @@
 use super::CppFieldType;
 use lib_ruby_parser_nodes::Field;
 
-pub struct CppField<'a> {
+pub(crate) struct CppField<'a> {
     field: &'a Field,
     cpp_field_type: CppFieldType<'a>,
 }
 
 impl<'a> CppField<'a> {
-    pub fn new(field: &'a Field) -> Self {
+    pub(crate) fn new(field: &'a Field) -> Self {
         let cpp_field_type = CppFieldType::new(&field.field_type);
         Self {
             field,
@@ -15,7 +15,7 @@ impl<'a> CppField<'a> {
         }
     }
 
-    pub fn field_name(&self) -> String {
+    pub(crate) fn field_name(&self) -> String {
         let result = self.field.field_name.to_owned();
         match &result[..] {
             "default" => "default_",
@@ -25,14 +25,14 @@ impl<'a> CppField<'a> {
         .to_owned()
     }
 
-    pub fn declaration(&self) -> String {
+    pub(crate) fn declaration(&self) -> String {
         format!(
             "    {field_type} {field_name};",
             field_type = self.cpp_field_type.as_cpp_ptr(),
             field_name = self.field_name()
         )
     }
-    pub fn constructor_arg(&self) -> String {
+    pub(crate) fn constructor_arg(&self) -> String {
         format!(
             "{field_type} {field_name}",
             field_type = self.cpp_field_type.as_cpp_ptr(),
@@ -40,7 +40,7 @@ impl<'a> CppField<'a> {
         )
     }
 
-    pub fn constructor_code(&self) -> String {
+    pub(crate) fn constructor_code(&self) -> String {
         let mut arg_value = self.field_name();
 
         if self.cpp_field_type.must_be_moved() {
@@ -54,7 +54,7 @@ impl<'a> CppField<'a> {
         )
     }
 
-    pub fn raw_constructor_arg(&self) -> String {
+    pub(crate) fn raw_constructor_arg(&self) -> String {
         format!(
             "{ptr_type} {ptr_name}",
             ptr_type = self.cpp_field_type.as_raw_ptr(),
@@ -62,7 +62,7 @@ impl<'a> CppField<'a> {
         )
     }
 
-    pub fn c_to_cpp(&self) -> String {
+    pub(crate) fn c_to_cpp(&self) -> String {
         match self.field.field_type {
             lib_ruby_parser_nodes::FieldType::Node
             | lib_ruby_parser_nodes::FieldType::MaybeNode
@@ -85,9 +85,11 @@ impl<'a> CppField<'a> {
             lib_ruby_parser_nodes::FieldType::Str
             | lib_ruby_parser_nodes::FieldType::MaybeStr
             | lib_ruby_parser_nodes::FieldType::Chars
-            | lib_ruby_parser_nodes::FieldType::StringValue
             | lib_ruby_parser_nodes::FieldType::RawString => {
-                format!("char_ptr_to_string({})", self.field_name())
+                format!("byte_ptr_to_owned_string({})", self.field_name())
+            }
+            lib_ruby_parser_nodes::FieldType::StringValue => {
+                format!("Bytes({})", self.field_name())
             }
         }
     }
