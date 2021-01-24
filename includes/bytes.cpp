@@ -1,6 +1,5 @@
 #include "bytes.h"
 #include <cstring>
-#include <iostream>
 
 namespace lib_ruby_parser
 {
@@ -12,7 +11,6 @@ namespace lib_ruby_parser
         }
         auto result = (char *)malloc(size * sizeof(char));
         memcpy(result, ptr, size);
-        std::cout << "\ncopy_bytes \"" << std::string(result, size) << "\" (size = " << size << ", ptr = " << (void *)result << ")\n";
         return result;
     }
 
@@ -31,7 +29,6 @@ namespace lib_ruby_parser
         }
         if (size_ != 0 && bytes_ != nullptr)
         {
-            std::cout << "\n~Bytes \"" << std::string(bytes_, size_) << "\" (size = " << size_ << ", ptr = " << (void *)bytes_ << ")\n";
             free(bytes_);
         }
         this->bytes_ = nullptr;

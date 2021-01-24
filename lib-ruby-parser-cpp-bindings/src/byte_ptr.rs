@@ -42,11 +42,6 @@ impl BytePtr {
 
     pub(crate) fn free(self) {
         unsafe { free_byte_ptr(self) }
-        // if !self.ptr.is_null() {
-        //     unsafe { free_str(self.ptr as *mut i8) };
-        // }
-        // self.ptr = std::ptr::null_mut();
-        // self.size = 0;
     }
 }
 
@@ -65,14 +60,12 @@ impl From<String> for BytePtr {
 
 impl From<&str> for BytePtr {
     fn from(s: &str) -> BytePtr {
-        // BytePtr::from(s.to_owned())
         BytePtr::from(s.as_bytes())
     }
 }
 
 impl From<&[u8]> for BytePtr {
     fn from(bytes: &[u8]) -> BytePtr {
-        // BytePtr::from(bytes.to_vec())
         BytePtr::new(bytes.as_ptr() as *const i8, bytes.len())
     }
 }

@@ -125,9 +125,7 @@ namespace lib_ruby_parser
                     if (cpp_result.success)
                     {
                         auto output_ptr = cpp_result.output.into_ptr();
-                        auto result = CustomDecoderResult::Ok(output_ptr);
-                        // free_byte_ptr(output_ptr);
-                        return result;
+                        return CustomDecoderResult::Ok(output_ptr);
                     }
                     else
                     {

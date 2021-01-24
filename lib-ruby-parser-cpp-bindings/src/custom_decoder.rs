@@ -8,7 +8,6 @@ fn decode_with_decoder(
     decoder: *mut bindings::CustomDecoder,
 ) -> Result<Vec<u8>, lib_ruby_parser::source::InputError> {
     let cpp_result = unsafe { bindings::rewrite(decoder, encoding, input) };
-    // println!("{:?}", cpp_result);
 
     if cpp_result.success {
         let output = cpp_result.output.into_vec();

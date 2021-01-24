@@ -1,5 +1,5 @@
 #include "byte_ptr.h"
-#include <iostream>
+#include <cstring>
 
 namespace lib_ruby_parser
 {
@@ -13,7 +13,6 @@ namespace lib_ruby_parser
             {
                 result.ptr = (char *)malloc(size * sizeof(char));
                 memcpy(result.ptr, ptr, size);
-                std::cout << "\nmake_byte_ptr \"" << std::string(result.ptr, size) << "\" (size = " << size << ", ptr = " << (void *)result.ptr << ")\n";
             }
             else
             {
@@ -26,7 +25,6 @@ namespace lib_ruby_parser
         {
             if (byte_ptr.size != 0 && byte_ptr.ptr != nullptr)
             {
-                std::cout << "\nfree_byte_ptr \"" << std::string(byte_ptr.ptr, byte_ptr.size) << "\" (size = " << byte_ptr.size << ", ptr = " << (void *)byte_ptr.ptr << ")\n";
                 free(byte_ptr.ptr);
             }
             byte_ptr.ptr = nullptr;
