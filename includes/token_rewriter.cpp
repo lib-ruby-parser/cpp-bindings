@@ -1,6 +1,5 @@
 #include "token_rewriter.h"
 #include "helpers.h"
-#include <iostream>
 
 namespace lib_ruby_parser
 {

@@ -24,14 +24,14 @@ namespace lib_ruby_parser
             std::vector<Diagnostic> diagnostics,
             std::vector<Comment> comments,
             std::vector<MagicComment> magic_comments,
-            std::string input);
+            Bytes input);
 
         std::unique_ptr<Node> ast;
         std::vector<Token> tokens;
         std::vector<Diagnostic> diagnostics;
         std::vector<Comment> comments;
         std::vector<MagicComment> magic_comments;
-        std::string input;
+        Bytes input;
 
         static std::unique_ptr<ParserResult> from_source(Bytes source, ParserOptions options);
     };

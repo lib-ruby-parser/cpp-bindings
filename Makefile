@@ -39,6 +39,10 @@ gen-headers: $(RUST_OBJ)
 # objects
 OBJECTS =
 
+$(TARGET_DIR)/byte_ptr.o: includes/byte_ptr.h includes/byte_ptr.cpp
+	$(CXX) includes/byte_ptr.cpp $(CXXFLAGS) -fPIC -c -o $(TARGET_DIR)/byte_ptr.o
+OBJECTS += $(TARGET_DIR)/byte_ptr.o
+
 $(TARGET_DIR)/bytes.o: includes/bytes.h includes/bytes.cpp
 	$(CXX) includes/bytes.cpp $(CXXFLAGS) -fPIC -c -o $(TARGET_DIR)/bytes.o
 OBJECTS += $(TARGET_DIR)/bytes.o
@@ -114,12 +118,12 @@ $(TARGET_DIR)/test-runner: $(DEPS) clean-includes
 test: $(TARGET_DIR)/test-runner
 	$(TARGET_DIR)/test-runner
 
-test-asan: $(DEPS)
+test-asan: $(DEPS) clean-includes
 	$(CXX) $(LIB_RUBY_PARSER_O) test.cpp -fsanitize=address $(CXXFLAGS) $(LINK_FLAGS) -o $(TARGET_DIR)/test-asan-runner
 	$(TARGET_DIR)/test-asan-runner
 
 test-valgrind: $(TARGET_DIR)/test-runner
-	valgrind --leak-check=full --error-exitcode=1 $(TARGET_DIR)/test-runner
+	valgrind --leak-check=full --error-exitcode=1 --num-callers=20 $(TARGET_DIR)/test-runner
 
 test-all: test test-valgrind test-asan
 
@@ -139,7 +143,8 @@ test-cov:
 LIB_RUBY_PARSER_TMP_H = target/lib-ruby-parser-tmp.h
 LIB_RUBY_PARSER_H = target/lib-ruby-parser.h
 clean-includes:
-	cat includes/comment_type.h > $(LIB_RUBY_PARSER_TMP_H)
+	cat includes/byte_ptr.h > $(LIB_RUBY_PARSER_TMP_H)
+	cat includes/comment_type.h >> $(LIB_RUBY_PARSER_TMP_H)
 	cat includes/error_level.h >> $(LIB_RUBY_PARSER_TMP_H)
 	cat includes/magic_comment_kind.h >> $(LIB_RUBY_PARSER_TMP_H)
 

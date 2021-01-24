@@ -24,9 +24,9 @@ namespace lib_ruby_parser
         return end_pos - begin_pos;
     }
 
-    std::string Range::source(const std::string &input)
+    Bytes Range::source(Bytes &input)
     {
-        return input.substr(begin_pos, size());
+        return input.range(begin_pos, begin_pos + size());
     }
 
     std::ostream &operator<<(std::ostream &os, const Range &range)

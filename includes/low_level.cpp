@@ -17,24 +17,40 @@ namespace lib_ruby_parser
     {
         namespace make
         {
+            template <typename T>
+            std::vector<T> ptr_to_vec(T **ptr, size_t size)
+            {
+                std::vector<T> v;
+                for (size_t i = 0; i < size; i++)
+                {
+                    v.push_back(std::move(*ptr[i]));
+                    delete (ptr[i]);
+                }
+                if (size != 0)
+                {
+                    free(ptr);
+                }
+                return v;
+            }
+
             std::vector<Token> tokens_vec_to_cpp_vec(TokenVec tokens)
             {
-                return ptr_to_vec<Token>(tokens.list, tokens.length);
+                return ptr_to_vec<Token>(tokens.ptr, tokens.length);
             }
 
             std::vector<Diagnostic> diagnostics_vec_to_cpp_vec(DiagnosticVec diagnostics)
             {
-                return ptr_to_vec<Diagnostic>(diagnostics.list, diagnostics.length);
+                return ptr_to_vec<Diagnostic>(diagnostics.ptr, diagnostics.length);
             }
 
             std::vector<Comment> comments_vec_to_cpp_vec(CommentVec comments)
             {
-                return ptr_to_vec<Comment>(comments.list, comments.length);
+                return ptr_to_vec<Comment>(comments.ptr, comments.length);
             }
 
             std::vector<MagicComment> magic_comments_vec_to_cpp_vec(MagicCommentVec magic_comments)
             {
-                return ptr_to_vec<MagicComment>(magic_comments.list, magic_comments.length);
+                return ptr_to_vec<MagicComment>(magic_comments.ptr, magic_comments.length);
             }
 
             extern "C"
@@ -45,15 +61,17 @@ namespace lib_ruby_parser
                     DiagnosticVec diagnostics,
                     CommentVec comments,
                     MagicCommentVec magic_comments,
-                    char *input)
+                    BytePtr input)
                 {
-                    return new ParserResult(
+                    auto result = new ParserResult(
                         std::unique_ptr<Node>(ast),
                         tokens_vec_to_cpp_vec(tokens),
                         diagnostics_vec_to_cpp_vec(diagnostics),
                         comments_vec_to_cpp_vec(comments),
                         magic_comments_vec_to_cpp_vec(magic_comments),
-                        char_ptr_to_string(input));
+                        Bytes(input));
+
+                    return result;
                 }
 
                 Comment *make_comment(CommentType kind, Range *location)
@@ -61,9 +79,9 @@ namespace lib_ruby_parser
                     return new Comment(kind, std::unique_ptr<Range>(location));
                 }
 
-                Diagnostic *make_diagnostic(ErrorLevel level, char *message, Range *range)
+                Diagnostic *make_diagnostic(ErrorLevel level, BytePtr message, Range *range)
                 {
-                    return new Diagnostic(level, char_ptr_to_string(message), std::unique_ptr<Range>(range));
+                    return new Diagnostic(level, byte_ptr_to_owned_string(message), std::unique_ptr<Range>(range));
                 }
 
                 MagicComment *make_magic_comment(MagicCommentKind kind, Range *key_l, Range *value_l)
@@ -81,12 +99,13 @@ namespace lib_ruby_parser
                     return new Loc(begin, end);
                 }
 
-                Token *make_token(int token_type, char *token_value, Loc *loc)
+                Token *make_token(int token_type, BytePtr token_value, Loc *loc)
                 {
-                    return new Token(
+                    auto result = new Token(
                         token_type,
-                        char_ptr_to_string(token_value),
+                        Bytes(token_value),
                         std::unique_ptr<Loc>(loc));
+                    return result;
                 }
             }
         } // namespace make
@@ -95,42 +114,37 @@ namespace lib_ruby_parser
         {
             extern "C"
             {
-                CustomDecoderResult rewrite(CustomDecoder *decoder, const char *encoding_ptr, size_t encoding_length, const char *input_ptr, size_t input_length)
+                CustomDecoderResult rewrite(CustomDecoder *decoder, BytePtr encoding_ptr, BytePtr input_ptr)
                 {
-                    auto encoding = std::string((char *)encoding_ptr, encoding_length);
-                    auto input = Bytes(input_ptr, input_length);
+                    auto encoding = std::string(encoding_ptr.ptr, encoding_ptr.size);
+                    auto input = Bytes((char *)input_ptr.ptr, input_ptr.size);
+                    input.mark_borrowed();
 
-                    auto cpp_result = decoder->rewrite(std::move(encoding), std::move(input));
+                    auto cpp_result = decoder->rewrite(encoding, std::move(input));
 
                     if (cpp_result.success)
                     {
-                        auto length = cpp_result.output.size();
-                        auto output = (char *)malloc(length);
-                        memcpy(output, cpp_result.output.ptr(), length);
-                        return CustomDecoderResult::Ok(output, length);
+                        auto output_ptr = cpp_result.output.into_ptr();
+                        return CustomDecoderResult::Ok(output_ptr);
                     }
                     else
                     {
-                        auto error_message = string_to_char_ptr(cpp_result.error_message);
-                        auto length = cpp_result.error_message.length();
-                        return CustomDecoderResult::Error(error_message, length);
+                        return CustomDecoderResult::Error(Bytes(cpp_result.error_message).into_ptr());
                     }
                 }
 
-                CustomDecoderResult CustomDecoderResult::Ok(char *output, size_t length)
+                CustomDecoderResult CustomDecoderResult::Ok(BytePtr output)
                 {
                     CustomDecoderResult result;
                     result.output = output;
-                    result.output_length = length;
                     result.success = true;
                     return result;
                 }
 
-                CustomDecoderResult CustomDecoderResult::Error(char *error_message, size_t length)
+                CustomDecoderResult CustomDecoderResult::Error(BytePtr error_message)
                 {
                     CustomDecoderResult result;
                     result.error_message = error_message;
-                    result.error_message_length = length;
                     result.success = false;
                     return result;
                 }
@@ -141,9 +155,9 @@ namespace lib_ruby_parser
         {
             extern "C"
             {
-                const char *parser_options_buffer_name(ParserOptions *options)
+                BytePtr parser_options_buffer_name(ParserOptions *options)
                 {
-                    return options->buffer_name.c_str();
+                    return make_byte_ptr(options->buffer_name.c_str(), options->buffer_name.size());
                 }
 
                 CustomDecoder *parser_options_custom_decoder(ParserOptions *options)
@@ -185,7 +199,7 @@ namespace lib_ruby_parser
             {
                 return Token(
                     raw_token.token_type,
-                    std::string(raw_token.token_value_ptr, raw_token.token_value_len),
+                    Bytes(raw_token.token_value),
                     std::make_unique<Loc>(
                         raw_token.loc_begin,
                         raw_token.loc_end));
@@ -195,8 +209,7 @@ namespace lib_ruby_parser
             {
                 RawToken result;
                 result.token_type = token.token_type;
-                result.token_value_ptr = string_to_char_ptr(token.token_value);
-                result.token_value_len = token.token_value.length();
+                result.token_value = token.token_value.into_ptr();
                 result.loc_begin = token.loc->begin;
                 result.loc_end = token.loc->end;
                 return result;
@@ -205,10 +218,11 @@ namespace lib_ruby_parser
             extern "C"
             {
 
-                RawTokenRewriterResult rewrite_token(TokenRewriter *rewriter, RawToken raw_token, const char *input_ptr, size_t input_len)
+                RawTokenRewriterResult rewrite_token(TokenRewriter *rewriter, RawToken raw_token, BytePtr input_ptr)
                 {
                     auto token = token_from_raw_token(raw_token);
-                    auto input = Bytes(input_ptr, input_len);
+                    auto input = Bytes(input_ptr);
+                    input.mark_borrowed();
 
                     auto cpp_result = rewriter->rewrite_token(std::move(token), std::move(input));
 

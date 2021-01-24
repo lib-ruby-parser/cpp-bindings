@@ -6,6 +6,7 @@
 #include "comment_type.h"
 #include "error_level.h"
 #include "magic_comment_kind.h"
+#include "byte_ptr.h"
 
 namespace lib_ruby_parser
 {
@@ -28,25 +29,25 @@ namespace lib_ruby_parser
             {
                 struct TokenVec
                 {
-                    Token **list;
+                    Token **ptr;
                     size_t length;
                 };
 
                 struct DiagnosticVec
                 {
-                    Diagnostic **list;
+                    Diagnostic **ptr;
                     size_t length;
                 };
 
                 struct CommentVec
                 {
-                    Comment **list;
+                    Comment **ptr;
                     size_t length;
                 };
 
                 struct MagicCommentVec
                 {
-                    MagicComment **list;
+                    MagicComment **ptr;
                     size_t length;
                 };
 
@@ -56,14 +57,14 @@ namespace lib_ruby_parser
                     DiagnosticVec diagnostics,
                     CommentVec comments,
                     MagicCommentVec magic_comments,
-                    char *input);
+                    BytePtr input);
 
                 Comment *make_comment(CommentType kind, Range *location);
-                Diagnostic *make_diagnostic(ErrorLevel level, char *message, Range *range);
+                Diagnostic *make_diagnostic(ErrorLevel level, BytePtr message, Range *range);
                 MagicComment *make_magic_comment(MagicCommentKind kind, Range *key_l, Range *value_l);
                 Range *make_range(size_t begin_pos, size_t end_pos);
                 Loc *make_loc(size_t begin, size_t end);
-                Token *make_token(int token_type, char *token_value, Loc *loc);
+                Token *make_token(int token_type, BytePtr token_value, Loc *loc);
             }
         } // namespace make
 
@@ -74,18 +75,14 @@ namespace lib_ruby_parser
                 struct CustomDecoderResult
                 {
                     bool success;
+                    BytePtr output;
+                    BytePtr error_message;
 
-                    char *output;
-                    size_t output_length;
-
-                    char *error_message;
-                    size_t error_message_length;
-
-                    static CustomDecoderResult Ok(char *output, size_t length);
-                    static CustomDecoderResult Error(char *error_message, size_t length);
+                    static CustomDecoderResult Ok(BytePtr output);
+                    static CustomDecoderResult Error(BytePtr error_message);
                 };
 
-                CustomDecoderResult rewrite(CustomDecoder *decoder, const char *encoding_ptr, size_t encoding_length, const char *input_ptr, size_t input_length);
+                CustomDecoderResult rewrite(CustomDecoder *decoder, BytePtr encoding, BytePtr input);
             }
         } // namespace custom_decoder
 
@@ -93,7 +90,7 @@ namespace lib_ruby_parser
         {
             extern "C"
             {
-                const char *parser_options_buffer_name(ParserOptions *options);
+                BytePtr parser_options_buffer_name(ParserOptions *options);
                 CustomDecoder *parser_options_custom_decoder(ParserOptions *options);
                 TokenRewriter *parser_options_token_rewriter(ParserOptions *options);
                 bool parser_options_debug(ParserOptions *options);
@@ -128,8 +125,7 @@ namespace lib_ruby_parser
                 struct RawToken
                 {
                     int token_type;
-                    const char *token_value_ptr;
-                    size_t token_value_len;
+                    BytePtr token_value;
                     size_t loc_begin;
                     size_t loc_end;
                 };
@@ -143,14 +139,14 @@ namespace lib_ruby_parser
                     RawToken token;
                 };
 
-                RawTokenRewriterResult rewrite_token(TokenRewriter *rewriter, RawToken token, const char *input_ptr, size_t input_len);
+                RawTokenRewriterResult rewrite_token(TokenRewriter *rewriter, RawToken token, BytePtr input);
             }
         } // namespace token_rewriter
 
         extern "C"
         {
 
-            char *token_name(int id);
+            BytePtr token_name(int id);
         }
     } // namespace low_level
 } // namespace lib_ruby_parser

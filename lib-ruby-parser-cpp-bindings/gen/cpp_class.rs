@@ -1,13 +1,13 @@
 use super::CppField;
 use lib_ruby_parser_nodes::Node;
 
-pub struct CppClass<'a> {
+pub(crate) struct CppClass<'a> {
     node: &'a Node,
     cpp_fields: Vec<CppField<'a>>,
 }
 
 impl<'a> CppClass<'a> {
-    pub fn new(node: &'a Node) -> Self {
+    pub(crate) fn new(node: &'a Node) -> Self {
         let cpp_fields = node
             .fields
             .iter()
@@ -16,11 +16,11 @@ impl<'a> CppClass<'a> {
         Self { node, cpp_fields }
     }
 
-    pub fn class_name(&self) -> String {
+    pub(crate) fn class_name(&self) -> String {
         self.node.struct_name.to_owned()
     }
 
-    pub fn implementation(&self) -> String {
+    pub(crate) fn implementation(&self) -> String {
         let args = self
             .cpp_fields
             .iter()
@@ -62,7 +62,7 @@ impl<'a> CppClass<'a> {
             .join(", ")
     }
 
-    pub fn make_fn_decl(&self) -> String {
+    pub(crate) fn make_fn_decl(&self) -> String {
         format!(
             "Node *make_{fn_name}({arglist});",
             fn_name = self.node.filename,
@@ -70,7 +70,7 @@ impl<'a> CppClass<'a> {
         )
     }
 
-    pub fn make_fn(&self) -> String {
+    pub(crate) fn make_fn(&self) -> String {
         let args = self
             .cpp_fields
             .iter()
@@ -89,7 +89,7 @@ impl<'a> CppClass<'a> {
         )
     }
 
-    pub fn definition(&self) -> String {
+    pub(crate) fn definition(&self) -> String {
         let fields = self
             .cpp_fields
             .iter()

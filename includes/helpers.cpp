@@ -18,9 +18,4 @@ namespace lib_ruby_parser
         ptr[s.length()] = '\0';
         return ptr;
     }
-
-    std::vector<Node> nodes_vec_to_cpp_vec(NodeVec nodes)
-    {
-        return ptr_to_vec<Node>(nodes.list, nodes.length);
-    }
 } // namespace lib_ruby_parser

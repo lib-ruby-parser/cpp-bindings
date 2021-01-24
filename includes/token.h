@@ -4,6 +4,7 @@
 #include <string>
 #include <cstddef>
 #include "helpers.h"
+#include "bytes.h"
 #include <iostream>
 #include <memory>
 
@@ -29,7 +30,7 @@ namespace lib_ruby_parser
     {
     public:
         int token_type;
-        std::string token_value;
+        Bytes token_value;
         std::unique_ptr<Loc> loc;
 
         Token() = default;
@@ -38,7 +39,7 @@ namespace lib_ruby_parser
         Token &operator=(Token &&) = default;
         explicit Token(
             int token_type,
-            std::string token_value,
+            Bytes token_value,
             std::unique_ptr<Loc> loc);
 
         friend std::ostream &operator<<(std::ostream &os, const Token &token);

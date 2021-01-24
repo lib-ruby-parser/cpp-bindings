@@ -1,53 +1,167 @@
 #include "bytes.h"
+#include <cstring>
 
 namespace lib_ruby_parser
 {
+    char *copy_bytes(const char *ptr, size_t size)
+    {
+        if (size == 0 || ptr == nullptr)
+        {
+            return nullptr;
+        }
+        auto result = (char *)malloc(size * sizeof(char));
+        memcpy(result, ptr, size);
+        return result;
+    }
+
+    Bytes::Bytes()
+    {
+        this->size_ = 0;
+        this->bytes_ = nullptr;
+        this->borrowed = false;
+    }
+
+    Bytes::~Bytes()
+    {
+        if (borrowed)
+        {
+            return;
+        }
+        if (size_ != 0 && bytes_ != nullptr)
+        {
+            free(bytes_);
+        }
+        this->bytes_ = nullptr;
+        this->size_ = 0;
+    }
+
+    BytePtr Bytes::borrow_ptr() const
+    {
+        BytePtr ptr;
+        ptr.ptr = bytes_;
+        ptr.size = size_;
+        return ptr;
+    }
+
     Bytes::Bytes(std::string s)
     {
-        this->bytes = std::vector(s.begin(), s.end());
+        this->bytes_ = copy_bytes(s.c_str(), s.length());
+        this->size_ = s.length();
+    }
+    Bytes::Bytes(char *ptr, size_t size)
+    {
+        this->bytes_ = ptr;
+        this->size_ = size;
+    }
+    Bytes::Bytes(BytePtr byte_ptr)
+    {
+        this->bytes_ = (char *)byte_ptr.ptr;
+        this->size_ = byte_ptr.size;
+
+        byte_ptr.ptr = nullptr;
+        byte_ptr.size = 0;
     }
 
-    Bytes::Bytes(std::vector<char> bytes)
+    Bytes::Bytes(Bytes &&other)
     {
-        this->bytes = std::move(bytes);
+        this->size_ = other.size_;
+        this->bytes_ = other.bytes_;
+        this->borrowed = other.borrowed;
+
+        other.size_ = 0;
+        other.bytes_ = nullptr;
+        other.borrowed = true;
     }
 
-    Bytes::Bytes(const char *ptr, size_t length)
+    Bytes &Bytes::operator=(Bytes &&other)
     {
-        this->bytes = std::vector<char>();
-        this->bytes.reserve(length);
-        for (size_t i = 0; i < length; i++)
+        if (size_ != 0 && bytes_ != nullptr)
         {
-            this->bytes.push_back(ptr[i]);
+            free(bytes_);
         }
+        this->size_ = other.size_;
+        this->bytes_ = other.bytes_;
+        this->borrowed = other.borrowed;
+
+        other.size_ = 0;
+        other.bytes_ = nullptr;
+        other.borrowed = true;
+
+        return *this;
     }
 
-    const char *Bytes::ptr()
+    BytePtr Bytes::into_ptr()
     {
-        return bytes.data();
+        BytePtr ptr;
+        ptr.ptr = bytes_;
+        ptr.size = size_;
+
+        this->bytes_ = nullptr;
+        this->size_ = 0;
+
+        return ptr;
     }
 
     size_t Bytes::size() const
     {
-        return bytes.size();
+        return size_;
     }
 
     Bytes Bytes::clone() const
     {
-        return Bytes(this->bytes);
+        return Bytes(copy_bytes(bytes_, size_), size_);
+    }
+
+    char Bytes::at(size_t idx) const
+    {
+        return bytes_[idx];
+    }
+
+    Bytes Bytes::range(size_t begin, size_t end) const
+    {
+        auto size = end - begin;
+        auto ptr_begin = bytes_ + begin * sizeof(char);
+        auto ptr = copy_bytes(ptr_begin, size);
+        return Bytes(ptr, size);
+    }
+
+    std::string Bytes::to_string() const
+    {
+        return std::string(bytes_, size_);
+    }
+
+    std::string Bytes::to_string_lossy() const
+    {
+        auto utf8_ptr = byte_ptr_to_utf8_lossy_byte_ptr(borrow_ptr());
+        return byte_ptr_to_owned_string(utf8_ptr);
+    }
+
+    void Bytes::mark_borrowed()
+    {
+        this->borrowed = true;
     }
 
     bool Bytes::operator==(const Bytes &other)
     {
-        return this->bytes == other.bytes;
+        return (bytes_ == other.bytes_) && (size_ == other.size_);
+    }
+
+    bool Bytes::operator==(const std::string &other)
+    {
+        return to_string() == other;
+    }
+
+    bool Bytes::operator==(const char *other)
+    {
+        return to_string() == other;
     }
 
     std::ostream &operator<<(std::ostream &os, const Bytes &bytes)
     {
         os << "Bytes[";
-        for (auto byte : bytes.bytes)
+        for (size_t i = 0; i < bytes.size_; i++)
         {
-            os << byte << ",";
+            os << bytes.at(i) << ',';
         }
         os << "]";
         return os;
