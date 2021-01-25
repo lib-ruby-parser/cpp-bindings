@@ -20,9 +20,9 @@ namespace lib_ruby_parser
         Bytes();
         ~Bytes();
 
-        Bytes(std::string s);
-        Bytes(char *ptr, size_t size);
-        Bytes(BytePtr byte_ptr);
+        explicit Bytes(std::string s);
+        explicit Bytes(char *ptr, size_t size);
+        explicit Bytes(BytePtr byte_ptr);
 
         Bytes(Bytes &&);
         Bytes(const Bytes &) = delete;
