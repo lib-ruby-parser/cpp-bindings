@@ -5,7 +5,6 @@
 #include <streambuf>
 #include <assert.h>
 #include "lib-ruby-parser.h"
-#pragma comment(lib, "WS2_32")
 
 using namespace lib_ruby_parser;
 

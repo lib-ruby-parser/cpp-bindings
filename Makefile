@@ -1,6 +1,5 @@
 BINDINGS_DIR = lib-ruby-parser-cpp-bindings
 
-LINK_FLAGS = -lpthread -ldl
 
 ifndef BUILD_ENV
 	BUILD_ENV = debug
@@ -54,6 +53,7 @@ ifeq ($(DETECTED_OS), Windows)
 	# CXXFLAGS += /Wall
 	CXXFLAGS += /std:c++17
 	CXXOBJFLAGS += /c /Fo
+	# LINK_FLAGS = advapi32.lib ws2_32.lib userenv.lib msvcrt.lib
 	ifeq ($(BUILD_ENV), debug)
 		CXXFLAGS += /Od
 	else
@@ -63,6 +63,7 @@ ifeq ($(DETECTED_OS), Windows)
 else
 	CXXFLAGS += -Wall -Wextra -std=c++17
 	CXXOBJFLAGS += -fPIC -c
+	LINK_FLAGS = -lpthread -ldl
 	ifeq ($(BUILD_ENV), debug)
 		CXXFLAGS += -g -O0
 	else
@@ -155,7 +156,7 @@ HEADERS = lib-ruby-parser.h comment_type.h error_level.h magic_comment_kind.h
 LIB_RUBY_PARSER_O = lib-ruby-parser$(OBJ_FILE_EXT)
 ifeq ($(DETECTED_OS), Windows)
 	MOVE_LIB_RUBY_PARSER_O = ls -l
-	LDFLAGS += /OUT:$(LIB_RUBY_PARSER_O)
+	LDFLAGS += advapi32.lib ws2_32.lib userenv.lib msvcrt.lib /OUT:$(LIB_RUBY_PARSER_O)
 else
 	MOVE_LIB_RUBY_PARSER_O =
 	LDFLAGS += -r -o $(LIB_RUBY_PARSER_O)
