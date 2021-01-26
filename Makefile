@@ -156,7 +156,7 @@ HEADERS = lib-ruby-parser.h comment_type.h error_level.h magic_comment_kind.h
 LIB_RUBY_PARSER_O = lib-ruby-parser$(OBJ_FILE_EXT)
 ifeq ($(DETECTED_OS), Windows)
 	MOVE_LIB_RUBY_PARSER_O = ls -l
-	LDFLAGS += advapi32.lib ws2_32.lib userenv.lib msvcrt.lib /OUT:$(LIB_RUBY_PARSER_O)
+	LDFLAGS += advapi32.lib ws2_32.lib userenv.lib msvcrt.lib /NODEFAULTLIB:libcmt.lib /OUT:$(LIB_RUBY_PARSER_O)
 else
 	MOVE_LIB_RUBY_PARSER_O =
 	LDFLAGS += -r -o $(LIB_RUBY_PARSER_O)
