@@ -37,6 +37,10 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
 
+      - name: setup
+        shell: bash
+        run: make setup
+
       - name: build rust object
         shell: bash
         run: |
@@ -71,10 +75,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y valgrind
-
-      - name: setup
-        shell: bash
-        run: make setup
 
       # - name: run tests
       #   shell: bash
