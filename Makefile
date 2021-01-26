@@ -79,7 +79,7 @@ print-env:
 	@echo "DETECTED_OS = $(DETECTED_OS)"
 	@echo "LIST_DEPS = $(LIST_DEPS)"
 
-RUST_OBJ = lib-ruby-parser-rust-static
+RUST_OBJ = lib-ruby-parser-rust-static$(OBJ_FILE_EXT)
 $(RUST_OBJ):
 	cd $(BINDINGS_DIR) && cargo build $(CARGOFLAGS)
 	ls -l $(BINDINGS_DIR)/$(RUST_TARGET_DIR)/$(RUST_ENV)/
@@ -155,14 +155,14 @@ HEADERS = lib-ruby-parser.h comment_type.h error_level.h magic_comment_kind.h
 LIB_RUBY_PARSER_O = lib-ruby-parser$(OBJ_FILE_EXT)
 ifeq ($(DETECTED_OS), Windows)
 	MOVE_LIB_RUBY_PARSER_O = ls -l
-	LDFLAGS += /c
+	LDFLAGS += /c /Fo$(LIB_RUBY_PARSER_O)
 else
-	MOVE_LIB_RUBY_PARSER_O = mv a.out $(LIB_RUBY_PARSER_O)
-	LDFLAGS +=
+	MOVE_LIB_RUBY_PARSER_O =
+	LDFLAGS += -r -o $(LIB_RUBY_PARSER_O)
 endif
 
 $(LIB_RUBY_PARSER_O): $(RUST_OBJ) $(OBJECTS)
-	$(LD) -r $(RUST_OBJ) $(OBJECTS) $(LDFLAGS)
+	$(LD) $(LDFLAGS) $(RUST_OBJ) $(OBJECTS)
 	bash -c "$(MOVE_LIB_RUBY_PARSER_O)"
 
 # // files

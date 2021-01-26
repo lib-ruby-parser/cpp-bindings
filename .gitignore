@@ -2,7 +2,7 @@ target/
 lib-ruby-parser-cpp-bindings/target
 lib-ruby-parser-cpp-bindings/Cargo.lock
 *.o
-lib-ruby-parser-rust-static
+lib-ruby-parser-rust-static.o
 test-runner
 test-runner.dSYM
 lib-ruby-parser.h
