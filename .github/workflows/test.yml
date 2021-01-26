@@ -40,7 +40,7 @@ jobs:
       - name: build rust object
         shell: bash
         run: |
-          CARGOFLAGS="--features=\"${{ matrix.build.features }}\"" make gen-headers
+          RUSTFLAGS="--print=native-static-libs" CARGOFLAGS="--features=\"${{ matrix.build.features }}\"" make gen-headers
 
       - name: setup msvc on windows
         uses: ilammy/msvc-dev-cmd@v1
