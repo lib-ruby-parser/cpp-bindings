@@ -61,7 +61,7 @@ ifeq ($(DETECTED_OS), Windows)
 	CXXOBJFLAGS += /c /Fo
 	# LINK_FLAGS = advapi32.lib ws2_32.lib userenv.lib msvcrt.lib
 	ifeq ($(BUILD_ENV), debug)
-		CXXFLAGS += /Od
+		CXXFLAGS += /Od /DEBUG
 	else
 		CXXFLAGS += /O2
 	endif
