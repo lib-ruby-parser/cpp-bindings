@@ -7,12 +7,10 @@ ifndef BUILD_ENV
 endif
 
 ifeq ($(BUILD_ENV), debug)
-	CXXFLAGS += -g -O0
 	RUST_ENV = debug
 	TARGET_DIR = target/debug
 	CARGOFLAGS +=
 else
-	CXXFLAGS += -O2
 	RUST_ENV = release
 	TARGET_DIR = target/release
 	CARGOFLAGS += --release
@@ -55,11 +53,22 @@ ifeq ($(DETECTED_OS), Windows)
 endif
 
 ifeq ($(DETECTED_OS), Windows)
-	CXXFLAGS += /Wall /std:c++17
+	# CXXFLAGS += /Wall
+	CXXFLAGS += /std:c++17
 	CXXOBJFLAGS += /c /Fo
+	ifeq ($(BUILD_ENV), debug)
+		CXXFLAGS += /O0
+	else
+		CXXFLAGS += /O2
+	endif
 else
 	CXXFLAGS += -Wall -Wextra -std=c++17
 	CXXOBJFLAGS += -fPIC -c -o
+	ifeq ($(BUILD_ENV), debug)
+		CXXFLAGS += -g -O0
+	else
+		CXXFLAGS += -O2
+	endif
 endif
 
 print-env:
