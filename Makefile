@@ -90,72 +90,69 @@ gen-headers: $(RUST_OBJ)
 # objects
 OBJECTS =
 
-byte_ptr.o: byte_ptr.h byte_ptr.cpp
+byte_ptr$(OBJ_FILE_EXT): byte_ptr.h byte_ptr.cpp
 	$(CXX) byte_ptr.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
-OBJECTS += byte_ptr.o
+OBJECTS += byte_ptr$(OBJ_FILE_EXT)
 
-bytes.o: bytes.h bytes.cpp
+bytes$(OBJ_FILE_EXT): bytes.h bytes.cpp
 	$(CXX) bytes.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
-OBJECTS += bytes.o
+OBJECTS += bytes$(OBJ_FILE_EXT)
 
-comment.o: comment.h comment.cpp
+comment$(OBJ_FILE_EXT): comment.h comment.cpp
 	$(CXX) comment.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
-OBJECTS += comment.o
+OBJECTS += comment$(OBJ_FILE_EXT)
 
-custom_decoder.o: custom_decoder.h custom_decoder.cpp
+custom_decoder$(OBJ_FILE_EXT): custom_decoder.h custom_decoder.cpp
 	$(CXX) custom_decoder.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
-OBJECTS += custom_decoder.o
+OBJECTS += custom_decoder$(OBJ_FILE_EXT)
 
-diagnostic.o: diagnostic.h diagnostic.cpp
+diagnostic$(OBJ_FILE_EXT): diagnostic.h diagnostic.cpp
 	$(CXX) diagnostic.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
-OBJECTS += diagnostic.o
+OBJECTS += diagnostic$(OBJ_FILE_EXT)
 
-helpers.o: helpers.h helpers.cpp
+helpers$(OBJ_FILE_EXT): helpers.h helpers.cpp
 	$(CXX) helpers.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
-OBJECTS += helpers.o
+OBJECTS += helpers$(OBJ_FILE_EXT)
 
-low_level.o: low_level.h low_level.cpp
+low_level$(OBJ_FILE_EXT): low_level.h low_level.cpp
 	$(CXX) low_level.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
-OBJECTS += low_level.o
+OBJECTS += low_level$(OBJ_FILE_EXT)
 
-node.o: node.h node.cpp
+node$(OBJ_FILE_EXT): node.h node.cpp
 	$(CXX) node.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
-OBJECTS += node.o
+OBJECTS += node$(OBJ_FILE_EXT)
 
-magic_comment.o: magic_comment.h magic_comment.cpp
+magic_comment$(OBJ_FILE_EXT): magic_comment.h magic_comment.cpp
 	$(CXX) magic_comment.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
-OBJECTS += magic_comment.o
+OBJECTS += magic_comment$(OBJ_FILE_EXT)
 
-make_node.o: make_node.h make_node.cpp
+make_node$(OBJ_FILE_EXT): make_node.h make_node.cpp
 	$(CXX) make_node.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
-OBJECTS += make_node.o
+OBJECTS += make_node$(OBJ_FILE_EXT)
 
-parser_options.o: parser_options.h parser_options.cpp
+parser_options$(OBJ_FILE_EXT): parser_options.h parser_options.cpp
 	$(CXX) parser_options.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
-OBJECTS += parser_options.o
+OBJECTS += parser_options$(OBJ_FILE_EXT)
 
-parser_result.o: parser_result.h parser_result.cpp
+parser_result$(OBJ_FILE_EXT): parser_result.h parser_result.cpp
 	$(CXX) parser_result.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
-OBJECTS += parser_result.o
+OBJECTS += parser_result$(OBJ_FILE_EXT)
 
-range.o: range.h range.cpp
+range$(OBJ_FILE_EXT): range.h range.cpp
 	$(CXX) range.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
-OBJECTS += range.o
+OBJECTS += range$(OBJ_FILE_EXT)
 
-token_rewriter.o: token_rewriter.h token_rewriter.cpp
+token_rewriter$(OBJ_FILE_EXT): token_rewriter.h token_rewriter.cpp
 	$(CXX) token_rewriter.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
-OBJECTS += token_rewriter.o
+OBJECTS += token_rewriter$(OBJ_FILE_EXT)
 
-token.o: token.h token.cpp
+token$(OBJ_FILE_EXT): token.h token.cpp
 	$(CXX) token.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
-OBJECTS += token.o
+OBJECTS += token$(OBJ_FILE_EXT)
 
-HEADERS = lib-ruby-parser.h \
-	comment_type.h \
-	error_level.h \
-	magic_comment_kind.h
+HEADERS = lib-ruby-parser.h comment_type.h error_level.h magic_comment_kind.h
 
-LIB_RUBY_PARSER_O = lib-ruby-parser.o
+LIB_RUBY_PARSER_O = lib-ruby-parser$(OBJ_FILE_EXT)
 ifeq ($(DETECTED_OS), Windows)
 	MOVE_LIB_RUBY_PARSER_O = ls -l
 	LDFLAGS += /c
