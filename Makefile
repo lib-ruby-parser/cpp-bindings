@@ -169,7 +169,7 @@ $(LIB_RUBY_PARSER_O): $(RUST_OBJ) $(OBJECTS)
 
 DEPS = $(LIB_RUBY_PARSER_O) $(HEADERS)
 
-test-runner: $(DEPS) $(LIB_RUBY_PARSER_H)
+test-runner: $(DEPS) $(LIB_RUBY_PARSER_H) test.cpp
 	$(CXX) $(LIB_RUBY_PARSER_O) test.cpp $(CXXFLAGS) $(LINK_FLAGS) -o test-runner
 
 test: test-runner
