@@ -37,10 +37,6 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
 
-      - name: setup
-        shell: bash
-        run: make setup
-
       - name: build rust object
         shell: bash
         run: |
