@@ -42,6 +42,19 @@ else
 	endif
 endif
 
+ifeq ($(DETECTED_OS), Linux)
+	LIST_DEPS = ldd
+	RUST_OBJ_EXT = .a
+endif
+ifeq ($(DETECTED_OS), Darwin)
+	LIST_DEPS = otool -L
+	RUST_OBJ_EXT = .a
+endif
+ifeq ($(DETECTED_OS), Windows)
+	LIST_DEPS = echo
+	RUST_OBJ_EXT = .lib
+endif
+
 print-env:
 	@echo "BUILD_ENV = $(BUILD_ENV)"
 	@echo "CXXFLAGS = $(CXXFLAGS)"
@@ -59,7 +72,7 @@ RUST_OBJ = $(TARGET_DIR)/lib-ruby-parser-rust-static
 $(RUST_OBJ):
 	cd $(BINDINGS_DIR) && cargo build $(CARGOFLAGS)
 	ls -l $(BINDINGS_DIR)/$(RUST_TARGET_DIR)/$(RUST_ENV)/
-	cp $(BINDINGS_DIR)/$(RUST_TARGET_DIR)/$(RUST_ENV)/liblib_ruby_parser_cpp_bindings.a $(RUST_OBJ)
+	cp $(BINDINGS_DIR)/$(RUST_TARGET_DIR)/$(RUST_ENV)/liblib_ruby_parser_cpp_bindings$(RUST_OBJ_EXT) $(RUST_OBJ)
 
 gen-headers: $(RUST_OBJ)
 
