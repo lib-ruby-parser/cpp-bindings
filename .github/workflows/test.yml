@@ -76,7 +76,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y valgrind
 
-      # - name: run tests
-      #   shell: bash
-      #   run: |
-      #     CC="cl.exe" CXX="cl.exe" CARGOFLAGS="--features=\"${{ matrix.build.features }}\"" make test-all
+      - name: run tests
+        shell: bash
+        run: |
+          CC="cl.exe" CXX="cl.exe" CARGOFLAGS="--features=\"${{ matrix.build.features }}\"" make test-all
