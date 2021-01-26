@@ -23,7 +23,7 @@ jobs:
           # - { cc: clang-8,  cxx: clang++-8,  ld: ld.lld-8 }
           # - { cc: clang-9,  cxx: clang++-9,  ld: ld.lld-9 }
           # - { cc: clang-10, cxx: clang++-10, ld: ld.lld-10 }
-          - { os: windows-latest, target: x86_64-pc-windows-msvc }
+          - { os: windows-latest, target: x86_64-pc-windows-msvc, features: "" }
 
     steps:
       - name: install rust
@@ -74,4 +74,4 @@ jobs:
       - name: run tests
         shell: bash
         run: |
-          CC="cl.exe" CXX="cl.exe" make test-all
+          CC="cl.exe" CXX="cl.exe" CARGOFLAGS="--features=\"${{ matrix.build.features }}\"" make test-all
