@@ -40,16 +40,19 @@ ifeq ($(DETECTED_OS), Linux)
 	LIST_DEPS = ldd
 	RUST_OBJ_FILE = liblib_ruby_parser_cpp_bindings.a
 	DYNAMIC_LIB_EXT = .dll
+	EXEC_EXT =
 endif
 ifeq ($(DETECTED_OS), Darwin)
 	LIST_DEPS = otool -L
 	RUST_OBJ_FILE = liblib_ruby_parser_cpp_bindings.a
 	DYNAMIC_LIB_EXT = .dylib
+	EXEC_EXT =
 endif
 ifeq ($(DETECTED_OS), Windows)
 	LIST_DEPS = echo
 	RUST_OBJ_FILE = lib_ruby_parser_cpp_bindings.lib
 	DYNAMIC_LIB_EXT = .so
+	EXEC_EXT = .exe
 endif
 
 ifeq ($(DETECTED_OS), Windows)
@@ -205,15 +208,15 @@ $(TEST_O): $(LIB_RUBY_PARSER_H)
 
 # // files
 
-test-runner: $(LIB_RUBY_PARSER_STATIC) $(TEST_O)
+test-runner$(EXEC_EXT): $(LIB_RUBY_PARSER_STATIC) $(TEST_O)
 	# $(CXX) /NODEFAULTLIB:libcmt.lib $(LIB_RUBY_PARSER_O) test.cpp $(CXXFLAGS) $(LINK_FLAGS)
 	# ls -l
-	$(CXX) $(LIB_RUBY_PARSER_STATIC) $(TEST_O) advapi32.lib ws2_32.lib userenv.lib msvcrt.lib $(SET_OUT_FILE)test-runner
+	$(CXX) $(LIB_RUBY_PARSER_STATIC) $(TEST_O) advapi32.lib ws2_32.lib userenv.lib msvcrt.lib $(SET_OUT_FILE)test-runner$(EXEC_EXT)
 	# lib.exe /OUT:test-runner $(LIB_RUBY_PARSER_STATIC) $(TEST_O)
 	ls -l
 
-test: test-runner
-	./test-runner
+test: test-runner$(EXEC_EXT)
+	./test-runner$(EXEC_EXT)
 
 test-asan: $(LIB_RUBY_PARSER_STATIC) $(LIB_RUBY_PARSER_H)
 	$(CXX) $(LIB_RUBY_PARSER_O) test.cpp -fsanitize=address $(CXXFLAGS) $(LINK_FLAGS) -o asan-test-runner
