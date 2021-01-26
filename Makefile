@@ -216,6 +216,7 @@ test-runner$(EXEC_EXT): $(LIB_RUBY_PARSER_STATIC) $(TEST_O)
 	ls -l
 
 test: test-runner$(EXEC_EXT)
+	dumpbin /dependents test-runner$(EXEC_EXT)
 	./test-runner$(EXEC_EXT)
 
 test-asan: $(LIB_RUBY_PARSER_STATIC) $(LIB_RUBY_PARSER_H)
