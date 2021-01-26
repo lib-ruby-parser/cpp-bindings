@@ -151,7 +151,7 @@ token$(OBJ_FILE_EXT): token.h token.cpp
 	$(CXX) token.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
 OBJECTS += token$(OBJ_FILE_EXT)
 
-HEADERS = lib-ruby-parser.h comment_type.h error_level.h magic_comment_kind.h
+HEADERS = $(LIB_RUBY_PARSER_H) comment_type.h error_level.h magic_comment_kind.h
 
 LIB_RUBY_PARSER_O = lib-ruby-parser$(OBJ_FILE_EXT)
 ifeq ($(DETECTED_OS), Windows)
@@ -167,7 +167,7 @@ endif
 # 	bash -c "$(MOVE_LIB_RUBY_PARSER_O)"
 
 TEST_O = test$(OBJ_FILE_EXT)
-$(TEST_O): test.cpp
+$(TEST_O): test.cpp $(LIB_RUBY_PARSER_H)
 	$(CXX) test.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
 
 # // files
