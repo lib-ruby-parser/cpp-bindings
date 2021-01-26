@@ -39,14 +39,17 @@ endif
 ifeq ($(DETECTED_OS), Linux)
 	LIST_DEPS = ldd
 	RUST_OBJ_FILE = liblib_ruby_parser_cpp_bindings.a
+	DYNAMIC_LIB_EXT = .dll
 endif
 ifeq ($(DETECTED_OS), Darwin)
 	LIST_DEPS = otool -L
 	RUST_OBJ_FILE = liblib_ruby_parser_cpp_bindings.a
+	DYNAMIC_LIB_EXT = .dylib
 endif
 ifeq ($(DETECTED_OS), Windows)
 	LIST_DEPS = echo
 	RUST_OBJ_FILE = lib_ruby_parser_cpp_bindings.lib
+	DYNAMIC_LIB_EXT = .so
 endif
 
 ifeq ($(DETECTED_OS), Windows)
@@ -60,6 +63,8 @@ ifeq ($(DETECTED_OS), Windows)
 		CXXFLAGS += /O2
 	endif
 	OBJ_FILE_EXT = .obj
+	STATIC_LIB_EXT = .lib
+	SET_OUT_FILE = /OUT:
 else
 	CXXFLAGS += -Wall -Wextra -std=c++17
 	CXXOBJFLAGS += -fPIC -c
@@ -70,6 +75,8 @@ else
 		CXXFLAGS += -O2
 	endif
 	OBJ_FILE_EXT = .o
+	STATIC_LIB_EXT = .a
+	SET_OUT_FILE = -o #
 endif
 
 print-env:
@@ -80,7 +87,7 @@ print-env:
 	@echo "DETECTED_OS = $(DETECTED_OS)"
 	@echo "LIST_DEPS = $(LIST_DEPS)"
 
-RUST_OBJ = lib-ruby-parser-rust-static$(OBJ_FILE_EXT)
+RUST_OBJ = lib-ruby-parser-rust-static$(STATIC_LIB_EXT)
 $(RUST_OBJ):
 	cd $(BINDINGS_DIR) && cargo build $(CARGOFLAGS)
 	ls -l $(BINDINGS_DIR)/$(RUST_TARGET_DIR)/$(RUST_ENV)/
@@ -151,71 +158,9 @@ token$(OBJ_FILE_EXT): token.h token.cpp
 	$(CXX) token.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
 OBJECTS += token$(OBJ_FILE_EXT)
 
-HEADERS = $(LIB_RUBY_PARSER_H) comment_type.h error_level.h magic_comment_kind.h
-
-LIB_RUBY_PARSER_O = lib-ruby-parser$(OBJ_FILE_EXT)
-ifeq ($(DETECTED_OS), Windows)
-	MOVE_LIB_RUBY_PARSER_O = ls -l
-	LDFLAGS += advapi32.lib ws2_32.lib userenv.lib msvcrt.lib /OUT:$(LIB_RUBY_PARSER_O)
-else
-	MOVE_LIB_RUBY_PARSER_O =
-	LDFLAGS += -r -o $(LIB_RUBY_PARSER_O)
-endif
-
-# $(LIB_RUBY_PARSER_O): $(RUST_OBJ) $(OBJECTS)
-# 	$(LD) $(LDFLAGS) $(RUST_OBJ) $(OBJECTS)
-# 	bash -c "$(MOVE_LIB_RUBY_PARSER_O)"
-
-TEST_O = test$(OBJ_FILE_EXT)
-$(TEST_O): test.cpp $(LIB_RUBY_PARSER_H)
-	$(CXX) test.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
-
-# // files
-
-DEPS = $(LIB_RUBY_PARSER_O) $(HEADERS)
-
-ifeq ($(DETECTED_OS), Windows)
-	STATIC_LIB_EXT = .lib
-else
-	STATIC_LIB_EXT = .a
-endif
-
 LIB_RUBY_PARSER_STATIC = lib-ruby-parser$(STATIC_LIB_EXT)
 $(LIB_RUBY_PARSER_STATIC): $(RUST_OBJ) $(OBJECTS)
-	$(LD) $(LDFLAGS) $(RUST_OBJ) $(OBJECTS)
-
-test-runner: $(LIB_RUBY_PARSER_STATIC) $(TEST_O)
-	# $(CXX) /NODEFAULTLIB:libcmt.lib $(LIB_RUBY_PARSER_O) test.cpp $(CXXFLAGS) $(LINK_FLAGS)
-	# ls -l
-	lib.exe /OUT:test-runner $(LIB_RUBY_PARSER_STATIC) $(TEST_O)
-	ls -l
-
-test: test-runner
-	./test-runner
-
-test-asan: $(DEPS) $(LIB_RUBY_PARSER_H)
-	$(CXX) $(LIB_RUBY_PARSER_O) test.cpp -fsanitize=address $(CXXFLAGS) $(LINK_FLAGS) -o test-asan-runner
-	./test-asan-runner
-
-test-valgrind: test-runner
-	valgrind --leak-check=full --error-exitcode=1 --num-callers=20 test-runner
-
-test-all: test test-valgrind test-asan
-
-clean:
-	rm -f *.o
-	rm -f test-runner
-	rm -f test-asan-runner
-	rm -f $(LIB_RUBY_PARSER_H)
-
-test-cov:
-	$(CXX) test.cpp $(RUST_OBJ) $(CXXFLAGS) $(LINK_FLAGS) -fprofile-instr-generate -fcoverage-mapping -o test
-	LLVM_PROFILE_FILE="test.profraw" test
-	llvm-profdata merge -sparse test.profraw -o test.profdata
-	llvm-cov report test-runner -instr-profile=test.profdata
-	# llvm-cov show test-runner -instr-profile=test.profdata
-
-# // releases
+	$(LD) -r $(SET_OUT_FILE)$(LIB_RUBY_PARSER_STATIC) $(RUST_OBJ) $(OBJECTS)
 
 LIB_RUBY_PARSER_TMP_H = lib-ruby-parser-tmp.h
 LIB_RUBY_PARSER_H = lib-ruby-parser.h
@@ -254,20 +199,70 @@ $(LIB_RUBY_PARSER_H):
 	echo "#endif // LIB_RUBY_PARSER_H" >> $(LIB_RUBY_PARSER_H)
 	rm $(LIB_RUBY_PARSER_TMP_H)
 
-DYNAMIC_LIB = lib-ruby-parser.dynamic
-STATIC_LIB = lib-ruby-parser.static
+TEST_O = test$(OBJ_FILE_EXT)
+$(TEST_O): $(LIB_RUBY_PARSER_H)
+	$(CXX) test.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
 
-$(DYNAMIC_LIB): $(DEPS) $(LIB_RUBY_PARSER_H)
-	$(CXX) -fPIC -O2 -shared $(LIB_RUBY_PARSER_O) -o $(DYNAMIC_LIB)
+# // files
+
+test-runner: $(LIB_RUBY_PARSER_STATIC) $(TEST_O)
+	# $(CXX) /NODEFAULTLIB:libcmt.lib $(LIB_RUBY_PARSER_O) test.cpp $(CXXFLAGS) $(LINK_FLAGS)
+	# ls -l
+	$(CXX) $(SET_OUT_FILE)test-runner $(LIB_RUBY_PARSER_STATIC) $(TEST_O)
+	# lib.exe /OUT:test-runner $(LIB_RUBY_PARSER_STATIC) $(TEST_O)
+	ls -l
+
+test: test-runner
+	./test-runner
+
+test-asan: $(LIB_RUBY_PARSER_STATIC) $(LIB_RUBY_PARSER_H)
+	$(CXX) $(LIB_RUBY_PARSER_O) test.cpp -fsanitize=address $(CXXFLAGS) $(LINK_FLAGS) -o asan-test-runner
+	./asan-test-runner
+
+test-valgrind: test-runner
+	valgrind --leak-check=full --error-exitcode=1 --num-callers=20 test-runner
+
+test-all: test test-valgrind test-asan
+
+clean:
+	rm -f *.o
+	rm -f *.obj
+
+	rm -f *test-runner
+	rm -rf *.dSYM/
+
+	rm -f *.a
+	rm -f *.lib
+
+	rm -f *.so
+	rm -f *.dylib
+	rm -f *.dll
+
+	rm -f lib-ruby-parser.h
+
+
+test-cov:
+	$(CXX) test.cpp $(RUST_OBJ) $(CXXFLAGS) $(LINK_FLAGS) -fprofile-instr-generate -fcoverage-mapping -o test
+	LLVM_PROFILE_FILE="test.profraw" test
+	llvm-profdata merge -sparse test.profraw -o test.profdata
+	llvm-cov report test-runner -instr-profile=test.profdata
+	# llvm-cov show test-runner -instr-profile=test.profdata
+
+# // releases
+
+DYNAMIC_LIB = lib-ruby-parser-dynamic$(DYNAMIC_LIB_EXT)
+STATIC_LIB = lib-ruby-parser-static$(STATIC_LIB_EXT)
+
+$(DYNAMIC_LIB): $(LIB_RUBY_PARSER_STATIC) $(TEST_O)
+	$(CXX) $(CXXFLAGS) -shared $(LIB_RUBY_PARSER_STATIC) -o $(DYNAMIC_LIB)
 	# test
 	$(CXX) $(CXXFLAGS) $(LINK_FLAGS) test.cpp $(DYNAMIC_LIB) -o dynamic-test-runner
 	$(LIST_DEPS) dynamic-test-runner
 	./dynamic-test-runner
 
-$(STATIC_LIB): $(DEPS) $(LIB_RUBY_PARSER_H)
-	ar -rv $(STATIC_LIB) $(LIB_RUBY_PARSER_O)
+$(STATIC_LIB): $(LIB_RUBY_PARSER_STATIC) $(TEST_O)
 	# test
-	$(CXX) $(CXXFLAGS) $(LINK_FLAGS) test.cpp $(STATIC_LIB) -o static-test-runner
+	$(CXX) $(CXXFLAGS) $(LIB_RUBY_PARSER_STATIC) test.cpp -o static-test-runner
 	$(LIST_DEPS) static-test-runner
 	./static-test-runner
 

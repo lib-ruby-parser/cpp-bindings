@@ -75,5 +75,4 @@ jobs:
       - name: run tests
         shell: bash
         run: |
-          make lib-ruby-parser.h
           CC="cl.exe" CXX="cl.exe" LD="lib.exe" CARGOFLAGS="--features=\"${{ matrix.build.features }}\"" make test-all
