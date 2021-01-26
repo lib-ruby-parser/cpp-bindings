@@ -171,7 +171,7 @@ $(LIB_RUBY_PARSER_O): $(RUST_OBJ) $(OBJECTS)
 DEPS = $(LIB_RUBY_PARSER_O) $(HEADERS)
 
 test-runner: $(DEPS) $(LIB_RUBY_PARSER_H) test.cpp
-	$(CXX) $(LIB_RUBY_PARSER_O) test.cpp $(CXXFLAGS) $(LINK_FLAGS) /NODEFAULTLIB:LIBCMT
+	$(CXX) /NODEFAULTLIB:libcmt.lib $(LIB_RUBY_PARSER_O) test.cpp $(CXXFLAGS) $(LINK_FLAGS)
 	ls -l
 
 test: test-runner
