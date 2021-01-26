@@ -1,7 +1,6 @@
 BINDINGS_DIR = lib-ruby-parser-cpp-bindings
 
 LINK_FLAGS = -lpthread -ldl
-CXXFLAGS += -std=c++17 -Wall
 
 ifndef BUILD_ENV
 	BUILD_ENV = debug
@@ -45,16 +44,17 @@ endif
 ifeq ($(DETECTED_OS), Linux)
 	LIST_DEPS = ldd
 	RUST_OBJ_FILE = liblib_ruby_parser_cpp_bindings.a
-	CXXFLAGS += -Wextra
+	CXXFLAGS += -Wall -Wextra -std=c++17
 endif
 ifeq ($(DETECTED_OS), Darwin)
 	LIST_DEPS = otool -L
 	RUST_OBJ_FILE = liblib_ruby_parser_cpp_bindings.a
-	CXXFLAGS += -Wextra
+	CXXFLAGS += -Wall -Wextra -std=c++17
 endif
 ifeq ($(DETECTED_OS), Windows)
 	LIST_DEPS = echo
 	RUST_OBJ_FILE = lib_ruby_parser_cpp_bindings.lib
+	CXXFLAGS += /Wall /std:c++17
 endif
 
 print-env:
