@@ -11,6 +11,6 @@ crate-type = ["staticlib"]
 [dependencies]
 lib-ruby-parser = {version = "=3.0.0-3", features = ["onig"]}
 
-[build-dependencies]
-bindgen = "0.53.1"
-lib-ruby-parser-nodes = "0.8.0"
+# [build-dependencies]
+# bindgen = "0.53.1"
+# lib-ruby-parser-nodes = "0.8.0"

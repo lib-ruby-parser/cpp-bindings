@@ -11,18 +11,44 @@ ifeq ($(BUILD_ENV), debug)
 	CXXFLAGS += -g -O0
 	RUST_ENV = debug
 	TARGET_DIR = target/debug
-	CARGOFLAGS =
+	CARGOFLAGS +=
 else
 	CXXFLAGS += -O2
 	RUST_ENV = release
 	TARGET_DIR = target/release
-	CARGOFLAGS = --release
+	CARGOFLAGS += --release
+endif
+
+ifeq ($(CARGO_BUILD_TARGET),)
+	# default target
+	RUST_TARGET_DIR = target
+else
+	RUST_TARGET_DIR = target/$(CARGO_BUILD_TARGET)
+endif
+
+ifeq ($(OS), Windows_NT)
+	DETECTED_OS = Windows
+else
+	UNAME_S := $(shell uname -s)
+	ifeq ($(UNAME_S), Linux)
+		DETECTED_OS = Linux
+	else
+		ifeq ($(UNAME_S), Darwin)
+			DETECTED_OS = Darwin
+		else
+			DETECTED_OS = Unknown
+		endif
+	endif
 endif
 
 print-env:
-	echo "BUILD_ENV = $(BUILD_ENV)"
-	echo "CXXFLAGS = $(CXXFLAGS)"
-	echo "RUST_ENV = $(RUST_ENV)"
+	@echo "BUILD_ENV = $(BUILD_ENV)"
+	@echo "CXXFLAGS = $(CXXFLAGS)"
+	@echo "RUST_ENV = $(RUST_ENV)"
+	@echo "CARGOFLAGS = $(CARGOFLAGS)"
+	@echo "DETECTED_OS = $(DETECTED_OS)"
+	@echo "LIST_DEPS = $(LIST_DEPS)"
+
 
 setup:
 	mkdir -p target/debug
@@ -31,8 +57,8 @@ setup:
 RUST_OBJ = $(TARGET_DIR)/lib-ruby-parser-rust-static
 $(RUST_OBJ):
 	cd $(BINDINGS_DIR) && cargo build $(CARGOFLAGS)
-	ls -l $(BINDINGS_DIR)/target/$(RUST_ENV)/
-	cp $(BINDINGS_DIR)/target/$(RUST_ENV)/liblib_ruby_parser_cpp_bindings.a $(RUST_OBJ)
+	ls -l $(BINDINGS_DIR)/$(RUST_TARGET_DIR)/$(RUST_ENV)/
+	cp $(BINDINGS_DIR)/$(RUST_TARGET_DIR)/$(RUST_ENV)/liblib_ruby_parser_cpp_bindings.a $(RUST_OBJ)
 
 gen-headers: $(RUST_OBJ)
 
@@ -178,14 +204,6 @@ clean-includes:
 
 DYNAMIC_LIB = $(TARGET_DIR)/lib-ruby-parser.dynamic
 STATIC_LIB = $(TARGET_DIR)/lib-ruby-parser.static
-
-UNAME_S := $(shell uname -s)
-ifeq ($(UNAME_S),Linux)
-	LIST_DEPS = ldd
-endif
-ifeq ($(UNAME_S),Darwin)
-	LIST_DEPS = otool -L
-endif
 
 $(DYNAMIC_LIB): $(DEPS) clean-includes
 	$(CXX) -fPIC -O2 -shared $(LIB_RUBY_PARSER_O) -o $(DYNAMIC_LIB)
