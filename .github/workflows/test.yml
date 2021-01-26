@@ -11,48 +11,64 @@ env:
 
 jobs:
   test:
-    name: ${{ matrix.compiler.cxx }}
-    runs-on: ubuntu-20.04
+    name: ${{ matrix.build.target }}
+    runs-on: ${{ matrix.build.os }}
     strategy:
       fail-fast: false
       matrix:
-        compiler:
-          - { cc: clang-8,  cxx: clang++-8,  ld: ld.lld-8 }
-          - { cc: clang-9,  cxx: clang++-9,  ld: ld.lld-9 }
-          - { cc: clang-10, cxx: clang++-10, ld: ld.lld-10 }
+        build:
+          # - { cc: clang-8,  cxx: clang++-8,  ld: ld.lld-8 }
+          # - { cc: clang-9,  cxx: clang++-9,  ld: ld.lld-9 }
+          # - { cc: clang-10, cxx: clang++-10, ld: ld.lld-10 }
+          - { os: windows-latest, target: x86_64-pc-windows-msvc }
 
     steps:
-      - name: setup compiler
-        run: |
-          echo "CC=${{ matrix.compiler.cc }}" >> $GITHUB_ENV
-          echo "CXX=${{ matrix.compiler.cxx }}" >> $GITHUB_ENV
-          echo "LD=${{ matrix.compiler.ld }}" >> $GITHUB_ENV
-
-      - name: make sure compiler are available
-        run: |
-          which "$CC"
-          which "$CXX"
-          which "$LD"
-
-      - name: install valgrind
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y valgrind
-
-      - name: checkout
-        uses: actions/checkout@v2
-        with:
-          submodules: true
-
       - name: install rust
         uses: actions-rs/toolchain@v1
         with:
           profile: minimal
-          toolchain: stable
+          toolchain: stable-msvc
+          target: ${{ matrix.build.target }}
           override: true
 
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: setup msvc on windows
+        uses: ilammy/msvc-dev-cmd@v1
+        if: runner.os == 'Windows'
+
+
+      # - name: setup clang on windows
+      #   # shell: bash
+      #   if: runner.os == 'Windows'
+      #   run: |
+      #     echo "C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append ;
+
+
+      # - name: setup compiler
+      #   run: |
+      #     echo "CC=${{ matrix.compiler.cc }}" >> $GITHUB_ENV
+      #     echo "CXX=${{ matrix.compiler.cxx }}" >> $GITHUB_ENV
+      #     echo "LD=${{ matrix.compiler.ld }}" >> $GITHUB_ENV
+
+      # - name: make sure compiler are available
+      #   run: |
+      #     which "$CC"
+      #     which "$CXX"
+      #     which "$LD"
+
+      - name: install valgrind
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y valgrind
+
       - name: setup
+        shell: bash
         run: make setup
 
       - name: run tests
-        run: make test-all
+        shell: bash
+        run: |
+          CC="cl.exe" CXX="cl.exe" make test-all
