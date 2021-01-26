@@ -187,7 +187,8 @@ $(LIB_RUBY_PARSER_STATIC): $(RUST_OBJ) $(OBJECTS)
 test-runner: $(LIB_RUBY_PARSER_STATIC) $(TEST_O)
 	# $(CXX) /NODEFAULTLIB:libcmt.lib $(LIB_RUBY_PARSER_O) test.cpp $(CXXFLAGS) $(LINK_FLAGS)
 	# ls -l
-	link.exe /OUT:test-runner $(LIB_RUBY_PARSER_STATIC) $(TEST_O)
+	lib.exe /OUT:test-runner $(LIB_RUBY_PARSER_STATIC) $(TEST_O)
+	ls -l
 
 test: test-runner
 	./test-runner
