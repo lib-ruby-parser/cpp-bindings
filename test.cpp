@@ -4,7 +4,7 @@
 #include <fstream>
 #include <streambuf>
 #include <assert.h>
-#include "target/lib-ruby-parser.h"
+#include "lib-ruby-parser.h"
 
 using namespace lib_ruby_parser;
 

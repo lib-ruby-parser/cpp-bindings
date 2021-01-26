@@ -78,7 +78,7 @@ jobs:
         run: LD=${{ matrix.build.ld }} CXX=${{ matrix.build.cxx }} CC=${{ matrix.build.cc }} make ${{ matrix.build.make_command }}
 
       - name: show asset
-        run: ls -l target/release/${{ matrix.build.output }}
+        run: ls -l ${{ matrix.build.output }}
 
       - name: upload assets
         uses: actions/upload-release-asset@v1.0.1
@@ -86,7 +86,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ env.RELEASE_UPLOAD_URL }}
-          asset_path: target/release/${{ matrix.build.output }}
+          asset_path: ${{ matrix.build.output }}
           asset_name: ${{ matrix.build.name }}
           asset_content_type: application/octet-stream
 
@@ -126,7 +126,7 @@ jobs:
         run: make clean-includes
 
       - name: show asset
-        run: ls -l target/lib-ruby-parser.h
+        run: ls -l lib-ruby-parser.h
 
       - name: upload assets
         uses: actions/upload-release-asset@v1.0.1
@@ -134,7 +134,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ env.RELEASE_UPLOAD_URL }}
-          asset_path: target/lib-ruby-parser.h
+          asset_path: lib-ruby-parser.h
           asset_name: lib-ruby-parser.h
           asset_content_type: application/octet-stream
 

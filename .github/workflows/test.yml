@@ -79,4 +79,4 @@ jobs:
       - name: run tests
         shell: bash
         run: |
-          CC="cl.exe" CXX="cl.exe" CARGOFLAGS="--features=\"${{ matrix.build.features }}\"" make test-all
+          CC="cl.exe" CXX="cl.exe" LD="cl.exe" CARGOFLAGS="--features=\"${{ matrix.build.features }}\"" make test-all
