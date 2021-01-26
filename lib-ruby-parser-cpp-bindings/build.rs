@@ -1,13 +1,13 @@
-#[cfg(not(windows))]
+#[cfg(not(target_os = "windows"))]
 extern crate bindgen;
-#[cfg(not(windows))]
+#[cfg(not(target_os = "windows"))]
 extern crate lib_ruby_parser_nodes;
 
 use std::path::Path;
 
-#[cfg(not(windows))]
+#[cfg(not(target_os = "windows"))]
 mod gen;
-#[cfg(not(windows))]
+#[cfg(not(target_os = "windows"))]
 use gen::{CppFile, RustFile};
 
 fn relative_path(path: &str) -> String {
@@ -20,7 +20,7 @@ fn relative_path(path: &str) -> String {
         .to_owned()
 }
 
-#[cfg(not(windows))]
+#[cfg(not(target_os = "windows"))]
 fn build_cpp_files() {
     let nodes = lib_ruby_parser_nodes::nodes().unwrap();
     let cpp_file = CppFile::new(&nodes);
@@ -41,7 +41,7 @@ fn build_cpp_files() {
     .unwrap();
 }
 
-#[cfg(not(windows))]
+#[cfg(not(target_os = "windows"))]
 fn build_bindings() {
     println!("cargo:rerun-if-changed=../includes/low_level.h");
     println!("cargo:rerun-if-changed=../includes/comment_type.h");
@@ -75,7 +75,7 @@ fn build_bindings() {
         .expect("Couldn't write bindings!");
 }
 
-#[cfg(not(windows))]
+#[cfg(not(target_os = "windows"))]
 fn build_rust_files() {
     let cpp_from_rust_gen_rs = relative_path("src/cpp_from_rust_gen.rs");
     let nodes = lib_ruby_parser_nodes::nodes().unwrap();
@@ -83,14 +83,14 @@ fn build_rust_files() {
     std::fs::write(&cpp_from_rust_gen_rs, RustFile::new(nodes).code()).unwrap();
 }
 
-#[cfg(not(windows))]
+#[cfg(not(target_os = "windows"))]
 fn main() {
     build_cpp_files();
     build_bindings();
     build_rust_files();
 }
 
-#[cfg(windows)]
+#[cfg(target_os = "windows")]
 fn main() {
     println!(
         "Running on Windows, so bindgen doesn't work. All files are expected to be pre-generated"

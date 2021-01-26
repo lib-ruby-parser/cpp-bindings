@@ -23,6 +23,7 @@ ifeq ($(CARGO_BUILD_TARGET),)
 	# default target
 	RUST_TARGET_DIR = target
 else
+	CARGOFLAGS += --target $(CARGO_BUILD_TARGET)
 	RUST_TARGET_DIR = target/$(CARGO_BUILD_TARGET)
 endif
 
