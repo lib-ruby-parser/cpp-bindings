@@ -158,12 +158,14 @@ HEADERS = lib-ruby-parser.h \
 LIB_RUBY_PARSER_O = lib-ruby-parser.o
 ifeq ($(DETECTED_OS), Windows)
 	MOVE_LIB_RUBY_PARSER_O = ls -l
+	LDFLAGS += /c
 else
 	MOVE_LIB_RUBY_PARSER_O = mv a.out $(LIB_RUBY_PARSER_O)
+	LDFLAGS +=
 endif
 
 $(LIB_RUBY_PARSER_O): $(RUST_OBJ) $(OBJECTS)
-	$(LD) -r $(RUST_OBJ) $(OBJECTS)
+	$(LD) -r $(RUST_OBJ) $(OBJECTS) $(LDFLAGS)
 	bash -c "$(MOVE_LIB_RUBY_PARSER_O)"
 
 # // files
