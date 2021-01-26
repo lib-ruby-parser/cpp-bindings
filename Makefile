@@ -162,17 +162,32 @@ else
 	LDFLAGS += -r -o $(LIB_RUBY_PARSER_O)
 endif
 
-$(LIB_RUBY_PARSER_O): $(RUST_OBJ) $(OBJECTS)
-	$(LD) $(LDFLAGS) $(RUST_OBJ) $(OBJECTS)
-	bash -c "$(MOVE_LIB_RUBY_PARSER_O)"
+# $(LIB_RUBY_PARSER_O): $(RUST_OBJ) $(OBJECTS)
+# 	$(LD) $(LDFLAGS) $(RUST_OBJ) $(OBJECTS)
+# 	bash -c "$(MOVE_LIB_RUBY_PARSER_O)"
+
+TEST_O = test$(OBJ_FILE_EXT)
+$(TEST_O): test.cpp
+	$(CXX) test.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
 
 # // files
 
 DEPS = $(LIB_RUBY_PARSER_O) $(HEADERS)
 
-test-runner: $(DEPS) $(LIB_RUBY_PARSER_H) test.cpp
-	$(CXX) /NODEFAULTLIB:libcmt.lib $(LIB_RUBY_PARSER_O) test.cpp $(CXXFLAGS) $(LINK_FLAGS)
-	ls -l
+ifeq ($(DETECTED_OS), Windows)
+	STATIC_LIB_EXT = .lib
+else
+	STATIC_LIB_EXT = .a
+endif
+
+LIB_RUBY_PARSER_STATIC = lib-ruby-parser$(STATIC_LIB_EXT)
+$(LIB_RUBY_PARSER_STATIC): $(RUST_OBJ) $(OBJECTS)
+	$(LD) $(LDFLAGS) $(RUST_OBJ) $(OBJECTS)
+
+test-runner: $(LIB_RUBY_PARSER_STATIC) $(TEST_O)
+	# $(CXX) /NODEFAULTLIB:libcmt.lib $(LIB_RUBY_PARSER_O) test.cpp $(CXXFLAGS) $(LINK_FLAGS)
+	# ls -l
+	link.exe /OUT:test-runner $(LIB_RUBY_PARSER_STATIC) $(TEST_O)
 
 test: test-runner
 	./test-runner
