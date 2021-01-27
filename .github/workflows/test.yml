@@ -26,6 +26,10 @@ jobs:
           - { os: windows-latest, target: x86_64-pc-windows-msvc, features: "" }
 
     steps:
+      - name: setup msvc on windows
+        uses: ilammy/msvc-dev-cmd@v1
+        if: runner.os == 'Windows'
+
       - name: install rust
         uses: actions-rs/toolchain@v1
         with:
@@ -41,11 +45,6 @@ jobs:
         shell: bash
         run: |
           RUSTFLAGS="--print=native-static-libs" CARGOFLAGS="--features=\"${{ matrix.build.features }}\"" make gen-headers
-
-      - name: setup msvc on windows
-        uses: ilammy/msvc-dev-cmd@v1
-        if: runner.os == 'Windows'
-
 
       # - name: setup clang on windows
       #   # shell: bash
