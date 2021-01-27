@@ -80,10 +80,10 @@ jobs:
       - name: run tests
         shell: bash
         run: |
-          CC="cl.exe" CXX="cl.exe" LD="link.exe" CARGOFLAGS="--features=\"${{ matrix.build.features }}\"" make test-runner.exe
+          CC="cl.exe" CXX="cl.exe" LD="link.exe" CARGOFLAGS="--features=\"${{ matrix.build.features }}\"" make test
 
-      - name: upload test-runner
-        uses: actions/upload-artifact@v1
-        with:
-          name: test-runner.exe
-          path: test-runner.exe
+      # - name: upload test-runner
+      #   uses: actions/upload-artifact@v1
+      #   with:
+      #     name: test-runner.exe
+      #     path: test-runner.exe

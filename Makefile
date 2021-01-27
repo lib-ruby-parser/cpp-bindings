@@ -59,6 +59,7 @@ ifeq ($(DETECTED_OS), Windows)
 	# CXXFLAGS += /Wall
 	CXXFLAGS += /std:c++17
 	CXXOBJFLAGS += /c /Fo
+	CXXFLAGS += /MT /Zi
 	# LINK_FLAGS = advapi32.lib ws2_32.lib userenv.lib msvcrt.lib
 	ifeq ($(BUILD_ENV), debug)
 		CXXFLAGS += /Od /DEBUG
@@ -213,7 +214,7 @@ $(TEST_O): $(LIB_RUBY_PARSER_H)
 test-runner$(EXEC_EXT): $(LIB_RUBY_PARSER_STATIC) $(TEST_O)
 	# $(CXX) /NODEFAULTLIB:libcmt.lib $(LIB_RUBY_PARSER_O) test.cpp $(CXXFLAGS) $(LINK_FLAGS)
 	# ls -l
-	link.exe $(LIB_RUBY_PARSER_STATIC) $(TEST_O) /OUT:test-runner$(EXEC_EXT)
+	link.exe /MT $(LIB_RUBY_PARSER_STATIC) $(TEST_O) /OUT:test-runner$(EXEC_EXT)
 	# lib.exe /OUT:test-runner $(LIB_RUBY_PARSER_STATIC) $(TEST_O)
 	ls -l
 
