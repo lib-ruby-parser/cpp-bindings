@@ -78,7 +78,6 @@ fn build_rust_files() {
 
 #[cfg(feature = "generate-bindings")]
 fn main() {
-    println!("cargo:rustc-link-lib=ws2_32");
     build_cpp_files();
     build_bindings();
     build_rust_files();
@@ -86,7 +85,6 @@ fn main() {
 
 #[cfg(not(feature = "generate-bindings"))]
 fn main() {
-    println!("cargo:rustc-link-lib=ws2_32");
     // println!(
     //     "Running on Windows, so bindgen doesn't work. All files are expected to be pre-generated"
     // );
