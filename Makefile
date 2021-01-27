@@ -94,7 +94,8 @@ RUST_OBJ = lib-ruby-parser-rust-static$(STATIC_LIB_EXT)
 $(RUST_OBJ):
 	cd $(BINDINGS_DIR) && cargo build $(CARGOFLAGS)
 	ls -l $(BINDINGS_DIR)/$(RUST_TARGET_DIR)/$(RUST_ENV)/
-	cp $(BINDINGS_DIR)/$(RUST_TARGET_DIR)/$(RUST_ENV)/$(RUST_OBJ_FILE) $(RUST_OBJ)
+	cp $(BINDINGS_DIR)/$(RUST_TARGET_DIR)/$(RUST_ENV)/$(RUST_OBJ_FILE) partial-$(RUST_OBJ)
+	lib.exe -r $(SET_OUT_FILE)$(RUST_OBJ) partial-$(RUST_OBJ) advapi32.lib ws2_32.lib userenv.lib msvcrt.lib
 
 gen-headers: $(RUST_OBJ)
 

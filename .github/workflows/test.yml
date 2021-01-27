@@ -50,7 +50,7 @@ jobs:
       - name: build rust object
         shell: bash
         run: |
-          RUSTFLAGS="--print=native-static-libs" CARGOFLAGS="--features=\"${{ matrix.build.features }}\"" make gen-headers
+          CC="cl.exe" CXX="cl.exe" LD="link.exe" RUSTFLAGS="--print=native-static-libs" CARGOFLAGS="--features=\"${{ matrix.build.features }}\"" make gen-headers
 
       # - name: setup clang on windows
       #   # shell: bash
@@ -80,4 +80,4 @@ jobs:
       - name: run tests
         shell: bash
         run: |
-          CC="cl.exe" CXX="cl.exe" LD="lib.exe" CARGOFLAGS="--features=\"${{ matrix.build.features }}\"" make test-all
+          CC="cl.exe" CXX="cl.exe" LD="link.exe" CARGOFLAGS="--features=\"${{ matrix.build.features }}\"" make test-all

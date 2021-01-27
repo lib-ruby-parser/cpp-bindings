@@ -6,11 +6,6 @@
 #include <assert.h>
 #include "lib-ruby-parser.h"
 
-#pragma comment(lib, "advapi32.lib")
-#pragma comment(lib, "ws2_32.lib")
-#pragma comment(lib, "userenv.lib")
-#pragma comment(lib, "msvcrt.lib")
-
 using namespace lib_ruby_parser;
 
 void test_range()
