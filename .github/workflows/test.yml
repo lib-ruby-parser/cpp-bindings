@@ -38,6 +38,9 @@ jobs:
           target: ${{ matrix.build.target }}
           override: true
 
+      - name: show link.exe
+        run: which -a link.exe
+
       - name: checkout
         uses: actions/checkout@v2
 
