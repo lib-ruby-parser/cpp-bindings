@@ -164,7 +164,7 @@ OBJECTS += token$(OBJ_FILE_EXT)
 
 LIB_RUBY_PARSER_STATIC = lib-ruby-parser$(STATIC_LIB_EXT)
 $(LIB_RUBY_PARSER_STATIC): $(RUST_OBJ) $(OBJECTS)
-	$(LD) -r $(SET_OUT_FILE)$(LIB_RUBY_PARSER_STATIC) $(RUST_OBJ) $(OBJECTS)
+	lib.exe -r $(SET_OUT_FILE)$(LIB_RUBY_PARSER_STATIC) $(RUST_OBJ) $(OBJECTS)
 
 LIB_RUBY_PARSER_TMP_H = lib-ruby-parser-tmp.h
 LIB_RUBY_PARSER_H = lib-ruby-parser.h
@@ -212,7 +212,7 @@ $(TEST_O): $(LIB_RUBY_PARSER_H)
 test-runner$(EXEC_EXT): $(LIB_RUBY_PARSER_STATIC) $(TEST_O)
 	# $(CXX) /NODEFAULTLIB:libcmt.lib $(LIB_RUBY_PARSER_O) test.cpp $(CXXFLAGS) $(LINK_FLAGS)
 	# ls -l
-	$(CXX) $(LIB_RUBY_PARSER_STATIC) $(TEST_O) /Fetest-runner$(EXEC_EXT)
+	link.exe $(LIB_RUBY_PARSER_STATIC) $(TEST_O) /OUT:test-runner$(EXEC_EXT)
 	# lib.exe /OUT:test-runner $(LIB_RUBY_PARSER_STATIC) $(TEST_O)
 	ls -l
 
