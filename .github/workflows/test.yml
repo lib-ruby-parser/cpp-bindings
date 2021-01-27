@@ -34,7 +34,7 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           profile: minimal
-          toolchain: stable-msvc
+          toolchain: stable
           target: ${{ matrix.build.target }}
           override: true
 
@@ -49,7 +49,7 @@ jobs:
       - name: build rust object
         shell: bash
         run: |
-          RUSTFLAGS="--print=native-static-libs -C linker=$(which -a link.exe)" CARGOFLAGS="--features=\"${{ matrix.build.features }}\"" make gen-headers
+          RUSTFLAGS="--print=native-static-libs" CARGOFLAGS="--features=\"${{ matrix.build.features }}\"" make gen-headers
 
       # - name: setup clang on windows
       #   # shell: bash
