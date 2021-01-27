@@ -1198,7 +1198,7 @@ class Numblock
 {
 public:
     std::unique_ptr<Node> call;
-    size_t numargs;
+    uint32_t numargs;
     std::unique_ptr<Node> body;
     std::unique_ptr<Range> begin_l;
     std::unique_ptr<Range> end_l;
@@ -1207,7 +1207,7 @@ public:
     Numblock() = delete;
     Numblock(Numblock &&) = default;
     Numblock(const Numblock &) = delete;
-    explicit Numblock(std::unique_ptr<Node> call, size_t numargs, std::unique_ptr<Node> body, std::unique_ptr<Range> begin_l, std::unique_ptr<Range> end_l, std::unique_ptr<Range> expression_l);
+    explicit Numblock(std::unique_ptr<Node> call, uint32_t numargs, std::unique_ptr<Node> body, std::unique_ptr<Range> begin_l, std::unique_ptr<Range> end_l, std::unique_ptr<Range> expression_l);
 };
 
 class OpAsgn

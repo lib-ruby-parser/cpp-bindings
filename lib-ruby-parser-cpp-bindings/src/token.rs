@@ -4,9 +4,7 @@ use crate::Ptr;
 
 impl From<lib_ruby_parser::Loc> for Ptr<bindings::Loc> {
     fn from(loc: lib_ruby_parser::Loc) -> Self {
-        let ptr = unsafe {
-            bindings::make_loc(loc.begin as bindings::size_t, loc.end as bindings::size_t)
-        };
+        let ptr = unsafe { bindings::make_loc(loc.begin as u32, loc.end as u32) };
 
         Ptr::new(ptr)
     }

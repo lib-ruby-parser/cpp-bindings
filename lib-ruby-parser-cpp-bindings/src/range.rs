@@ -3,12 +3,7 @@ use crate::Ptr;
 
 impl From<lib_ruby_parser::source::Range> for Ptr<bindings::Range> {
     fn from(range: lib_ruby_parser::source::Range) -> Self {
-        let ptr = unsafe {
-            bindings::make_range(
-                range.begin_pos as bindings::size_t,
-                range.end_pos as bindings::size_t,
-            )
-        };
+        let ptr = unsafe { bindings::make_range(range.begin_pos as u32, range.end_pos as u32) };
         Ptr::new(ptr)
     }
 }

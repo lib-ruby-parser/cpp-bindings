@@ -8,7 +8,7 @@ namespace lib_ruby_parser {
 std::vector<Node> nodes_vec_to_cpp_vec(NodeVec nodes)
 {
     std::vector<Node> v;
-    for (size_t i = 0; i < nodes.length; i++)
+    for (uint32_t i = 0; i < nodes.length; i++)
     {
         v.push_back(std::move(*nodes.ptr[i]));
         delete (nodes.ptr[i]);
@@ -362,7 +362,7 @@ Node *make_nth_ref(BytePtr name, Range * expression_l) {
     node_variant_t inner = std::make_unique<NthRef>(byte_ptr_to_owned_string(name), std::unique_ptr<Range>(expression_l));
     return new Node(std::move(inner));
 }
-Node *make_numblock(Node * call, size_t  numargs, Node * body, Range * begin_l, Range * end_l, Range * expression_l) {
+Node *make_numblock(Node * call, uint32_t  numargs, Node * body, Range * begin_l, Range * end_l, Range * expression_l) {
     node_variant_t inner = std::make_unique<Numblock>(std::unique_ptr<Node>(call), numargs, std::unique_ptr<Node>(body), std::unique_ptr<Range>(begin_l), std::unique_ptr<Range>(end_l), std::unique_ptr<Range>(expression_l));
     return new Node(std::move(inner));
 }

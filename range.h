@@ -11,17 +11,17 @@ namespace lib_ruby_parser
     class Range
     {
     public:
-        size_t begin_pos;
-        size_t end_pos;
+        uint32_t begin_pos;
+        uint32_t end_pos;
 
         Range() = delete;
         Range(Range &&) = default;
         Range(const Range &) = default;
-        explicit Range(size_t begin_pos, size_t end_pos);
+        explicit Range(uint32_t begin_pos, uint32_t end_pos);
 
         bool operator==(const Range &other);
         bool operator!=(const Range &other);
-        size_t size();
+        uint32_t size();
         Bytes source(Bytes &input);
 
         friend std::ostream &operator<<(std::ostream &os, const Range &range);

@@ -18,10 +18,10 @@ namespace lib_ruby_parser
         namespace make
         {
             template <typename T>
-            std::vector<T> ptr_to_vec(T **ptr, size_t size)
+            std::vector<T> ptr_to_vec(T **ptr, uint32_t size)
             {
                 std::vector<T> v;
-                for (size_t i = 0; i < size; i++)
+                for (uint32_t i = 0; i < size; i++)
                 {
                     v.push_back(std::move(*ptr[i]));
                     delete (ptr[i]);
@@ -89,12 +89,12 @@ namespace lib_ruby_parser
                     return new MagicComment(kind, std::unique_ptr<Range>(key_l), std::unique_ptr<Range>(value_l));
                 }
 
-                Range *make_range(size_t begin_pos, size_t end_pos)
+                Range *make_range(uint32_t begin_pos, uint32_t end_pos)
                 {
                     return new Range(begin_pos, end_pos);
                 }
 
-                Loc *make_loc(size_t begin, size_t end)
+                Loc *make_loc(uint32_t begin, uint32_t end)
                 {
                     return new Loc(begin, end);
                 }

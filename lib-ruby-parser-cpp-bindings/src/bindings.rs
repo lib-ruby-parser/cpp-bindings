@@ -12,15 +12,15 @@ pub type allocator_pointer = u8;
 pub type allocator_const_pointer = u8;
 pub type allocator_reference = u8;
 pub type allocator_const_reference = u8;
+pub type allocator_value_type = u8;
+pub type allocator_propagate_on_container_move_assignment = u8;
+pub type allocator_is_always_equal = u8;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct allocator_rebind {
     pub _address: u8,
 }
 pub type allocator_rebind_other = u8;
-pub type allocator_value_type = u8;
-pub type allocator_propagate_on_container_move_assignment = u8;
-pub type allocator_is_always_equal = u8;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct vector {
@@ -47,15 +47,14 @@ pub type vector_const_reverse_iterator = u8;
 pub struct vector__ConstructTransaction {
     pub _address: u8,
 }
-pub type size_t = ::std::os::raw::c_ulong;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct BytePtr {
     pub ptr: *mut ::std::os::raw::c_char,
-    pub size: size_t,
+    pub size: u32,
 }
 extern "C" {
-    pub fn make_byte_ptr(ptr: *const ::std::os::raw::c_char, size: size_t) -> BytePtr;
+    pub fn make_byte_ptr(ptr: *const ::std::os::raw::c_char, size: u32) -> BytePtr;
 }
 extern "C" {
     pub fn free_byte_ptr(byte_ptr: BytePtr);
@@ -79,7 +78,7 @@ extern "C" {
 #[derive(Debug)]
 pub struct Bytes {
     pub bytes_: *mut ::std::os::raw::c_char,
-    pub size_: size_t,
+    pub size_: u32,
     pub borrowed: bool,
 }
 extern "C" {
@@ -88,19 +87,19 @@ extern "C" {
 }
 extern "C" {
     #[link_name = "\u{1}__ZNK15lib_ruby_parser5Bytes4sizeEv"]
-    pub fn Bytes_size(this: *const Bytes) -> size_t;
+    pub fn Bytes_size(this: *const Bytes) -> u32;
 }
 extern "C" {
     #[link_name = "\u{1}__ZNK15lib_ruby_parser5Bytes5cloneEv"]
     pub fn Bytes_clone(this: *const Bytes) -> Bytes;
 }
 extern "C" {
-    #[link_name = "\u{1}__ZNK15lib_ruby_parser5Bytes2atEm"]
-    pub fn Bytes_at(this: *const Bytes, idx: size_t) -> ::std::os::raw::c_char;
+    #[link_name = "\u{1}__ZNK15lib_ruby_parser5Bytes2atEj"]
+    pub fn Bytes_at(this: *const Bytes, idx: u32) -> ::std::os::raw::c_char;
 }
 extern "C" {
-    #[link_name = "\u{1}__ZNK15lib_ruby_parser5Bytes5rangeEmm"]
-    pub fn Bytes_range(this: *const Bytes, begin: size_t, end: size_t) -> Bytes;
+    #[link_name = "\u{1}__ZNK15lib_ruby_parser5Bytes5rangeEjj"]
+    pub fn Bytes_range(this: *const Bytes, begin: u32, end: u32) -> Bytes;
 }
 extern "C" {
     #[link_name = "\u{1}__ZNK15lib_ruby_parser5Bytes9to_stringEv"]
@@ -123,8 +122,8 @@ extern "C" {
     pub fn Bytes_Bytes1(this: *mut Bytes, s: string);
 }
 extern "C" {
-    #[link_name = "\u{1}__ZN15lib_ruby_parser5BytesC1EPcm"]
-    pub fn Bytes_Bytes2(this: *mut Bytes, ptr: *mut ::std::os::raw::c_char, size: size_t);
+    #[link_name = "\u{1}__ZN15lib_ruby_parser5BytesC1EPcj"]
+    pub fn Bytes_Bytes2(this: *mut Bytes, ptr: *mut ::std::os::raw::c_char, size: u32);
 }
 extern "C" {
     #[link_name = "\u{1}__ZN15lib_ruby_parser5BytesC1ENS_7BytePtrE"]
@@ -144,7 +143,7 @@ impl Bytes {
         Bytes_into_ptr(self)
     }
     #[inline]
-    pub unsafe fn size(&self) -> size_t {
+    pub unsafe fn size(&self) -> u32 {
         Bytes_size(self)
     }
     #[inline]
@@ -152,11 +151,11 @@ impl Bytes {
         Bytes_clone(self)
     }
     #[inline]
-    pub unsafe fn at(&self, idx: size_t) -> ::std::os::raw::c_char {
+    pub unsafe fn at(&self, idx: u32) -> ::std::os::raw::c_char {
         Bytes_at(self, idx)
     }
     #[inline]
-    pub unsafe fn range(&self, begin: size_t, end: size_t) -> Bytes {
+    pub unsafe fn range(&self, begin: u32, end: u32) -> Bytes {
         Bytes_range(self, begin, end)
     }
     #[inline]
@@ -184,7 +183,7 @@ impl Bytes {
         __bindgen_tmp.assume_init()
     }
     #[inline]
-    pub unsafe fn new2(ptr: *mut ::std::os::raw::c_char, size: size_t) -> Self {
+    pub unsafe fn new2(ptr: *mut ::std::os::raw::c_char, size: u32) -> Self {
         let mut __bindgen_tmp = ::std::mem::MaybeUninit::uninit();
         Bytes_Bytes2(__bindgen_tmp.as_mut_ptr(), ptr, size);
         __bindgen_tmp.assume_init()
@@ -220,7 +219,7 @@ pub struct Range {
 #[derive(Debug, Copy, Clone)]
 pub struct NodeVec {
     pub ptr: *mut *mut Node,
-    pub length: size_t,
+    pub length: u32,
 }
 extern "C" {
     pub fn make_alias(
@@ -829,7 +828,7 @@ extern "C" {
 extern "C" {
     pub fn make_numblock(
         call: *mut Node,
-        numargs: size_t,
+        numargs: u32,
         body: *mut Node,
         begin_l: *mut Range,
         end_l: *mut Range,
@@ -1185,25 +1184,25 @@ pub struct ParserOptions {
 #[derive(Debug, Copy, Clone)]
 pub struct TokenVec {
     pub ptr: *mut *mut Token,
-    pub length: size_t,
+    pub length: u32,
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct DiagnosticVec {
     pub ptr: *mut *mut Diagnostic,
-    pub length: size_t,
+    pub length: u32,
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct CommentVec {
     pub ptr: *mut *mut Comment,
-    pub length: size_t,
+    pub length: u32,
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct MagicCommentVec {
     pub ptr: *mut *mut MagicComment,
-    pub length: size_t,
+    pub length: u32,
 }
 extern "C" {
     pub fn make_parser_result(
@@ -1233,10 +1232,10 @@ extern "C" {
     ) -> *mut MagicComment;
 }
 extern "C" {
-    pub fn make_range(begin_pos: size_t, end_pos: size_t) -> *mut Range;
+    pub fn make_range(begin_pos: u32, end_pos: u32) -> *mut Range;
 }
 extern "C" {
-    pub fn make_loc(begin: size_t, end: size_t) -> *mut Loc;
+    pub fn make_loc(begin: u32, end: u32) -> *mut Loc;
 }
 extern "C" {
     pub fn make_token(
@@ -1312,8 +1311,8 @@ pub enum RawLexStateAction {
 pub struct RawToken {
     pub token_type: ::std::os::raw::c_int,
     pub token_value: BytePtr,
-    pub loc_begin: size_t,
-    pub loc_end: size_t,
+    pub loc_begin: u32,
+    pub loc_end: u32,
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]

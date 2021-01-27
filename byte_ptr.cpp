@@ -5,7 +5,7 @@ namespace lib_ruby_parser
 {
     extern "C"
     {
-        BytePtr make_byte_ptr(const char *ptr, size_t size)
+        BytePtr make_byte_ptr(const char *ptr, uint32_t size)
         {
             BytePtr result;
             result.size = size;
@@ -49,7 +49,7 @@ namespace lib_ruby_parser
     {
         auto vec = std::vector<char>();
         vec.reserve(byte_ptr.size);
-        for (size_t i = 0; i < byte_ptr.size; i++)
+        for (uint32_t i = 0; i < byte_ptr.size; i++)
         {
             vec.push_back(byte_ptr.ptr[i]);
         }

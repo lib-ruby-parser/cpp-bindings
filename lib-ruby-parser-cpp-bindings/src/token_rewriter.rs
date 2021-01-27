@@ -17,8 +17,8 @@ impl From<lib_ruby_parser::Token> for bindings::RawToken {
         bindings::RawToken {
             token_type: token.token_type,
             token_value: BytePtr::from(token.token_value),
-            loc_begin: token.loc.begin as bindings::size_t,
-            loc_end: token.loc.end as bindings::size_t,
+            loc_begin: token.loc.begin as u32,
+            loc_end: token.loc.end as u32,
         }
     }
 }

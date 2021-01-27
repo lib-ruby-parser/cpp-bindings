@@ -3,7 +3,7 @@
 
 namespace lib_ruby_parser
 {
-    char *copy_bytes(const char *ptr, size_t size)
+    char *copy_bytes(const char *ptr, uint32_t size)
     {
         if (size == 0 || ptr == nullptr)
         {
@@ -48,7 +48,7 @@ namespace lib_ruby_parser
         this->bytes_ = copy_bytes(s.c_str(), s.length());
         this->size_ = s.length();
     }
-    Bytes::Bytes(char *ptr, size_t size)
+    Bytes::Bytes(char *ptr, uint32_t size)
     {
         this->bytes_ = ptr;
         this->size_ = size;
@@ -102,7 +102,7 @@ namespace lib_ruby_parser
         return ptr;
     }
 
-    size_t Bytes::size() const
+    uint32_t Bytes::size() const
     {
         return size_;
     }
@@ -112,12 +112,12 @@ namespace lib_ruby_parser
         return Bytes(copy_bytes(bytes_, size_), size_);
     }
 
-    char Bytes::at(size_t idx) const
+    char Bytes::at(uint32_t idx) const
     {
         return bytes_[idx];
     }
 
-    Bytes Bytes::range(size_t begin, size_t end) const
+    Bytes Bytes::range(uint32_t begin, uint32_t end) const
     {
         auto size = end - begin;
         auto ptr_begin = bytes_ + begin * sizeof(char);
@@ -159,7 +159,7 @@ namespace lib_ruby_parser
     std::ostream &operator<<(std::ostream &os, const Bytes &bytes)
     {
         os << "Bytes[";
-        for (size_t i = 0; i < bytes.size_; i++)
+        for (uint32_t i = 0; i < bytes.size_; i++)
         {
             os << bytes.at(i) << ',';
         }

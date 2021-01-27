@@ -3,7 +3,7 @@
 namespace lib_ruby_parser
 {
 
-    Range::Range(size_t begin_pos, size_t end_pos)
+    Range::Range(uint32_t begin_pos, uint32_t end_pos)
     {
         this->begin_pos = begin_pos;
         this->end_pos = end_pos;
@@ -19,7 +19,7 @@ namespace lib_ruby_parser
         return !(*this == other);
     }
 
-    size_t Range::size()
+    uint32_t Range::size()
     {
         return end_pos - begin_pos;
     }

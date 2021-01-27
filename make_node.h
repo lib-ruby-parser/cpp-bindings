@@ -15,9 +15,9 @@ extern "C" {
 struct NodeVec
 {
     Node **ptr;
-    size_t length;
+    uint32_t length;
 
-    NodeVec(Node **ptr, size_t length)
+    NodeVec(Node **ptr, uint32_t length)
     {
         this->ptr = ptr;
         this->length = length;
@@ -109,7 +109,7 @@ Node *make_module(Node * name, Node * body, Range * keyword_l, Range * end_l, Ra
 Node *make_next(NodeVec args, Range * keyword_l, Range * expression_l);
 Node *make_nil(Range * expression_l);
 Node *make_nth_ref(BytePtr name, Range * expression_l);
-Node *make_numblock(Node * call, size_t  numargs, Node * body, Range * begin_l, Range * end_l, Range * expression_l);
+Node *make_numblock(Node * call, uint32_t  numargs, Node * body, Range * begin_l, Range * end_l, Range * expression_l);
 Node *make_op_asgn(Node * recv, BytePtr operator_, Node * value, Range * operator_l, Range * expression_l);
 Node *make_optarg(BytePtr name, Node * default_, Range * name_l, Range * operator_l, Range * expression_l);
 Node *make_or(Node * lhs, Node * rhs, Range * operator_l, Range * expression_l);

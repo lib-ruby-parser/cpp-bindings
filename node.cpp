@@ -672,7 +672,7 @@ this->name = std::move(name);
 this->expression_l = std::move(expression_l);
 }
 
-Numblock::Numblock(std::unique_ptr<Node> call, size_t numargs, std::unique_ptr<Node> body, std::unique_ptr<Range> begin_l, std::unique_ptr<Range> end_l, std::unique_ptr<Range> expression_l)
+Numblock::Numblock(std::unique_ptr<Node> call, uint32_t numargs, std::unique_ptr<Node> body, std::unique_ptr<Range> begin_l, std::unique_ptr<Range> end_l, std::unique_ptr<Range> expression_l)
 {
 this->call = std::move(call);
 this->numargs = numargs;

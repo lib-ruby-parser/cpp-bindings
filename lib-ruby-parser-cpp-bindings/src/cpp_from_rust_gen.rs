@@ -1188,7 +1188,7 @@ impl From<lib_ruby_parser::nodes::Numblock> for Ptr<bindings::Node> {
     fn from(node: lib_ruby_parser::nodes::Numblock) -> Self {
         let lib_ruby_parser::nodes::Numblock { call, numargs, body, begin_l, end_l, expression_l } = node;
         let call = Ptr::<bindings::Node>::from(call).unwrap();
-        let numargs = numargs as bindings::size_t;
+        let numargs = numargs as u32;
         let body = Ptr::<bindings::Node>::from(body).unwrap();
         let begin_l = Ptr::<bindings::Range>::from(begin_l).unwrap();
         let end_l = Ptr::<bindings::Range>::from(end_l).unwrap();

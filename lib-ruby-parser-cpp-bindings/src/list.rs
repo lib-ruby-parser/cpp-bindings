@@ -4,10 +4,10 @@ use crate::Ptr;
 fn map_vec_to_c_list<Source, Target>(
     vec: Vec<Source>,
     f: fn(Source) -> Ptr<Target>,
-) -> (*mut *mut Target, bindings::size_t) {
+) -> (*mut *mut Target, u32) {
     let vec = vec.into_iter().map(|i| f(i).unwrap()).collect::<Vec<_>>();
     let slice = Box::leak(vec.into_boxed_slice());
-    (slice.as_mut_ptr(), slice.len() as bindings::size_t)
+    (slice.as_mut_ptr(), slice.len() as u32)
 }
 
 impl From<Vec<lib_ruby_parser::Token>> for bindings::TokenVec {

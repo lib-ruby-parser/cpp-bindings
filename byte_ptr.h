@@ -13,10 +13,10 @@ namespace lib_ruby_parser
         {
         public:
             char *ptr;
-            size_t size;
+            uint32_t size;
         };
 
-        BytePtr make_byte_ptr(const char *ptr, size_t size);
+        BytePtr make_byte_ptr(const char *ptr, uint32_t size);
         void free_byte_ptr(BytePtr byte_ptr);
 
         // Defined in Rust

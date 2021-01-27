@@ -115,9 +115,9 @@ extern \"C\" {{
 struct NodeVec
 {{
     Node **ptr;
-    size_t length;
+    uint32_t length;
 
-    NodeVec(Node **ptr, size_t length)
+    NodeVec(Node **ptr, uint32_t length)
     {{
         this->ptr = ptr;
         this->length = length;
@@ -148,7 +148,7 @@ namespace lib_ruby_parser {{
 std::vector<Node> nodes_vec_to_cpp_vec(NodeVec nodes)
 {{
     std::vector<Node> v;
-    for (size_t i = 0; i < nodes.length; i++)
+    for (uint32_t i = 0; i < nodes.length; i++)
     {{
         v.push_back(std::move(*nodes.ptr[i]));
         delete (nodes.ptr[i]);
