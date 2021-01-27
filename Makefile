@@ -211,7 +211,7 @@ $(TEST_O): $(LIB_RUBY_PARSER_H)
 test-runner$(EXEC_EXT): $(LIB_RUBY_PARSER_STATIC) $(TEST_O)
 	# $(CXX) /NODEFAULTLIB:libcmt.lib $(LIB_RUBY_PARSER_O) test.cpp $(CXXFLAGS) $(LINK_FLAGS)
 	# ls -l
-	$(CXX) $(LIB_RUBY_PARSER_STATIC) $(TEST_O) advapi32.lib ws2_32.lib userenv.lib msvcrt.lib /Fetest-runner$(EXEC_EXT)
+	$(CXX) $(LIB_RUBY_PARSER_STATIC) $(TEST_O) /Fetest-runner$(EXEC_EXT)
 	# lib.exe /OUT:test-runner $(LIB_RUBY_PARSER_STATIC) $(TEST_O)
 	ls -l
 
