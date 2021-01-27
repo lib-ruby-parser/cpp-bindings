@@ -214,7 +214,7 @@ $(TEST_O): $(LIB_RUBY_PARSER_H)
 test-runner$(EXEC_EXT): $(LIB_RUBY_PARSER_STATIC) $(TEST_O)
 	# $(CXX) /NODEFAULTLIB:libcmt.lib $(LIB_RUBY_PARSER_O) test.cpp $(CXXFLAGS) $(LINK_FLAGS)
 	# ls -l
-	link.exe /MT $(LIB_RUBY_PARSER_STATIC) $(TEST_O) /OUT:test-runner$(EXEC_EXT)
+	link.exe $(LIB_RUBY_PARSER_STATIC) $(TEST_O) /OUT:test-runner$(EXEC_EXT)
 	# lib.exe /OUT:test-runner $(LIB_RUBY_PARSER_STATIC) $(TEST_O)
 	ls -l
 
