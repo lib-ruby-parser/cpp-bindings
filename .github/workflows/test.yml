@@ -40,9 +40,7 @@ jobs:
 
       - name: show link.exe
         run: |
-          which link.exe
-          ls -l "/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Tools/MSVC/14.28.29333/bin/HostX64/x64/link.exe"
-          ls -l "$(which link.exe)"
+          which -a link.exe
 
       - name: checkout
         uses: actions/checkout@v2
