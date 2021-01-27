@@ -92,7 +92,7 @@ print-env:
 
 RUST_OBJ = lib-ruby-parser-rust-static$(STATIC_LIB_EXT)
 $(RUST_OBJ):
-	cd $(BINDINGS_DIR) && cargo build $(CARGOFLAGS) && cargo run --example parse $(CARGOFLAGS)
+	cd $(BINDINGS_DIR) && cargo build $(CARGOFLAGS) -vv && cargo run --example parse $(CARGOFLAGS) -vv
 	dumpbin /dependents	$(BINDINGS_DIR)/target/x86_64-pc-windows-msvc/debug/examples/parse.exe
 	ls -l $(BINDINGS_DIR)/$(RUST_TARGET_DIR)/$(RUST_ENV)/
 	cp $(BINDINGS_DIR)/$(RUST_TARGET_DIR)/$(RUST_ENV)/$(RUST_OBJ_FILE) partial-$(RUST_OBJ)
