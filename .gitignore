@@ -1,9 +1,3 @@
 target/
-src/node.h
-src/node.cpp
-src/make_node.h
-src/make_node.cpp
 lib-ruby-parser-cpp-bindings/target
-lib-ruby-parser-cpp-bindings/src/bindings.rs
-lib-ruby-parser-cpp-bindings/src/cpp_from_rust_gen.rs
 lib-ruby-parser-cpp-bindings/Cargo.lock

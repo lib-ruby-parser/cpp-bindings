@@ -11,12 +11,12 @@ ifeq ($(BUILD_ENV), debug)
 	CXXFLAGS += -g -O0
 	RUST_ENV = debug
 	TARGET_DIR = target/debug
-	CARGOFLAGS =
+	CARGOFLAGS +=
 else
 	CXXFLAGS += -O2
 	RUST_ENV = release
 	TARGET_DIR = target/release
-	CARGOFLAGS = --release
+	CARGOFLAGS += --release
 endif
 
 print-env:
