@@ -20,30 +20,26 @@ fn build_cpp_files() {
     let nodes = lib_ruby_parser_nodes::nodes().unwrap();
     let cpp_file = CppFile::new(&nodes);
 
-    std::fs::write(&relative_path("../includes/node.h"), cpp_file.node_h()).unwrap();
-    std::fs::write(&relative_path("../includes/node.cpp"), cpp_file.node_cpp()).unwrap();
+    std::fs::write(&relative_path("../src/node.h"), cpp_file.node_h()).unwrap();
+    std::fs::write(&relative_path("../src/node.cpp"), cpp_file.node_cpp()).unwrap();
+
+    std::fs::write(&relative_path("../src/make_node.h"), cpp_file.make_node_h()).unwrap();
 
     std::fs::write(
-        &relative_path("../includes/make_node.h"),
-        cpp_file.make_node_h(),
-    )
-    .unwrap();
-
-    std::fs::write(
-        &relative_path("../includes/make_node.cpp"),
+        &relative_path("../src/make_node.cpp"),
         cpp_file.make_node_cpp(),
     )
     .unwrap();
 }
 
 fn build_bindings() {
-    println!("cargo:rerun-if-changed=../includes/low_level.h");
-    println!("cargo:rerun-if-changed=../includes/comment_type.h");
-    println!("cargo:rerun-if-changed=../includes/error_level.h");
-    println!("cargo:rerun-if-changed=../includes/magic_comment_kind.h");
-    println!("cargo:rerun-if-changed=../includes/byte_ptr.h");
+    println!("cargo:rerun-if-changed=../src/low_level.h");
+    println!("cargo:rerun-if-changed=../src/comment_type.h");
+    println!("cargo:rerun-if-changed=../src/error_level.h");
+    println!("cargo:rerun-if-changed=../src/magic_comment_kind.h");
+    println!("cargo:rerun-if-changed=../src/byte_ptr.h");
 
-    let bindings_h = relative_path("../includes/low_level.h");
+    let bindings_h = relative_path("../src/low_level.h");
 
     let bindings = bindgen::Builder::default()
         .header(bindings_h)
