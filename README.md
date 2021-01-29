@@ -75,8 +75,8 @@ All classes/methods are defined in the `lib_ruby_parser` namespace.
 8. `Range` has the following fields and methods:
 
     ```cpp
-    size_t begin_pos;
-    size_t end_pos;
+    uint32_t begin_pos;
+    uint32_t end_pos;
     std::string source(const std::string &input);
     ```
 

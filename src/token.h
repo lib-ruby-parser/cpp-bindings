@@ -13,13 +13,13 @@ namespace lib_ruby_parser
     class Loc
     {
     public:
-        size_t begin;
-        size_t end;
+        uint32_t begin;
+        uint32_t end;
 
         Loc() = delete;
         Loc(Loc &&) = default;
         Loc(const Loc &) = default;
-        explicit Loc(size_t begin, size_t end);
+        explicit Loc(uint32_t begin, uint32_t end);
         friend std::ostream &operator<<(std::ostream &os, const Loc &loc);
 
         bool operator==(const Loc &other);

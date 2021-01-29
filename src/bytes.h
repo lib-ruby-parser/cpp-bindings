@@ -11,7 +11,7 @@ namespace lib_ruby_parser
     class Bytes
     {
         char *bytes_;
-        size_t size_;
+        uint32_t size_;
         bool borrowed = false;
 
         BytePtr borrow_ptr() const;
@@ -21,7 +21,7 @@ namespace lib_ruby_parser
         ~Bytes();
 
         explicit Bytes(std::string s);
-        explicit Bytes(char *ptr, size_t size);
+        explicit Bytes(char *ptr, uint32_t size);
         explicit Bytes(BytePtr byte_ptr);
 
         Bytes(Bytes &&);
@@ -29,10 +29,10 @@ namespace lib_ruby_parser
         Bytes &operator=(Bytes &&other);
 
         BytePtr into_ptr();
-        size_t size() const;
+        uint32_t size() const;
         Bytes clone() const;
-        char at(size_t idx) const;
-        Bytes range(size_t begin, size_t end) const;
+        char at(uint32_t idx) const;
+        Bytes range(uint32_t begin, uint32_t end) const;
         std::string to_string() const;
         std::string to_string_lossy() const;
         void mark_borrowed();

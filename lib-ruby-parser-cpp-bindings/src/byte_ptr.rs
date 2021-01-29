@@ -1,10 +1,10 @@
-use crate::bindings::{free_byte_ptr, size_t, BytePtr};
+use crate::bindings::{free_byte_ptr, BytePtr};
 
 impl BytePtr {
     pub(crate) fn new(ptr: *const i8, size: usize) -> Self {
         Self {
             ptr: ptr as *mut i8,
-            size: size as size_t,
+            size: size as u32,
         }
     }
 

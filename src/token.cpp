@@ -2,7 +2,7 @@
 
 namespace lib_ruby_parser
 {
-    Loc::Loc(size_t begin, size_t end)
+    Loc::Loc(uint32_t begin, uint32_t end)
     {
         this->begin = begin;
         this->end = end;

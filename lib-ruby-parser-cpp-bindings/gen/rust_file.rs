@@ -127,7 +127,7 @@ impl<'a> CppFromRustImpl<'a> {
                     field_name = f.field_name
                 ),
                 FieldType::U8 | FieldType::Usize => format!(
-                    "let {field_name} = {field_name} as bindings::size_t;",
+                    "let {field_name} = {field_name} as u32;",
                     field_name = f.field_name
                 ),
             })

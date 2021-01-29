@@ -20,8 +20,8 @@ impl<'a> CppFieldType<'a> {
             FieldType::MaybeStr => "std::string",
             FieldType::Chars => "std::string",
             FieldType::StringValue => "Bytes",
-            FieldType::U8 => "size_t",
-            FieldType::Usize => "size_t",
+            FieldType::U8 => "uint32_t",
+            FieldType::Usize => "uint32_t",
             FieldType::RawString => "std::string",
             FieldType::RegexOptions => "std::unique_ptr<Node>",
         }
@@ -57,8 +57,8 @@ impl<'a> CppFieldType<'a> {
             FieldType::MaybeStr => "BytePtr",
             FieldType::Chars => "BytePtr",
             FieldType::StringValue => "BytePtr",
-            FieldType::U8 => "size_t ",
-            FieldType::Usize => "size_t ",
+            FieldType::U8 => "uint32_t ",
+            FieldType::Usize => "uint32_t ",
             FieldType::RawString => "BytePtr",
             FieldType::RegexOptions => "Node *",
         }

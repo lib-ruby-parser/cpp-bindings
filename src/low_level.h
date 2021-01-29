@@ -30,25 +30,25 @@ namespace lib_ruby_parser
                 struct TokenVec
                 {
                     Token **ptr;
-                    size_t length;
+                    uint32_t length;
                 };
 
                 struct DiagnosticVec
                 {
                     Diagnostic **ptr;
-                    size_t length;
+                    uint32_t length;
                 };
 
                 struct CommentVec
                 {
                     Comment **ptr;
-                    size_t length;
+                    uint32_t length;
                 };
 
                 struct MagicCommentVec
                 {
                     MagicComment **ptr;
-                    size_t length;
+                    uint32_t length;
                 };
 
                 ParserResult *make_parser_result(
@@ -62,8 +62,8 @@ namespace lib_ruby_parser
                 Comment *make_comment(CommentType kind, Range *location);
                 Diagnostic *make_diagnostic(ErrorLevel level, BytePtr message, Range *range);
                 MagicComment *make_magic_comment(MagicCommentKind kind, Range *key_l, Range *value_l);
-                Range *make_range(size_t begin_pos, size_t end_pos);
-                Loc *make_loc(size_t begin, size_t end);
+                Range *make_range(uint32_t begin_pos, uint32_t end_pos);
+                Loc *make_loc(uint32_t begin, uint32_t end);
                 Token *make_token(int token_type, BytePtr token_value, Loc *loc);
             }
         } // namespace make
@@ -126,8 +126,8 @@ namespace lib_ruby_parser
                 {
                     int token_type;
                     BytePtr token_value;
-                    size_t loc_begin;
-                    size_t loc_end;
+                    uint32_t loc_begin;
+                    uint32_t loc_end;
                 };
 
                 struct RawTokenRewriterResult
