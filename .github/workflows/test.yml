@@ -13,25 +13,74 @@ jobs:
   test:
     name: test on ${{ matrix.build.os }}
     runs-on: ${{ matrix.build.os }}
+    env:
+      CARGO_BUILD_TARGET: ${{ matrix.build.target }}
+      CC: ${{ matrix.build.cc }}
+      CXX: ${{ matrix.build.cxx }}
+      LD: ${{ matrix.build.ld }}
+      CARGOFLAGS: ${{ matrix.build.cargoflags }}
     strategy:
       fail-fast: false
       matrix:
         build:
-          - { os: ubuntu-20.04, cc: clang-10, cxx: clang++-10, ld: ld.lld-10, run: "make test-all" }
-          - { os: macos-latest, cc: clang   , cxx: clang++   , ld: ld       , run: "make test"     }
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            cc: clang-9
+            cxx: clang++-9
+            ld: ld.lld-9
+            cargoflags: --features="generate-bindings,onig"
+            run: |
+              make build-static test-valgrind
+              make clean
+              CXXFLAGS="-fsanitize=address" make test
+
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            cc: clang
+            cxx: clang++
+            ld: ld
+            cargoflags: --features="generate-bindings,onig"
+            run: |
+              make build-static
+              make clean
+              CXXFLAGS="-fsanitize=address" make test
+
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            cc: cl.exe
+            cxx: cl.exe
+            ld: link.exe
+            cargoflags: ""
+            run: make build-static
 
     steps:
-      - name: setup compiler
-        run: |
-          echo "CC=${{ matrix.build.cc }}" >> $GITHUB_ENV
-          echo "CXX=${{ matrix.build.cxx }}" >> $GITHUB_ENV
-          echo "LD=${{ matrix.build.ld }}" >> $GITHUB_ENV
+      - name: setup msvc on windows
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
 
-      - name: make sure compiler are available
+      - name: fix linker on windows
+        if: runner.os == 'Windows'
         run: |
-          which "$CC"
-          which "$CXX"
-          which "$LD"
+          rm "C:\\Program Files\\Git\\usr\\bin\\link.exe"
+          which -a link.exe
+
+      - name: install rust
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          target: ${{ matrix.build.target }}
+          override: true
+
+      - name: checkout
+        uses: actions/checkout@v2
+
+
+      - name: build rust object
+        shell: bash
+        run: |
+          make setup
+          make rust-object
 
       - name: install valgrind
         if: runner.os == 'Linux'
@@ -39,20 +88,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y valgrind
 
-      - name: checkout
-        uses: actions/checkout@v2
-        with:
-          submodules: true
-
-      - name: install rust
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          override: true
-
-      - name: setup
-        run: make setup
-
       - name: run tests
+        shell: bash
         run: ${{ matrix.build.run }}
