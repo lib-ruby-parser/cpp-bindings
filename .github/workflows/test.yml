@@ -11,22 +11,21 @@ env:
 
 jobs:
   test:
-    name: ${{ matrix.compiler.cxx }}
-    runs-on: ubuntu-20.04
+    name: test on ${{ matrix.build.os }}
+    runs-on: ${{ matrix.build.os }}
     strategy:
       fail-fast: false
       matrix:
-        compiler:
-          - { cc: clang-8,  cxx: clang++-8,  ld: ld.lld-8 }
-          - { cc: clang-9,  cxx: clang++-9,  ld: ld.lld-9 }
-          - { cc: clang-10, cxx: clang++-10, ld: ld.lld-10 }
+        build:
+          - { os: ubuntu-20.04, cc: clang-10, cxx: clang++-10, ld: ld.lld-10, run: "make test-all" }
+          - { os: macos-latest, cc: clang   , cxx: clang++   , ld: ld       , run: "make test"     }
 
     steps:
       - name: setup compiler
         run: |
-          echo "CC=${{ matrix.compiler.cc }}" >> $GITHUB_ENV
-          echo "CXX=${{ matrix.compiler.cxx }}" >> $GITHUB_ENV
-          echo "LD=${{ matrix.compiler.ld }}" >> $GITHUB_ENV
+          echo "CC=${{ matrix.build.cc }}" >> $GITHUB_ENV
+          echo "CXX=${{ matrix.build.cxx }}" >> $GITHUB_ENV
+          echo "LD=${{ matrix.build.ld }}" >> $GITHUB_ENV
 
       - name: make sure compiler are available
         run: |
@@ -35,6 +34,7 @@ jobs:
           which "$LD"
 
       - name: install valgrind
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install -y valgrind
@@ -55,4 +55,4 @@ jobs:
         run: make setup
 
       - name: run tests
-        run: make test-all
+        run: ${{ matrix.build.run }}

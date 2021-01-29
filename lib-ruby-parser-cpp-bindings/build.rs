@@ -1,11 +1,16 @@
+#[cfg(feature = "generate-bindings")]
 extern crate bindgen;
+#[cfg(feature = "generate-bindings")]
 extern crate lib_ruby_parser_nodes;
 
 use std::path::Path;
 
+#[cfg(feature = "generate-bindings")]
 mod gen;
+#[cfg(feature = "generate-bindings")]
 use gen::{CppFile, RustFile};
 
+#[allow(dead_code)]
 fn relative_path(path: &str) -> String {
     Path::new(file!())
         .parent()
@@ -16,6 +21,7 @@ fn relative_path(path: &str) -> String {
         .to_owned()
 }
 
+#[cfg(feature = "generate-bindings")]
 fn build_cpp_files() {
     let nodes = lib_ruby_parser_nodes::nodes().unwrap();
     let cpp_file = CppFile::new(&nodes);
@@ -32,6 +38,7 @@ fn build_cpp_files() {
     .unwrap();
 }
 
+#[cfg(feature = "generate-bindings")]
 fn build_bindings() {
     println!("cargo:rerun-if-changed=../src/low_level.h");
     println!("cargo:rerun-if-changed=../src/comment_type.h");
@@ -65,6 +72,7 @@ fn build_bindings() {
         .expect("Couldn't write bindings!");
 }
 
+#[cfg(feature = "generate-bindings")]
 fn build_rust_files() {
     let cpp_from_rust_gen_rs = relative_path("src/cpp_from_rust_gen.rs");
     let nodes = lib_ruby_parser_nodes::nodes().unwrap();
@@ -72,8 +80,16 @@ fn build_rust_files() {
     std::fs::write(&cpp_from_rust_gen_rs, RustFile::new(nodes).code()).unwrap();
 }
 
+#[cfg(feature = "generate-bindings")]
 fn main() {
     build_cpp_files();
     build_bindings();
     build_rust_files();
+}
+
+#[cfg(not(feature = "generate-bindings"))]
+fn main() {
+    println!(
+        "Running with disabled 'generate-bindings' feature, so bindgen is disabled too. All files are expected to be pre-generated"
+    );
 }
