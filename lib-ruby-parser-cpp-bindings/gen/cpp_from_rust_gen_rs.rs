@@ -1,15 +1,19 @@
-use lib_ruby_parser_nodes::{FieldType, Node};
+use lib_ruby_parser_nodes::FieldType;
 
-pub(crate) struct RustFile {
-    nodes: Vec<Node>,
+pub(crate) struct CppFromRustGen<'a> {
+    nodes: &'a [lib_ruby_parser_nodes::Node],
 }
 
-impl RustFile {
-    pub(crate) fn new(nodes: Vec<Node>) -> Self {
+impl<'a> CppFromRustGen<'a> {
+    pub(crate) fn new(nodes: &'a [lib_ruby_parser_nodes::Node]) -> Self {
         Self { nodes }
     }
 
-    pub(crate) fn code(&self) -> String {
+    pub(crate) fn write(&self) {
+        std::fs::write("src/cpp_from_rust_gen.rs", self.contents()).unwrap()
+    }
+
+    fn contents(&self) -> String {
         format!(
             "use crate::bindings;
 use crate::Ptr;
@@ -51,11 +55,11 @@ impl From<lib_ruby_parser::Node> for Ptr<bindings::Node> {{
 }
 
 struct CppFromRustImpl<'a> {
-    node: &'a Node,
+    node: &'a lib_ruby_parser_nodes::Node,
 }
 
 impl<'a> CppFromRustImpl<'a> {
-    pub(crate) fn new(node: &'a Node) -> Self {
+    pub(crate) fn new(node: &'a lib_ruby_parser_nodes::Node) -> Self {
         Self { node }
     }
 
@@ -110,19 +114,11 @@ impl<'a> CppFromRustImpl<'a> {
                     "let {field_name} = Ptr::<bindings::Loc>::from({field_name}).unwrap();",
                     field_name = f.field_name
                 ),
-                FieldType::MaybeStr => format!(
-                    "let {field_name} = BytePtr::from({field_name});",
-                    field_name = f.field_name
-                ),
-                FieldType::StringValue => format!(
-                    "let {field_name} = BytePtr::from({field_name});",
-                    field_name = f.field_name
-                ),
-                FieldType::Chars => format!(
-                    "let {field_name} = BytePtr::from({field_name});",
-                    field_name = f.field_name
-                ),
-                FieldType::Str | FieldType::RawString => format!(
+                FieldType::MaybeStr
+                | FieldType::StringValue
+                | FieldType::Chars
+                | FieldType::Str
+                | FieldType::RawString => format!(
                     "let {field_name} = BytePtr::from({field_name});",
                     field_name = f.field_name
                 ),

@@ -1,5 +1,7 @@
 #include "node.h"
+
 namespace lib_ruby_parser {
+
 Alias::Alias(std::unique_ptr<Node> to, std::unique_ptr<Node> from, std::unique_ptr<Loc> keyword_l, std::unique_ptr<Loc> expression_l)
 {
 this->to = std::move(to);
@@ -983,5 +985,6 @@ ZSuper::ZSuper(std::unique_ptr<Loc> expression_l)
 {
 this->expression_l = std::move(expression_l);
 }
+
 
 }
