@@ -73,9 +73,8 @@ impl<'a> CppField<'a> {
             lib_ruby_parser_nodes::FieldType::Nodes => {
                 format!("nodes_vec_to_cpp_vec({name})", name = self.field_name())
             }
-            lib_ruby_parser_nodes::FieldType::Range
-            | lib_ruby_parser_nodes::FieldType::MaybeRange => {
-                format!("std::unique_ptr<Range>({})", self.field_name())
+            lib_ruby_parser_nodes::FieldType::Loc | lib_ruby_parser_nodes::FieldType::MaybeLoc => {
+                format!("std::unique_ptr<Loc>({})", self.field_name())
             }
 
             lib_ruby_parser_nodes::FieldType::U8 | lib_ruby_parser_nodes::FieldType::Usize => {

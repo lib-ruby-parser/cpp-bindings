@@ -20,12 +20,14 @@ fn decode_with_decoder(
     }
 }
 
-impl From<Ptr<bindings::CustomDecoder>> for lib_ruby_parser::source::CustomDecoder {
+impl From<Ptr<bindings::CustomDecoder>>
+    for Option<Box<dyn lib_ruby_parser::source::CustomDecoder>>
+{
     fn from(decoder_ptr: Ptr<bindings::CustomDecoder>) -> Self {
         let decoder_ptr = decoder_ptr.unwrap();
 
         if decoder_ptr.is_null() {
-            return lib_ruby_parser::source::CustomDecoder::default();
+            return None;
         }
 
         let decode = move |encoding: &str, input: &[u8]| {
@@ -34,6 +36,8 @@ impl From<Ptr<bindings::CustomDecoder>> for lib_ruby_parser::source::CustomDecod
             decode_with_decoder(encoding, input, decoder_ptr)
         };
 
-        lib_ruby_parser::source::CustomDecoder::new(Box::new(decode))
+        Some(Box::new(
+            lib_ruby_parser::source::RustFnBasedCustomDecoder::new(Box::new(decode)),
+        ))
     }
 }

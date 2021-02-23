@@ -8,15 +8,15 @@
 
 using namespace lib_ruby_parser;
 
-void test_range()
+void test_loc()
 {
-    Range range(10, 100);
-    assert(range.begin_pos == 10);
-    assert(range.end_pos == 100);
-    assert(range.size() == 90);
-    assert(range == Range(10, 100));
-    assert(range != Range(20, 100));
-    assert(range != Range(10, 200));
+    Loc loc(10, 100);
+    assert(loc.begin == 10);
+    assert(loc.end == 100);
+    assert(loc.size() == 90);
+    assert(loc == Loc(10, 100));
+    assert(loc != Loc(20, 100));
+    assert(loc != Loc(10, 200));
 }
 
 void test_node()
@@ -24,14 +24,14 @@ void test_node()
     Node node(
         std::make_unique<Int>(
             std::string("42"),
-            std::unique_ptr<Range>(nullptr),
-            std::make_unique<Range>(3, 4)));
+            std::unique_ptr<Loc>(nullptr),
+            std::make_unique<Loc>(3, 4)));
 
     assert(node.is<Int>());
     assert(!node.is<Float>());
 
     assert(node.get<Int>()->operator_l == nullptr);
-    assert(*(node.get<Int>()->expression_l) == Range(3, 4));
+    assert(*(node.get<Int>()->expression_l) == Loc(3, 4));
     assert(node.get<Int>()->value == std::string("42"));
 }
 
@@ -46,7 +46,7 @@ void test_parse()
     auto int_node = ast->get<Int>();
 
     assert(int_node->value == "42");
-    assert(*(int_node->expression_l) == Range(0, 2));
+    assert(*(int_node->expression_l) == Loc(0, 2));
     assert(int_node->operator_l == nullptr);
 }
 
@@ -79,12 +79,12 @@ void test_diagnostics()
     assert(result->diagnostics[0] == Diagnostic(
                                          ErrorLevel::ERROR,
                                          std::string("Can't change the value of self"),
-                                         std::make_unique<Range>(0, 4)));
+                                         std::make_unique<Loc>(0, 4)));
 
     assert(result->diagnostics[1] == Diagnostic(
                                          ErrorLevel::ERROR,
                                          std::string("Can't assign to nil"),
-                                         std::make_unique<Range>(10, 13)));
+                                         std::make_unique<Loc>(10, 13)));
 }
 
 void test_comments()
@@ -95,10 +95,10 @@ void test_comments()
 
     assert(result->comments[0] == Comment(
                                       CommentType::INLINE,
-                                      std::make_unique<Range>(0, 6)));
+                                      std::make_unique<Loc>(0, 6)));
     assert(result->comments[1] == Comment(
                                       CommentType::INLINE,
-                                      std::make_unique<Range>(6, 12)));
+                                      std::make_unique<Loc>(6, 12)));
 }
 
 void test_magic_comments()
@@ -111,19 +111,19 @@ void test_magic_comments()
 
     assert(result->magic_comments[0] == MagicComment(
                                             MagicCommentKind::WARN_INDENT,
-                                            std::make_unique<Range>(2, 13),
-                                            std::make_unique<Range>(15, 19)));
+                                            std::make_unique<Loc>(2, 13),
+                                            std::make_unique<Loc>(15, 19)));
     assert(result->magic_comments[1] == MagicComment(
                                             MagicCommentKind::FROZEN_STRING_LITERAL,
-                                            std::make_unique<Range>(22, 43),
-                                            std::make_unique<Range>(45, 49)));
+                                            std::make_unique<Loc>(22, 43),
+                                            std::make_unique<Loc>(45, 49)));
     assert(result->magic_comments[2] == MagicComment(
                                             MagicCommentKind::ENCODING,
-                                            std::make_unique<Range>(52, 60),
-                                            std::make_unique<Range>(62, 67)));
+                                            std::make_unique<Loc>(52, 60),
+                                            std::make_unique<Loc>(62, 67)));
 }
 
-void test_range_source()
+void test_loc_source()
 {
     auto result = ParserResult::from_source(Bytes("100 + 200"), ParserOptions());
     auto send = result->ast->get<Send>();
@@ -240,7 +240,7 @@ void test_custom_decoder_error()
     assert(result->diagnostics[0] == Diagnostic(
                                          ErrorLevel::ERROR,
                                          std::string("encoding error: DecodingError(\"test error\")"),
-                                         std::make_unique<Range>(12, 15)));
+                                         std::make_unique<Loc>(12, 15)));
 
     assert(state->input.to_string() == input.to_string());
     assert(state->encoding == "BAR");
@@ -284,14 +284,14 @@ int main()
     test_##name();                         \
     std::cout << "... OK\n";
 
-    test(range);
+    test(loc);
     test(node);
     test(parse);
     test(tokens);
     test(diagnostics);
     test(comments);
     test(magic_comments);
-    test(range_source);
+    test(loc_source);
 
     test(parse_all);
 

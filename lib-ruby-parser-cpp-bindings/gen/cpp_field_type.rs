@@ -14,8 +14,8 @@ impl<'a> CppFieldType<'a> {
             FieldType::Node => "std::unique_ptr<Node>",
             FieldType::Nodes => "std::vector<Node>",
             FieldType::MaybeNode => "std::unique_ptr<Node>",
-            FieldType::Range => "std::unique_ptr<Range>",
-            FieldType::MaybeRange => "std::unique_ptr<Range>",
+            FieldType::Loc => "std::unique_ptr<Loc>",
+            FieldType::MaybeLoc => "std::unique_ptr<Loc>",
             FieldType::Str => "std::string",
             FieldType::MaybeStr => "std::string",
             FieldType::Chars => "std::string",
@@ -32,9 +32,9 @@ impl<'a> CppFieldType<'a> {
         match &self.field_type {
             FieldType::Node
             | FieldType::MaybeNode
-            | FieldType::Range
+            | FieldType::Loc
             | FieldType::Nodes
-            | FieldType::MaybeRange
+            | FieldType::MaybeLoc
             | FieldType::RegexOptions
             | FieldType::Str
             | FieldType::MaybeStr
@@ -51,8 +51,8 @@ impl<'a> CppFieldType<'a> {
             FieldType::Node => "Node *",
             FieldType::Nodes => "NodeVec",
             FieldType::MaybeNode => "Node *",
-            FieldType::Range => "Range *",
-            FieldType::MaybeRange => "Range *",
+            FieldType::Loc => "Loc *",
+            FieldType::MaybeLoc => "Loc *",
             FieldType::Str => "BytePtr",
             FieldType::MaybeStr => "BytePtr",
             FieldType::Chars => "BytePtr",

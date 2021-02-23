@@ -27,7 +27,7 @@ impl From<bindings::RawToken> for lib_ruby_parser::Token {
     fn from(token: bindings::RawToken) -> Self {
         lib_ruby_parser::Token {
             token_type: token.token_type,
-            token_value: lib_ruby_parser::TokenValue::from(token.token_value),
+            token_value: lib_ruby_parser::Bytes::new(token.token_value.into_vec()),
             loc: lib_ruby_parser::Loc {
                 begin: token.loc_begin as usize,
                 end: token.loc_end as usize,
@@ -52,7 +52,7 @@ impl From<bindings::RawRewriteAction> for lib_ruby_parser::token_rewriter::Rewri
 }
 
 type RewriterTuple = (
-    lib_ruby_parser::Token,
+    Box<lib_ruby_parser::Token>,
     lib_ruby_parser::token_rewriter::RewriteAction,
     lib_ruby_parser::token_rewriter::LexStateAction,
 );
@@ -65,7 +65,11 @@ struct RewriterResult {
 
 impl RewriterResult {
     pub(crate) fn to_tuple(self) -> RewriterTuple {
-        (self.token, self.rewrite_action, self.lex_state_action)
+        (
+            Box::new(self.token),
+            self.rewrite_action,
+            self.lex_state_action,
+        )
     }
 }
 
@@ -100,8 +104,8 @@ impl From<bindings::RawTokenRewriterResult> for RewriterResult {
 }
 
 impl lib_ruby_parser::token_rewriter::TokenRewriter for CppTokenRewriter {
-    fn rewrite_token(&mut self, token: lib_ruby_parser::Token, input: &[u8]) -> RewriterTuple {
-        let token = bindings::RawToken::from(token);
+    fn rewrite_token(&mut self, token: Box<lib_ruby_parser::Token>, input: &[u8]) -> RewriterTuple {
+        let token = bindings::RawToken::from(*token);
         let input = BytePtr::from(input);
 
         let raw_result = unsafe { bindings::rewrite_token(self.rewriter, token, input) };

@@ -11,7 +11,7 @@
 namespace lib_ruby_parser
 {
     class Loc;
-    class Range;
+    class Loc;
     class Token;
     class Comment;
     class Diagnostic;
@@ -59,10 +59,9 @@ namespace lib_ruby_parser
                     MagicCommentVec magic_comments,
                     BytePtr input);
 
-                Comment *make_comment(CommentType kind, Range *location);
-                Diagnostic *make_diagnostic(ErrorLevel level, BytePtr message, Range *range);
-                MagicComment *make_magic_comment(MagicCommentKind kind, Range *key_l, Range *value_l);
-                Range *make_range(uint32_t begin_pos, uint32_t end_pos);
+                Comment *make_comment(CommentType kind, Loc *location);
+                Diagnostic *make_diagnostic(ErrorLevel level, BytePtr message, Loc *loc);
+                MagicComment *make_magic_comment(MagicCommentKind kind, Loc *key_l, Loc *value_l);
                 Loc *make_loc(uint32_t begin, uint32_t end);
                 Token *make_token(int token_type, BytePtr token_value, Loc *loc);
             }

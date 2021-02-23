@@ -2,7 +2,7 @@
 
 namespace lib_ruby_parser
 {
-    Comment::Comment(CommentType kind, std::unique_ptr<Range> location)
+    Comment::Comment(CommentType kind, std::unique_ptr<Loc> location)
     {
         this->kind = kind;
         this->location = std::move(location);

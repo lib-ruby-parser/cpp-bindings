@@ -10,22 +10,6 @@
 
 namespace lib_ruby_parser
 {
-    class Loc
-    {
-    public:
-        uint32_t begin;
-        uint32_t end;
-
-        Loc() = delete;
-        Loc(Loc &&) = default;
-        Loc(const Loc &) = default;
-        explicit Loc(uint32_t begin, uint32_t end);
-        friend std::ostream &operator<<(std::ostream &os, const Loc &loc);
-
-        bool operator==(const Loc &other);
-        bool operator!=(const Loc &other);
-    };
-
     class Token
     {
     public:

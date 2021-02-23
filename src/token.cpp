@@ -2,28 +2,6 @@
 
 namespace lib_ruby_parser
 {
-    Loc::Loc(uint32_t begin, uint32_t end)
-    {
-        this->begin = begin;
-        this->end = end;
-    }
-
-    std::ostream &operator<<(std::ostream &os, const Loc &loc)
-    {
-        os << loc.begin << "..." << loc.end;
-        return os;
-    }
-
-    bool Loc::operator==(const Loc &other)
-    {
-        return (begin == other.begin) && (end == other.end);
-    }
-
-    bool Loc::operator!=(const Loc &other)
-    {
-        return (begin != other.begin) || (end != other.end);
-    }
-
     Token::Token(
         int token_type,
         Bytes token_value,

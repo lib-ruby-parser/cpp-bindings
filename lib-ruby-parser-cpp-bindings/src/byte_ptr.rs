@@ -79,15 +79,15 @@ impl From<Option<String>> for BytePtr {
     }
 }
 
-impl From<lib_ruby_parser::TokenValue> for BytePtr {
-    fn from(token_value: lib_ruby_parser::TokenValue) -> BytePtr {
+impl From<lib_ruby_parser::Bytes> for BytePtr {
+    fn from(token_value: lib_ruby_parser::Bytes) -> BytePtr {
         BytePtr::from(token_value.into_bytes())
     }
 }
 
-impl From<lib_ruby_parser::source::buffer::Input> for BytePtr {
-    fn from(input: lib_ruby_parser::source::buffer::Input) -> BytePtr {
-        BytePtr::from(input.bytes)
+impl From<lib_ruby_parser::source::Input> for BytePtr {
+    fn from(input: lib_ruby_parser::source::Input) -> BytePtr {
+        BytePtr::from(input.as_bytes().to_vec())
     }
 }
 
@@ -103,12 +103,9 @@ impl From<lib_ruby_parser::StringValue> for BytePtr {
     }
 }
 
-impl From<BytePtr> for lib_ruby_parser::TokenValue {
+impl From<BytePtr> for lib_ruby_parser::Bytes {
     fn from(byte_ptr: BytePtr) -> Self {
-        match byte_ptr.into_string() {
-            Ok(s) => lib_ruby_parser::TokenValue::String(s),
-            Err(err) => lib_ruby_parser::TokenValue::InvalidString(err.into_bytes()),
-        }
+        Self::new(byte_ptr.into_vec())
     }
 }
 

@@ -4,7 +4,7 @@
 #include <string>
 #include <memory>
 #include <iostream>
-#include "range.h"
+#include "loc.h"
 #include "error_level.h"
 
 namespace lib_ruby_parser
@@ -14,14 +14,14 @@ namespace lib_ruby_parser
     public:
         ErrorLevel level;
         std::string message;
-        std::unique_ptr<Range> range;
+        std::unique_ptr<Loc> loc;
 
         Diagnostic() = delete;
         Diagnostic(Diagnostic &&) = default;
         Diagnostic(const Diagnostic &) = delete;
         explicit Diagnostic(ErrorLevel level,
                             std::string message,
-                            std::unique_ptr<Range> range);
+                            std::unique_ptr<Loc> loc);
 
         bool operator==(const Diagnostic &other);
         bool operator!=(const Diagnostic &other);

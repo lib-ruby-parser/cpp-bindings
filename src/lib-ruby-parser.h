@@ -10,7 +10,7 @@
 #include "node.h"
 #include "parser_options.h"
 #include "parser_result.h"
-#include "range.h"
+#include "loc.h"
 #include "token_rewriter.h"
 #include "token.h"
 

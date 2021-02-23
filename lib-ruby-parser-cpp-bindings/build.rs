@@ -23,7 +23,7 @@ fn relative_path(path: &str) -> String {
 
 #[cfg(feature = "generate-bindings")]
 fn build_cpp_files() {
-    let nodes = lib_ruby_parser_nodes::nodes().unwrap();
+    let nodes = lib_ruby_parser_nodes::nodes();
     let cpp_file = CppFile::new(&nodes);
 
     std::fs::write(&relative_path("../src/node.h"), cpp_file.node_h()).unwrap();
@@ -75,7 +75,7 @@ fn build_bindings() {
 #[cfg(feature = "generate-bindings")]
 fn build_rust_files() {
     let cpp_from_rust_gen_rs = relative_path("src/cpp_from_rust_gen.rs");
-    let nodes = lib_ruby_parser_nodes::nodes().unwrap();
+    let nodes = lib_ruby_parser_nodes::nodes();
 
     std::fs::write(&cpp_from_rust_gen_rs, RustFile::new(nodes).code()).unwrap();
 }

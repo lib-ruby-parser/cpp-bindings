@@ -17,7 +17,7 @@ impl From<lib_ruby_parser::Diagnostic> for Ptr<bindings::Diagnostic> {
             bindings::make_diagnostic(
                 bindings::ErrorLevel::from(&diagnostic.level),
                 BytePtr::from(diagnostic.render_message()),
-                Ptr::<bindings::Range>::from(diagnostic.range).unwrap(),
+                Ptr::<bindings::Loc>::from(diagnostic.loc).unwrap(),
             )
         };
         Ptr::new(ptr)

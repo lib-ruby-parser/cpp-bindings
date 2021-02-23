@@ -1,7 +1,7 @@
 #include <cstring>
 #include "low_level.h"
 #include "comment.h"
-#include "range.h"
+#include "loc.h"
 #include "bytes.h"
 #include "custom_decoder.h"
 #include "helpers.h"
@@ -74,24 +74,19 @@ namespace lib_ruby_parser
                     return result;
                 }
 
-                Comment *make_comment(CommentType kind, Range *location)
+                Comment *make_comment(CommentType kind, Loc *location)
                 {
-                    return new Comment(kind, std::unique_ptr<Range>(location));
+                    return new Comment(kind, std::unique_ptr<Loc>(location));
                 }
 
-                Diagnostic *make_diagnostic(ErrorLevel level, BytePtr message, Range *range)
+                Diagnostic *make_diagnostic(ErrorLevel level, BytePtr message, Loc *loc)
                 {
-                    return new Diagnostic(level, byte_ptr_to_owned_string(message), std::unique_ptr<Range>(range));
+                    return new Diagnostic(level, byte_ptr_to_owned_string(message), std::unique_ptr<Loc>(loc));
                 }
 
-                MagicComment *make_magic_comment(MagicCommentKind kind, Range *key_l, Range *value_l)
+                MagicComment *make_magic_comment(MagicCommentKind kind, Loc *key_l, Loc *value_l)
                 {
-                    return new MagicComment(kind, std::unique_ptr<Range>(key_l), std::unique_ptr<Range>(value_l));
-                }
-
-                Range *make_range(uint32_t begin_pos, uint32_t end_pos)
-                {
-                    return new Range(begin_pos, end_pos);
+                    return new MagicComment(kind, std::unique_ptr<Loc>(key_l), std::unique_ptr<Loc>(value_l));
                 }
 
                 Loc *make_loc(uint32_t begin, uint32_t end)

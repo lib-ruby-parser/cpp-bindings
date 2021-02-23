@@ -40,7 +40,7 @@ namespace lib_ruby_parser
         bool operator==(const Bytes &other);
         bool operator==(const std::string &other);
         bool operator==(const char *other);
-        friend std::ostream &operator<<(std::ostream &os, const Bytes &range);
+        friend std::ostream &operator<<(std::ostream &os, const Bytes &bytes);
     };
 } // namespace lib_ruby_parser
 

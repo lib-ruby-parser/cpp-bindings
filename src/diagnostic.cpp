@@ -6,16 +6,16 @@ namespace lib_ruby_parser
 
     Diagnostic::Diagnostic(ErrorLevel level,
                            std::string message,
-                           std::unique_ptr<Range> range)
+                           std::unique_ptr<Loc> loc)
     {
         this->level = level;
         this->message = message;
-        this->range = std::move(range);
+        this->loc = std::move(loc);
     }
 
     bool Diagnostic::operator==(const Diagnostic &other)
     {
-        return (level == other.level) && (message == other.message) && (*(range.get()) == *(other.range.get()));
+        return (level == other.level) && (message == other.message) && (*(loc.get()) == *(other.loc.get()));
     }
 
     bool Diagnostic::operator!=(const Diagnostic &other)
@@ -36,6 +36,6 @@ namespace lib_ruby_parser
         default:
             break;
         }
-        return os << ": " << diagnostic.message << *(diagnostic.range.get());
+        return os << ": " << diagnostic.message << *(diagnostic.loc.get());
     }
 } // namespace lib_ruby_parser

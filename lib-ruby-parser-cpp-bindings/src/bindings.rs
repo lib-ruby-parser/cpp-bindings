@@ -12,15 +12,15 @@ pub type allocator_pointer = u8;
 pub type allocator_const_pointer = u8;
 pub type allocator_reference = u8;
 pub type allocator_const_reference = u8;
-pub type allocator_value_type = u8;
-pub type allocator_propagate_on_container_move_assignment = u8;
-pub type allocator_is_always_equal = u8;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct allocator_rebind {
     pub _address: u8,
 }
 pub type allocator_rebind_other = u8;
+pub type allocator_value_type = u8;
+pub type allocator_propagate_on_container_move_assignment = u8;
+pub type allocator_is_always_equal = u8;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct vector {
@@ -212,7 +212,7 @@ pub struct Node {
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct Range {
+pub struct Loc {
     _unused: [u8; 0],
 }
 #[repr(C)]
@@ -225,70 +225,70 @@ extern "C" {
     pub fn make_alias(
         to: *mut Node,
         from: *mut Node,
-        keyword_l: *mut Range,
-        expression_l: *mut Range,
+        keyword_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_and_asgn(
         recv: *mut Node,
         value: *mut Node,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
+        operator_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_and(
         lhs: *mut Node,
         rhs: *mut Node,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
+        operator_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
-    pub fn make_arg(name: BytePtr, expression_l: *mut Range) -> *mut Node;
+    pub fn make_arg(name: BytePtr, expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
     pub fn make_args(
         args: NodeVec,
-        expression_l: *mut Range,
-        begin_l: *mut Range,
-        end_l: *mut Range,
+        expression_l: *mut Loc,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_array(
         elements: NodeVec,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_array_pattern(
         elements: NodeVec,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_array_pattern_with_tail(
         elements: NodeVec,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
-    pub fn make_back_ref(name: BytePtr, expression_l: *mut Range) -> *mut Node;
+    pub fn make_back_ref(name: BytePtr, expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
     pub fn make_begin(
         statements: NodeVec,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
@@ -296,39 +296,38 @@ extern "C" {
         call: *mut Node,
         args: *mut Node,
         body: *mut Node,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_block_pass(
         value: *mut Node,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
+        operator_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_blockarg(
         name: BytePtr,
-        operator_l: *mut Range,
-        name_l: *mut Range,
-        expression_l: *mut Range,
+        operator_l: *mut Loc,
+        name_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
-    pub fn make_break_(args: NodeVec, keyword_l: *mut Range, expression_l: *mut Range)
-        -> *mut Node;
+    pub fn make_break_(args: NodeVec, keyword_l: *mut Loc, expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
     pub fn make_case(
         expr: *mut Node,
         when_bodies: NodeVec,
         else_body: *mut Node,
-        keyword_l: *mut Range,
-        else_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        keyword_l: *mut Loc,
+        else_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
@@ -336,10 +335,10 @@ extern "C" {
         expr: *mut Node,
         in_bodies: NodeVec,
         else_body: *mut Node,
-        keyword_l: *mut Range,
-        else_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        keyword_l: *mut Loc,
+        else_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
@@ -347,49 +346,45 @@ extern "C" {
         scope: *mut Node,
         name: BytePtr,
         value: *mut Node,
-        double_colon_l: *mut Range,
-        name_l: *mut Range,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
+        double_colon_l: *mut Loc,
+        name_l: *mut Loc,
+        operator_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
-    pub fn make_cbase(expression_l: *mut Range) -> *mut Node;
+    pub fn make_cbase(expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
     pub fn make_class(
         name: *mut Node,
         superclass: *mut Node,
         body: *mut Node,
-        keyword_l: *mut Range,
-        operator_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        keyword_l: *mut Loc,
+        operator_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
-    pub fn make_complex(
-        value: BytePtr,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
-    ) -> *mut Node;
+    pub fn make_complex(value: BytePtr, operator_l: *mut Loc, expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
     pub fn make_const_(
         scope: *mut Node,
         name: BytePtr,
-        double_colon_l: *mut Range,
-        name_l: *mut Range,
-        expression_l: *mut Range,
+        double_colon_l: *mut Loc,
+        name_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_const_pattern(
         const_: *mut Node,
         pattern: *mut Node,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
@@ -397,24 +392,24 @@ extern "C" {
         recv: *mut Node,
         method_name: BytePtr,
         args: NodeVec,
-        dot_l: *mut Range,
-        selector_l: *mut Range,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
+        dot_l: *mut Loc,
+        selector_l: *mut Loc,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        operator_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
-    pub fn make_cvar(name: BytePtr, expression_l: *mut Range) -> *mut Node;
+    pub fn make_cvar(name: BytePtr, expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
     pub fn make_cvasgn(
         name: BytePtr,
         value: *mut Node,
-        name_l: *mut Range,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
+        name_l: *mut Loc,
+        operator_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
@@ -422,20 +417,20 @@ extern "C" {
         name: BytePtr,
         args: *mut Node,
         body: *mut Node,
-        keyword_l: *mut Range,
-        name_l: *mut Range,
-        end_l: *mut Range,
-        assignment_l: *mut Range,
-        expression_l: *mut Range,
+        keyword_l: *mut Loc,
+        name_l: *mut Loc,
+        end_l: *mut Loc,
+        assignment_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_defined(
         value: *mut Node,
-        keyword_l: *mut Range,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        keyword_l: *mut Loc,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
@@ -444,136 +439,132 @@ extern "C" {
         name: BytePtr,
         args: *mut Node,
         body: *mut Node,
-        keyword_l: *mut Range,
-        operator_l: *mut Range,
-        name_l: *mut Range,
-        assignment_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        keyword_l: *mut Loc,
+        operator_l: *mut Loc,
+        name_l: *mut Loc,
+        assignment_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_dstr(
         parts: NodeVec,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_dsym(
         parts: NodeVec,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_eflipflop(
         left: *mut Node,
         right: *mut Node,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
+        operator_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
-    pub fn make_empty_else(expression_l: *mut Range) -> *mut Node;
+    pub fn make_empty_else(expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
-    pub fn make_encoding_(expression_l: *mut Range) -> *mut Node;
+    pub fn make_encoding_(expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
     pub fn make_ensure(
         body: *mut Node,
         ensure: *mut Node,
-        keyword_l: *mut Range,
-        expression_l: *mut Range,
+        keyword_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_erange(
         left: *mut Node,
         right: *mut Node,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
+        operator_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
-    pub fn make_false_(expression_l: *mut Range) -> *mut Node;
+    pub fn make_false_(expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
-    pub fn make_file(expression_l: *mut Range) -> *mut Node;
+    pub fn make_file(expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
     pub fn make_find_pattern(
         elements: NodeVec,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
-    pub fn make_float(
-        value: BytePtr,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
-    ) -> *mut Node;
+    pub fn make_float(value: BytePtr, operator_l: *mut Loc, expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
     pub fn make_for_(
         iterator: *mut Node,
         iteratee: *mut Node,
         body: *mut Node,
-        keyword_l: *mut Range,
-        operator_l: *mut Range,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        keyword_l: *mut Loc,
+        operator_l: *mut Loc,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
-    pub fn make_forward_arg(expression_l: *mut Range) -> *mut Node;
+    pub fn make_forward_arg(expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
-    pub fn make_forwarded_args(expression_l: *mut Range) -> *mut Node;
+    pub fn make_forwarded_args(expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
-    pub fn make_gvar(name: BytePtr, expression_l: *mut Range) -> *mut Node;
+    pub fn make_gvar(name: BytePtr, expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
     pub fn make_gvasgn(
         name: BytePtr,
         value: *mut Node,
-        name_l: *mut Range,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
+        name_l: *mut Loc,
+        operator_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_hash(
         pairs: NodeVec,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
-    pub fn make_kwargs(pairs: NodeVec, expression_l: *mut Range) -> *mut Node;
+    pub fn make_kwargs(pairs: NodeVec, expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
     pub fn make_hash_pattern(
         elements: NodeVec,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_heredoc(
         parts: NodeVec,
-        heredoc_body_l: *mut Range,
-        heredoc_end_l: *mut Range,
-        expression_l: *mut Range,
+        heredoc_body_l: *mut Loc,
+        heredoc_end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
@@ -581,27 +572,24 @@ extern "C" {
         cond: *mut Node,
         if_true: *mut Node,
         if_false: *mut Node,
-        keyword_l: *mut Range,
-        begin_l: *mut Range,
-        else_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        keyword_l: *mut Loc,
+        begin_l: *mut Loc,
+        else_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
-    pub fn make_if_guard(
-        cond: *mut Node,
-        keyword_l: *mut Range,
-        expression_l: *mut Range,
-    ) -> *mut Node;
+    pub fn make_if_guard(cond: *mut Node, keyword_l: *mut Loc, expression_l: *mut Loc)
+        -> *mut Node;
 }
 extern "C" {
     pub fn make_if_mod(
         cond: *mut Node,
         if_true: *mut Node,
         if_false: *mut Node,
-        keyword_l: *mut Range,
-        expression_l: *mut Range,
+        keyword_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
@@ -609,33 +597,33 @@ extern "C" {
         cond: *mut Node,
         if_true: *mut Node,
         if_false: *mut Node,
-        question_l: *mut Range,
-        colon_l: *mut Range,
-        expression_l: *mut Range,
+        question_l: *mut Loc,
+        colon_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_iflipflop(
         left: *mut Node,
         right: *mut Node,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
+        operator_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_match_pattern(
         value: *mut Node,
         pattern: *mut Node,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
+        operator_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_match_pattern_p(
         value: *mut Node,
         pattern: *mut Node,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
+        operator_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
@@ -643,18 +631,18 @@ extern "C" {
         pattern: *mut Node,
         guard: *mut Node,
         body: *mut Node,
-        keyword_l: *mut Range,
-        begin_l: *mut Range,
-        expression_l: *mut Range,
+        keyword_l: *mut Loc,
+        begin_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_index(
         recv: *mut Node,
         indexes: NodeVec,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
@@ -662,177 +650,176 @@ extern "C" {
         recv: *mut Node,
         indexes: NodeVec,
         value: *mut Node,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        operator_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
-    pub fn make_int(value: BytePtr, operator_l: *mut Range, expression_l: *mut Range) -> *mut Node;
+    pub fn make_int(value: BytePtr, operator_l: *mut Loc, expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
     pub fn make_irange(
         left: *mut Node,
         right: *mut Node,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
+        operator_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
-    pub fn make_ivar(name: BytePtr, expression_l: *mut Range) -> *mut Node;
+    pub fn make_ivar(name: BytePtr, expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
     pub fn make_ivasgn(
         name: BytePtr,
         value: *mut Node,
-        name_l: *mut Range,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
+        name_l: *mut Loc,
+        operator_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
-    pub fn make_kwarg(name: BytePtr, name_l: *mut Range, expression_l: *mut Range) -> *mut Node;
+    pub fn make_kwarg(name: BytePtr, name_l: *mut Loc, expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
     pub fn make_kwbegin(
         statements: NodeVec,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
-    pub fn make_kwnilarg(name_l: *mut Range, expression_l: *mut Range) -> *mut Node;
+    pub fn make_kwnilarg(name_l: *mut Loc, expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
     pub fn make_kwoptarg(
         name: BytePtr,
         default_: *mut Node,
-        name_l: *mut Range,
-        expression_l: *mut Range,
+        name_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_kwrestarg(
         name: BytePtr,
-        operator_l: *mut Range,
-        name_l: *mut Range,
-        expression_l: *mut Range,
+        operator_l: *mut Loc,
+        name_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_kwsplat(
         value: *mut Node,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
+        operator_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
-    pub fn make_lambda(expression_l: *mut Range) -> *mut Node;
+    pub fn make_lambda(expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
-    pub fn make_line(expression_l: *mut Range) -> *mut Node;
+    pub fn make_line(expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
-    pub fn make_lvar(name: BytePtr, expression_l: *mut Range) -> *mut Node;
+    pub fn make_lvar(name: BytePtr, expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
     pub fn make_lvasgn(
         name: BytePtr,
         value: *mut Node,
-        name_l: *mut Range,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
+        name_l: *mut Loc,
+        operator_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_masgn(
         lhs: *mut Node,
         rhs: *mut Node,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
+        operator_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_match_alt(
         lhs: *mut Node,
         rhs: *mut Node,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
+        operator_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_match_as(
         value: *mut Node,
         as_: *mut Node,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
+        operator_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
-    pub fn make_match_current_line(re: *mut Node, expression_l: *mut Range) -> *mut Node;
+    pub fn make_match_current_line(re: *mut Node, expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
     pub fn make_match_nil_pattern(
-        operator_l: *mut Range,
-        name_l: *mut Range,
-        expression_l: *mut Range,
+        operator_l: *mut Loc,
+        name_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_match_rest(
         name: *mut Node,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
+        operator_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
-    pub fn make_match_var(name: BytePtr, name_l: *mut Range, expression_l: *mut Range)
-        -> *mut Node;
+    pub fn make_match_var(name: BytePtr, name_l: *mut Loc, expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
     pub fn make_match_with_lvasgn(
         re: *mut Node,
         value: *mut Node,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
+        operator_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_mlhs(
         items: NodeVec,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_module(
         name: *mut Node,
         body: *mut Node,
-        keyword_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        keyword_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
-    pub fn make_next(args: NodeVec, keyword_l: *mut Range, expression_l: *mut Range) -> *mut Node;
+    pub fn make_next(args: NodeVec, keyword_l: *mut Loc, expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
-    pub fn make_nil(expression_l: *mut Range) -> *mut Node;
+    pub fn make_nil(expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
-    pub fn make_nth_ref(name: BytePtr, expression_l: *mut Range) -> *mut Node;
+    pub fn make_nth_ref(name: BytePtr, expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
     pub fn make_numblock(
         call: *mut Node,
         numargs: u32,
         body: *mut Node,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
@@ -840,92 +827,89 @@ extern "C" {
         recv: *mut Node,
         operator_: BytePtr,
         value: *mut Node,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
+        operator_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_optarg(
         name: BytePtr,
         default_: *mut Node,
-        name_l: *mut Range,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
+        name_l: *mut Loc,
+        operator_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_or(
         lhs: *mut Node,
         rhs: *mut Node,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
+        operator_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_or_asgn(
         recv: *mut Node,
         value: *mut Node,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
+        operator_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_pair(
         key: *mut Node,
         value: *mut Node,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
+        operator_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
-    pub fn make_pin(var: *mut Node, selector_l: *mut Range, expression_l: *mut Range) -> *mut Node;
+    pub fn make_pin(var: *mut Node, selector_l: *mut Loc, expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
     pub fn make_postexe(
         body: *mut Node,
-        keyword_l: *mut Range,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        keyword_l: *mut Loc,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_preexe(
         body: *mut Node,
-        keyword_l: *mut Range,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        keyword_l: *mut Loc,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_procarg0(
         args: NodeVec,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
-    pub fn make_rational(
-        value: BytePtr,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
-    ) -> *mut Node;
+    pub fn make_rational(value: BytePtr, operator_l: *mut Loc, expression_l: *mut Loc)
+        -> *mut Node;
 }
 extern "C" {
-    pub fn make_redo(expression_l: *mut Range) -> *mut Node;
+    pub fn make_redo(expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
-    pub fn make_reg_opt(options: BytePtr, expression_l: *mut Range) -> *mut Node;
+    pub fn make_reg_opt(options: BytePtr, expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
     pub fn make_regexp(
         parts: NodeVec,
         options: *mut Node,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
@@ -933,8 +917,8 @@ extern "C" {
         body: *mut Node,
         rescue_bodies: NodeVec,
         else_: *mut Node,
-        else_l: *mut Range,
-        expression_l: *mut Range,
+        else_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
@@ -942,177 +926,168 @@ extern "C" {
         exc_list: *mut Node,
         exc_var: *mut Node,
         body: *mut Node,
-        keyword_l: *mut Range,
-        assoc_l: *mut Range,
-        begin_l: *mut Range,
-        expression_l: *mut Range,
+        keyword_l: *mut Loc,
+        assoc_l: *mut Loc,
+        begin_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_restarg(
         name: BytePtr,
-        operator_l: *mut Range,
-        name_l: *mut Range,
-        expression_l: *mut Range,
+        operator_l: *mut Loc,
+        name_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
-    pub fn make_retry(expression_l: *mut Range) -> *mut Node;
+    pub fn make_retry(expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
-    pub fn make_return_(
-        args: NodeVec,
-        keyword_l: *mut Range,
-        expression_l: *mut Range,
-    ) -> *mut Node;
+    pub fn make_return_(args: NodeVec, keyword_l: *mut Loc, expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
     pub fn make_sclass(
         expr: *mut Node,
         body: *mut Node,
-        keyword_l: *mut Range,
-        operator_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        keyword_l: *mut Loc,
+        operator_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
-    pub fn make_self_(expression_l: *mut Range) -> *mut Node;
+    pub fn make_self_(expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
     pub fn make_send(
         recv: *mut Node,
         method_name: BytePtr,
         args: NodeVec,
-        dot_l: *mut Range,
-        selector_l: *mut Range,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
+        dot_l: *mut Loc,
+        selector_l: *mut Loc,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        operator_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
-    pub fn make_shadowarg(name: BytePtr, expression_l: *mut Range) -> *mut Node;
+    pub fn make_shadowarg(name: BytePtr, expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
-    pub fn make_splat(
-        value: *mut Node,
-        operator_l: *mut Range,
-        expression_l: *mut Range,
-    ) -> *mut Node;
+    pub fn make_splat(value: *mut Node, operator_l: *mut Loc, expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
     pub fn make_str_(
         value: BytePtr,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_super_(
         args: NodeVec,
-        keyword_l: *mut Range,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        keyword_l: *mut Loc,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_sym(
         name: BytePtr,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
-    pub fn make_true_(expression_l: *mut Range) -> *mut Node;
+    pub fn make_true_(expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
-    pub fn make_undef(names: NodeVec, keyword_l: *mut Range, expression_l: *mut Range)
-        -> *mut Node;
+    pub fn make_undef(names: NodeVec, keyword_l: *mut Loc, expression_l: *mut Loc) -> *mut Node;
 }
 extern "C" {
     pub fn make_unless_guard(
         cond: *mut Node,
-        keyword_l: *mut Range,
-        expression_l: *mut Range,
+        keyword_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_until(
         cond: *mut Node,
         body: *mut Node,
-        keyword_l: *mut Range,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        keyword_l: *mut Loc,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_until_post(
         cond: *mut Node,
         body: *mut Node,
-        keyword_l: *mut Range,
-        expression_l: *mut Range,
+        keyword_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_when(
         patterns: NodeVec,
         body: *mut Node,
-        keyword_l: *mut Range,
-        begin_l: *mut Range,
-        expression_l: *mut Range,
+        keyword_l: *mut Loc,
+        begin_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_while_(
         cond: *mut Node,
         body: *mut Node,
-        keyword_l: *mut Range,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        keyword_l: *mut Loc,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_while_post(
         cond: *mut Node,
         body: *mut Node,
-        keyword_l: *mut Range,
-        expression_l: *mut Range,
+        keyword_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_x_heredoc(
         parts: NodeVec,
-        heredoc_body_l: *mut Range,
-        heredoc_end_l: *mut Range,
-        expression_l: *mut Range,
+        heredoc_body_l: *mut Loc,
+        heredoc_end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_xstr(
         parts: NodeVec,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
     pub fn make_yield_(
         args: NodeVec,
-        keyword_l: *mut Range,
-        begin_l: *mut Range,
-        end_l: *mut Range,
-        expression_l: *mut Range,
+        keyword_l: *mut Loc,
+        begin_l: *mut Loc,
+        end_l: *mut Loc,
+        expression_l: *mut Loc,
     ) -> *mut Node;
 }
 extern "C" {
-    pub fn make_zsuper(expression_l: *mut Range) -> *mut Node;
+    pub fn make_zsuper(expression_l: *mut Loc) -> *mut Node;
 }
 #[repr(i32)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
@@ -1134,11 +1109,6 @@ pub enum MagicCommentKind {
     FROZEN_STRING_LITERAL = 1,
     WARN_INDENT = 2,
     SHAREABLE_CONSTANT_VALUE = 3,
-}
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct Loc {
-    _unused: [u8; 0],
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -1215,24 +1185,17 @@ extern "C" {
     ) -> *mut ParserResult;
 }
 extern "C" {
-    pub fn make_comment(kind: CommentType, location: *mut Range) -> *mut Comment;
+    pub fn make_comment(kind: CommentType, location: *mut Loc) -> *mut Comment;
 }
 extern "C" {
-    pub fn make_diagnostic(
-        level: ErrorLevel,
-        message: BytePtr,
-        range: *mut Range,
-    ) -> *mut Diagnostic;
+    pub fn make_diagnostic(level: ErrorLevel, message: BytePtr, loc: *mut Loc) -> *mut Diagnostic;
 }
 extern "C" {
     pub fn make_magic_comment(
         kind: MagicCommentKind,
-        key_l: *mut Range,
-        value_l: *mut Range,
+        key_l: *mut Loc,
+        value_l: *mut Loc,
     ) -> *mut MagicComment;
-}
-extern "C" {
-    pub fn make_range(begin_pos: u32, end_pos: u32) -> *mut Range;
 }
 extern "C" {
     pub fn make_loc(begin: u32, end: u32) -> *mut Loc;

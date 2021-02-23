@@ -25,8 +25,8 @@ impl From<lib_ruby_parser::source::MagicComment> for Ptr<bindings::MagicComment>
         let ptr = unsafe {
             bindings::make_magic_comment(
                 bindings::MagicCommentKind::from(magic_comment.kind),
-                Ptr::<bindings::Range>::from(magic_comment.key_l).unwrap(),
-                Ptr::<bindings::Range>::from(magic_comment.value_l).unwrap(),
+                Ptr::<bindings::Loc>::from(magic_comment.key_l).unwrap(),
+                Ptr::<bindings::Loc>::from(magic_comment.value_l).unwrap(),
             )
         };
 

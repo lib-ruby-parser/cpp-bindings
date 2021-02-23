@@ -2,7 +2,7 @@
 #define LIB_RUBY_PARSER_COMMENT_H
 
 #include <memory>
-#include "range.h"
+#include "loc.h"
 #include "comment_type.h"
 
 namespace lib_ruby_parser
@@ -11,12 +11,12 @@ namespace lib_ruby_parser
     {
     public:
         CommentType kind;
-        std::unique_ptr<Range> location;
+        std::unique_ptr<Loc> location;
 
         Comment() = delete;
         Comment(Comment &&) = default;
         Comment(const Comment &) = delete;
-        explicit Comment(CommentType kind, std::unique_ptr<Range> location);
+        explicit Comment(CommentType kind, std::unique_ptr<Loc> location);
 
         bool operator==(const Comment &other);
         bool operator!=(const Comment &other);

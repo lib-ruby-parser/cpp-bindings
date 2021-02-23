@@ -32,7 +32,7 @@ impl<'a> CppFile<'a> {
 #include <vector>
 #include <string>
 #include <variant>
-#include \"range.h\"
+#include \"loc.h\"
 #include \"bytes.h\"
 
 namespace lib_ruby_parser {{
@@ -108,7 +108,7 @@ namespace lib_ruby_parser {{
 namespace lib_ruby_parser {{
 
 class Node;
-class Range;
+class Loc;
 
 extern \"C\" {{
 

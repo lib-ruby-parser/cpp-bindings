@@ -134,7 +134,7 @@ $(LIB_RUBY_PARSER_H):
 	cat src/magic_comment_kind.h >> $(LIB_RUBY_PARSER_TMP_H)
 
 	cat src/bytes.h >> $(LIB_RUBY_PARSER_TMP_H)
-	cat src/range.h >> $(LIB_RUBY_PARSER_TMP_H)
+	cat src/loc.h >> $(LIB_RUBY_PARSER_TMP_H)
 	cat src/token.h >> $(LIB_RUBY_PARSER_TMP_H)
 
 	cat src/node.h >> $(LIB_RUBY_PARSER_TMP_H)
@@ -224,10 +224,10 @@ $(TARGET_DIR)/parser_result$(OBJ_FILE_EXT): src/parser_result.h src/parser_resul
 	mv parser_result$(OBJ_FILE_EXT) $(TARGET_DIR)/parser_result$(OBJ_FILE_EXT)
 OBJECTS += $(TARGET_DIR)/parser_result$(OBJ_FILE_EXT)
 
-$(TARGET_DIR)/range$(OBJ_FILE_EXT): src/range.h src/range.cpp
-	$(CXX) src/range.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
-	mv range$(OBJ_FILE_EXT) $(TARGET_DIR)/range$(OBJ_FILE_EXT)
-OBJECTS += $(TARGET_DIR)/range$(OBJ_FILE_EXT)
+$(TARGET_DIR)/loc$(OBJ_FILE_EXT): src/loc.h src/loc.cpp
+	$(CXX) src/loc.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
+	mv loc$(OBJ_FILE_EXT) $(TARGET_DIR)/loc$(OBJ_FILE_EXT)
+OBJECTS += $(TARGET_DIR)/loc$(OBJ_FILE_EXT)
 
 $(TARGET_DIR)/token_rewriter$(OBJ_FILE_EXT): src/token_rewriter.h src/token_rewriter.cpp
 	$(CXX) src/token_rewriter.cpp $(CXXFLAGS) $(CXXOBJFLAGS)

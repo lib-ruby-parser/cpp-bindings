@@ -62,21 +62,21 @@ All classes/methods are defined in the `lib_ruby_parser` namespace.
     ```cpp
     ErrorLevel level; // enum with WARNING and ERROR values
     std::string message;
-    std::unique_ptr<Range> range;
+    std::unique_ptr<Loc> loc;
     ```
 
 7. `Comment` has the following fields:
 
     ```cpp
     CommentType kind; // enum with INLINE, DOCUMENT and UNKNOWN values
-    std::unique_ptr<Range> location;
+    std::unique_ptr<Loc> location;
     ```
 
-8. `Range` has the following fields and methods:
+8. `Loc` has the following fields and methods:
 
     ```cpp
-    uint32_t begin_pos;
-    uint32_t end_pos;
+    uint32_t begin;
+    uint32_t end;
     std::string source(const std::string &input);
     ```
 
@@ -91,6 +91,6 @@ All classes/methods are defined in the `lib_ruby_parser` namespace.
     // "# encoding: utf-8"
     //    ~~~~~~~~ key
     //              ~~~~~ value
-    std::unique_ptr<Range> key_l;
-    std::unique_ptr<Range> value_l;
+    std::unique_ptr<Loc> key_l;
+    std::unique_ptr<Loc> value_l;
     ```

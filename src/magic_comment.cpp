@@ -3,8 +3,8 @@
 namespace lib_ruby_parser
 {
     MagicComment::MagicComment(MagicCommentKind kind,
-                               std::unique_ptr<Range> key_l,
-                               std::unique_ptr<Range> value_l)
+                               std::unique_ptr<Loc> key_l,
+                               std::unique_ptr<Loc> value_l)
     {
         this->kind = kind;
         this->key_l = std::move(key_l);

@@ -16,7 +16,7 @@ impl From<lib_ruby_parser::source::Comment> for Ptr<bindings::Comment> {
         let ptr = unsafe {
             bindings::make_comment(
                 bindings::CommentType::from(comment.kind),
-                Ptr::<bindings::Range>::from(comment.location).unwrap(),
+                Ptr::<bindings::Loc>::from(comment.location).unwrap(),
             )
         };
         Ptr::new(ptr)

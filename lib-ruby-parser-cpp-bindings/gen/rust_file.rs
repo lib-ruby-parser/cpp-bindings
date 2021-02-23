@@ -106,8 +106,8 @@ impl<'a> CppFromRustImpl<'a> {
                     "let {field_name} = bindings::NodeVec::from({field_name});",
                     field_name = f.field_name
                 ),
-                FieldType::Range | FieldType::MaybeRange => format!(
-                    "let {field_name} = Ptr::<bindings::Range>::from({field_name}).unwrap();",
+                FieldType::Loc | FieldType::MaybeLoc => format!(
+                    "let {field_name} = Ptr::<bindings::Loc>::from({field_name}).unwrap();",
                     field_name = f.field_name
                 ),
                 FieldType::MaybeStr => format!(

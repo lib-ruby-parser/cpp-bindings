@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include "range.h"
+#include "loc.h"
 #include "bytes.h"
 
 namespace lib_ruby_parser
