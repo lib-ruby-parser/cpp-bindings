@@ -4,8 +4,6 @@
 #include <vector>
 #include <string>
 #include <memory>
-#include "node.h"
-#include "make_node.h"
 
 namespace lib_ruby_parser
 {
