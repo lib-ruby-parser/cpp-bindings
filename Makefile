@@ -31,7 +31,7 @@ BINDINGS_DIR = lib-ruby-parser-cpp-bindings
 
 ifeq ($(DETECTED_OS), Windows)
 	# CXXFLAGS += /Wall
-	CXXFLAGS += /std:c++17 /nologo
+	CXXFLAGS += /std:c++17 /nologo /bigobj
 	CXXOBJFLAGS += /c /Fo
 	CXXFLAGS += /MT /Zi
 	# CXXEXECFLAGS = advapi32.lib ws2_32.lib userenv.lib msvcrt.lib
