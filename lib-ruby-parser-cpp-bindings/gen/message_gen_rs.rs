@@ -1,4 +1,5 @@
-use super::make_message_h::camel_case_to_underscored;
+use super::helpers::camel_case_to_underscored;
+use super::helpers::{all_messages, map_message_fields, map_messages};
 
 pub(crate) struct MessageGenRs {
     messages: Vec<lib_ruby_parser_nodes::Message>,
@@ -6,12 +7,9 @@ pub(crate) struct MessageGenRs {
 
 impl MessageGenRs {
     pub(crate) fn new(registry: &lib_ruby_parser_nodes::Messages) -> Self {
-        let messages = registry
-            .sections
-            .iter()
-            .flat_map(|s| s.messages.to_owned())
-            .collect();
-        Self { messages }
+        Self {
+            messages: all_messages(registry),
+        }
     }
 
     pub(crate) fn write(&self) {
@@ -42,10 +40,7 @@ impl From<lib_ruby_parser::Diagnostic> for Ptr<bindings::Diagnostic> {{
     }
 
     fn match_branches(&self) -> Vec<String> {
-        self.messages
-            .iter()
-            .map(|m| MatchBranch::new(m).code())
-            .collect()
+        map_messages(&self.messages, |m| MatchBranch::new(m).code())
     }
 }
 
@@ -70,11 +65,7 @@ impl<'a> MatchBranch<'a> {
     }
 
     fn deconstruct_fields(&self) -> Vec<String> {
-        self.message
-            .fields
-            .iter()
-            .map(|f| f.name.to_owned())
-            .collect()
+        map_message_fields(&self.message.fields, |f| f.name.to_owned())
     }
 
     fn stmts(&self) -> Vec<String> {
@@ -90,25 +81,17 @@ impl<'a> MatchBranch<'a> {
     }
 
     fn map_fields(&self) -> Vec<String> {
-        self.message
-            .fields
-            .iter()
-            .map(|f| match f.field_type {
-                lib_ruby_parser_nodes::MessageFieldType::Byte => {
-                    format!("let {name} = {name} as i8;", name = f.name)
-                }
-                lib_ruby_parser_nodes::MessageFieldType::Str => {
-                    format!("let {name} = BytePtr::from({name});", name = f.name)
-                }
-            })
-            .collect()
+        map_message_fields(&self.message.fields, |f| match f.field_type {
+            lib_ruby_parser_nodes::MessageFieldType::Byte => {
+                format!("let {name} = {name} as i8;", name = f.name)
+            }
+            lib_ruby_parser_nodes::MessageFieldType::Str => {
+                format!("let {name} = BytePtr::from({name});", name = f.name)
+            }
+        })
     }
 
     fn args(&self) -> Vec<String> {
-        self.message
-            .fields
-            .iter()
-            .map(|f| f.name.to_owned())
-            .collect()
+        map_message_fields(&self.message.fields, |f| f.name.to_owned())
     }
 }

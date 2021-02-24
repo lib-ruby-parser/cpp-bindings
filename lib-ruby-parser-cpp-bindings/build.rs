@@ -23,6 +23,9 @@ fn build_cpp_files() {
 
     gen::MakeMessageH::new(&messages).write();
     gen::MakeMessageCpp::new(&messages).write();
+
+    gen::RenderMessageH::new(&messages).write();
+    gen::RenderMessageCpp::new(&messages).write();
 }
 
 #[cfg(feature = "generate-bindings")]

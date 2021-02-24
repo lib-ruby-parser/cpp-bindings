@@ -1,3 +1,4 @@
+use super::helpers::{map_node_fields, map_nodes};
 use super::{Field, FieldType};
 
 pub(crate) struct NodeCpp<'a> {
@@ -28,10 +29,7 @@ namespace lib_ruby_parser {{
     }
 
     fn implementations(&self) -> Vec<String> {
-        self.nodes
-            .iter()
-            .map(|n| NodeImplementation::new(n).code())
-            .collect()
+        map_nodes(self.nodes, |n| NodeImplementation::new(n).code())
     }
 }
 
@@ -58,37 +56,29 @@ impl<'a> NodeImplementation<'a> {
     }
 
     fn args(&self) -> Vec<String> {
-        self.node
-            .fields
-            .iter()
-            .map(|f| {
-                format!(
-                    "{field_type} {field_name}",
-                    field_type = FieldType::new(&f.field_type).cpp_type(),
-                    field_name = Field::new(f).cpp_name()
-                )
-            })
-            .collect()
+        map_node_fields(&self.node.fields, |f| {
+            format!(
+                "{field_type} {field_name}",
+                field_type = FieldType::new(&f.field_type).cpp_type(),
+                field_name = Field::new(f).cpp_name()
+            )
+        })
     }
 
     fn construtor_stmts(&self) -> Vec<String> {
-        self.node
-            .fields
-            .iter()
-            .map(|f| {
-                let field_name = Field::new(f).cpp_name();
+        map_node_fields(&self.node.fields, |f| {
+            let field_name = Field::new(f).cpp_name();
 
-                let mut rhs = field_name.clone();
-                if FieldType::new(&f.field_type).needs_move() {
-                    rhs = format!("std::move({})", rhs)
-                }
+            let mut rhs = field_name.clone();
+            if FieldType::new(&f.field_type).needs_move() {
+                rhs = format!("std::move({})", rhs)
+            }
 
-                format!(
-                    "this->{field_name} = {rhs};",
-                    field_name = field_name,
-                    rhs = rhs
-                )
-            })
-            .collect()
+            format!(
+                "this->{field_name} = {rhs};",
+                field_name = field_name,
+                rhs = rhs
+            )
+        })
     }
 }

@@ -1,3 +1,4 @@
+use super::helpers::{map_node_fields, map_nodes};
 use super::{Field, FieldType};
 
 pub(crate) struct NodeH<'a> {
@@ -64,17 +65,13 @@ public:
     }
 
     fn class_declarations(&self) -> Vec<String> {
-        self.nodes
-            .iter()
-            .map(|node| CppClassDeclaration::new(node).code())
-            .collect()
+        map_nodes(self.nodes, |node| CppClassDeclaration::new(node).code())
     }
 
     fn variants(&self) -> Vec<String> {
-        self.nodes
-            .iter()
-            .map(|node| format!("std::unique_ptr<{}>", node.struct_name))
-            .collect()
+        map_nodes(self.nodes, |node| {
+            format!("std::unique_ptr<{}>", node.struct_name)
+        })
     }
 }
 
@@ -137,16 +134,12 @@ public:
     }
 
     fn constructor_args(&self) -> Vec<String> {
-        self.node
-            .fields
-            .iter()
-            .map(|f| {
-                format!(
-                    "{field_type} {field_name}",
-                    field_type = FieldType::new(&f.field_type).cpp_type(),
-                    field_name = Field::new(f).cpp_name()
-                )
-            })
-            .collect()
+        map_node_fields(&self.node.fields, |f| {
+            format!(
+                "{field_type} {field_name}",
+                field_type = FieldType::new(&f.field_type).cpp_type(),
+                field_name = Field::new(f).cpp_name()
+            )
+        })
     }
 }

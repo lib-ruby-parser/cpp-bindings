@@ -33,3 +33,11 @@ pub(crate) use make_message_cpp::MakeMessageCpp;
 
 mod message_gen_rs;
 pub(crate) use message_gen_rs::MessageGenRs;
+
+mod render_message_h;
+pub(crate) use render_message_h::RenderMessageH;
+
+mod render_message_cpp;
+pub(crate) use render_message_cpp::RenderMessageCpp;
+
+mod helpers;

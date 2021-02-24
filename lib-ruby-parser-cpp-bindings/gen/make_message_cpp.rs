@@ -1,5 +1,5 @@
-use super::make_message_h::camel_case_to_underscored;
-use super::message_h::CppField;
+use super::helpers::MessageCppField;
+use super::helpers::{all_messages, camel_case_to_underscored, map_message_fields, map_messages};
 
 pub(crate) struct MakeMessageCpp {
     messages: Vec<lib_ruby_parser_nodes::Message>,
@@ -7,12 +7,9 @@ pub(crate) struct MakeMessageCpp {
 
 impl MakeMessageCpp {
     pub(crate) fn new(registry: &lib_ruby_parser_nodes::Messages) -> Self {
-        let messages = registry
-            .sections
-            .iter()
-            .flat_map(|s| s.messages.to_owned())
-            .collect();
-        Self { messages }
+        Self {
+            messages: all_messages(registry),
+        }
     }
 
     pub(crate) fn write(&self) {
@@ -35,10 +32,7 @@ namespace lib_ruby_parser {{
     }
 
     fn make_fns(&self) -> Vec<String> {
-        self.messages
-            .iter()
-            .map(|m| MakeFn::new(m).code())
-            .collect()
+        map_messages(&self.messages, |m| MakeFn::new(m).code())
     }
 }
 
@@ -71,26 +65,20 @@ impl<'a> MakeFn<'a> {
     }
 
     fn message_ctor_args(&self) -> Vec<String> {
-        self.message
-            .fields
-            .iter()
-            .map(|f| CppField::new(f).to_c_string())
-            .collect()
+        map_message_fields(&self.message.fields, |f| {
+            MessageCppField::new(f).to_c_string()
+        })
     }
 
     fn c_message_args_to_cpp(&self) -> Vec<String> {
-        self.message
-            .fields
-            .iter()
-            .map(|f| {
-                let field_name = CppField::new(f).field_name;
-                match f.field_type {
-                    lib_ruby_parser_nodes::MessageFieldType::Str => {
-                        format!("byte_ptr_to_owned_string({})", field_name)
-                    }
-                    lib_ruby_parser_nodes::MessageFieldType::Byte => field_name,
+        map_message_fields(&self.message.fields, |f| {
+            let field_name = MessageCppField::new(f).field_name;
+            match f.field_type {
+                lib_ruby_parser_nodes::MessageFieldType::Str => {
+                    format!("byte_ptr_to_owned_string({})", field_name)
                 }
-            })
-            .collect()
+                lib_ruby_parser_nodes::MessageFieldType::Byte => field_name,
+            }
+        })
     }
 }

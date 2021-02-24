@@ -1,4 +1,5 @@
-use super::message_h::CppField;
+use super::helpers::MessageCppField;
+use super::helpers::{all_messages, map_message_fields, map_messages};
 
 pub(crate) struct MessageCpp {
     messages: Vec<lib_ruby_parser_nodes::Message>,
@@ -6,12 +7,9 @@ pub(crate) struct MessageCpp {
 
 impl MessageCpp {
     pub(crate) fn new(registry: &lib_ruby_parser_nodes::Messages) -> Self {
-        let messages = registry
-            .sections
-            .iter()
-            .flat_map(|s| s.messages.to_owned())
-            .collect();
-        Self { messages }
+        Self {
+            messages: all_messages(registry),
+        }
     }
 
     pub(crate) fn write(&self) {
@@ -37,36 +35,28 @@ namespace lib_ruby_parser {{
     }
 
     fn constructors(&self) -> Vec<String> {
-        self.messages
-            .iter()
-            .map(|m| MessageConstructor::new(m).code())
-            .collect()
+        map_messages(&self.messages, |m| MessageConstructor::new(m).code())
     }
 
     fn comparisons(&self) -> Vec<String> {
-        self.messages
-            .iter()
-            .map(|m| {
-                let mut compare_fields = m
-                    .fields
-                    .iter()
-                    .map(|f| format!("{f} == other.{f}", f = CppField::new(f).field_name))
-                    .collect::<Vec<_>>();
-                if compare_fields.is_empty() {
-                    compare_fields = vec!["true".to_string()];
-                }
+        map_messages(&self.messages, |m| {
+            let mut compare_fields = map_message_fields(&m.fields, |f| {
+                format!("{f} == other.{f}", f = MessageCppField::new(f).field_name)
+            });
+            if compare_fields.is_empty() {
+                compare_fields = vec!["true".to_string()];
+            }
 
-                format!(
-                    "bool {class_name}::operator==(const {class_name} &{other})
+            format!(
+                "bool {class_name}::operator==(const {class_name} &{other})
 {{
     return {compare_fields};
 }}",
-                    class_name = m.name,
-                    other = if m.fields.is_empty() { "" } else { "other" },
-                    compare_fields = compare_fields.join(" && ")
-                )
-            })
-            .collect()
+                class_name = m.name,
+                other = if m.fields.is_empty() { "" } else { "other" },
+                compare_fields = compare_fields.join(" && ")
+            )
+        })
     }
 }
 
@@ -92,23 +82,17 @@ impl<'a> MessageConstructor<'a> {
     }
 
     fn args(&self) -> Vec<String> {
-        self.message
-            .fields
-            .iter()
-            .map(|f| CppField::new(f).to_cpp_string())
-            .collect()
+        map_message_fields(&self.message.fields, |f| {
+            MessageCppField::new(f).to_cpp_string()
+        })
     }
 
     fn statements(&self) -> Vec<String> {
-        self.message
-            .fields
-            .iter()
-            .map(|f| {
-                format!(
-                    "this->{field_name} = {field_name};",
-                    field_name = CppField::new(f).field_name
-                )
-            })
-            .collect()
+        map_message_fields(&self.message.fields, |f| {
+            format!(
+                "this->{field_name} = {field_name};",
+                field_name = MessageCppField::new(f).field_name
+            )
+        })
     }
 }

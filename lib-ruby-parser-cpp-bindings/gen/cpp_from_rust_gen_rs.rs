@@ -1,3 +1,4 @@
+use super::helpers::{map_node_fields, map_nodes};
 use lib_ruby_parser_nodes::FieldType;
 
 pub(crate) struct CppFromRustGen<'a> {
@@ -35,22 +36,16 @@ impl From<lib_ruby_parser::Node> for Ptr<bindings::Node> {{
     }
 
     fn impls(&self) -> Vec<String> {
-        self.nodes
-            .iter()
-            .map(|node| CppFromRustImpl::new(node).code())
-            .collect()
+        map_nodes(self.nodes, |node| CppFromRustImpl::new(node).code())
     }
 
     fn match_branches(&self) -> Vec<String> {
-        self.nodes
-            .iter()
-            .map(|node| {
-                format!(
-                    "lib_ruby_parser::Node::{rust_struct_name}(inner) => inner.into(),",
-                    rust_struct_name = node.struct_name
-                )
-            })
-            .collect()
+        map_nodes(self.nodes, |node| {
+            format!(
+                "lib_ruby_parser::Node::{rust_struct_name}(inner) => inner.into(),",
+                rust_struct_name = node.struct_name
+            )
+        })
     }
 }
 
@@ -89,54 +84,40 @@ impl<'a> CppFromRustImpl<'a> {
     }
 
     fn rust_fields_list(&self) -> String {
-        self.node
-            .fields
-            .iter()
-            .map(|f| f.field_name.to_owned())
-            .collect::<Vec<_>>()
-            .join(", ")
+        map_node_fields(&self.node.fields, |f| f.field_name.to_owned()).join(", ")
     }
 
     fn conversions(&self) -> String {
-        self.node
-            .fields
-            .iter()
-            .map(|f| match f.field_type {
-                FieldType::Node | FieldType::MaybeNode | FieldType::RegexOptions => format!(
-                    "let {field_name} = Ptr::<bindings::Node>::from({field_name}).unwrap();",
-                    field_name = f.field_name
-                ),
-                FieldType::Nodes => format!(
-                    "let {field_name} = bindings::NodeVec::from({field_name});",
-                    field_name = f.field_name
-                ),
-                FieldType::Loc | FieldType::MaybeLoc => format!(
-                    "let {field_name} = Ptr::<bindings::Loc>::from({field_name}).unwrap();",
-                    field_name = f.field_name
-                ),
-                FieldType::MaybeStr
-                | FieldType::StringValue
-                | FieldType::Chars
-                | FieldType::Str
-                | FieldType::RawString => format!(
-                    "let {field_name} = BytePtr::from({field_name});",
-                    field_name = f.field_name
-                ),
-                FieldType::U8 | FieldType::Usize => format!(
-                    "let {field_name} = {field_name} as u32;",
-                    field_name = f.field_name
-                ),
-            })
-            .collect::<Vec<_>>()
-            .join("\n        ")
+        map_node_fields(&self.node.fields, |f| match f.field_type {
+            FieldType::Node | FieldType::MaybeNode | FieldType::RegexOptions => format!(
+                "let {field_name} = Ptr::<bindings::Node>::from({field_name}).unwrap();",
+                field_name = f.field_name
+            ),
+            FieldType::Nodes => format!(
+                "let {field_name} = bindings::NodeVec::from({field_name});",
+                field_name = f.field_name
+            ),
+            FieldType::Loc | FieldType::MaybeLoc => format!(
+                "let {field_name} = Ptr::<bindings::Loc>::from({field_name}).unwrap();",
+                field_name = f.field_name
+            ),
+            FieldType::MaybeStr
+            | FieldType::StringValue
+            | FieldType::Chars
+            | FieldType::Str
+            | FieldType::RawString => format!(
+                "let {field_name} = BytePtr::from({field_name});",
+                field_name = f.field_name
+            ),
+            FieldType::U8 | FieldType::Usize => format!(
+                "let {field_name} = {field_name} as u32;",
+                field_name = f.field_name
+            ),
+        })
+        .join("\n        ")
     }
 
     fn cpp_fields_list(&self) -> String {
-        self.node
-            .fields
-            .iter()
-            .map(|f| f.field_name.to_owned())
-            .collect::<Vec<_>>()
-            .join(", ")
+        map_node_fields(&self.node.fields, |f| f.field_name.to_owned()).join(", ")
     }
 }

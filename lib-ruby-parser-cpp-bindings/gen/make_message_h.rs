@@ -1,4 +1,5 @@
-use super::message_h::CppField;
+use super::helpers::MessageCppField;
+use super::helpers::{all_messages, camel_case_to_underscored, map_message_fields, map_messages};
 
 pub(crate) struct MakeMessageH {
     messages: Vec<lib_ruby_parser_nodes::Message>,
@@ -6,12 +7,9 @@ pub(crate) struct MakeMessageH {
 
 impl MakeMessageH {
     pub(crate) fn new(registry: &lib_ruby_parser_nodes::Messages) -> Self {
-        let messages = registry
-            .sections
-            .iter()
-            .flat_map(|s| s.messages.to_owned())
-            .collect();
-        Self { messages }
+        Self {
+            messages: all_messages(registry),
+        }
     }
 
     pub(crate) fn write(&self) {
@@ -46,44 +44,15 @@ extern \"C\" {{
     }
 
     fn make_fns(&self) -> Vec<String> {
-        self.messages
-            .iter()
-            .map(|m| {
-                let args = m
-                    .fields
-                    .iter()
-                    .map(|f| CppField::new(f).to_c_string())
-                    .collect::<Vec<_>>();
-                format!(
-                    "Diagnostic *make_{lower}({args});",
-                    lower = camel_case_to_underscored(&m.name).to_lowercase(),
-                    args = [vec![String::from("ErrorLevel level, Loc *loc")], args]
-                        .concat()
-                        .join(", ")
-                )
-            })
-            .collect()
+        map_messages(&self.messages, |m| {
+            let args = map_message_fields(&m.fields, |f| MessageCppField::new(f).to_c_string());
+            format!(
+                "Diagnostic *make_{lower}({args});",
+                lower = camel_case_to_underscored(&m.name).to_lowercase(),
+                args = [vec![String::from("ErrorLevel level, Loc *loc")], args]
+                    .concat()
+                    .join(", ")
+            )
+        })
     }
-}
-
-pub(crate) fn camel_case_to_underscored(s: &str) -> String {
-    let mut words = vec![];
-    let mut word = String::from("");
-
-    for c in s.chars() {
-        if c.is_uppercase() {
-            // flush
-            words.push(word);
-            word = String::from("");
-        }
-        word.push(c);
-    }
-
-    words.push(word);
-
-    words
-        .into_iter()
-        .filter(|w| !w.is_empty())
-        .collect::<Vec<_>>()
-        .join("_")
 }

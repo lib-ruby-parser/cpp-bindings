@@ -1,3 +1,4 @@
+use super::helpers::{map_node_fields, map_nodes};
 use super::{Field, FieldType};
 
 pub(crate) struct MakeNodeH<'a> {
@@ -51,10 +52,7 @@ struct NodeVec
     }
 
     fn make_fn_decls(&self) -> Vec<String> {
-        self.nodes
-            .iter()
-            .map(|n| MakeFnDecl::new(n).code())
-            .collect()
+        map_nodes(self.nodes, |n| MakeFnDecl::new(n).code())
     }
 }
 
@@ -76,16 +74,12 @@ impl<'a> MakeFnDecl<'a> {
     }
 
     fn args(&self) -> Vec<String> {
-        self.node
-            .fields
-            .iter()
-            .map(|f| {
-                format!(
-                    "{ptr_type} {ptr_name}",
-                    ptr_type = FieldType::new(&f.field_type).c_ptr(),
-                    ptr_name = Field::new(f).cpp_name()
-                )
-            })
-            .collect()
+        map_node_fields(&self.node.fields, |f| {
+            format!(
+                "{ptr_type} {ptr_name}",
+                ptr_type = FieldType::new(&f.field_type).c_ptr(),
+                ptr_name = Field::new(f).cpp_name()
+            )
+        })
     }
 }
