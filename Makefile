@@ -137,8 +137,9 @@ $(LIB_RUBY_PARSER_H):
 	cat src/loc.h >> $(LIB_RUBY_PARSER_TMP_H)
 	cat src/token.h >> $(LIB_RUBY_PARSER_TMP_H)
 
+	cat src/message.h >> $(LIB_RUBY_PARSER_TMP_H)
+
 	cat src/node.h >> $(LIB_RUBY_PARSER_TMP_H)
-	cat src/make_node.h >> $(LIB_RUBY_PARSER_TMP_H)
 
 	cat src/comment.h >> $(LIB_RUBY_PARSER_TMP_H)
 	cat src/custom_decoder.h >> $(LIB_RUBY_PARSER_TMP_H)
@@ -214,6 +215,11 @@ $(TARGET_DIR)/make_node$(OBJ_FILE_EXT): src/make_node.h src/make_node.cpp
 	mv make_node$(OBJ_FILE_EXT) $(TARGET_DIR)/make_node$(OBJ_FILE_EXT)
 OBJECTS += $(TARGET_DIR)/make_node$(OBJ_FILE_EXT)
 
+$(TARGET_DIR)/make_message$(OBJ_FILE_EXT): src/make_message.h src/make_message.cpp
+	$(CXX) src/make_message.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
+	mv make_message$(OBJ_FILE_EXT) $(TARGET_DIR)/make_message$(OBJ_FILE_EXT)
+OBJECTS += $(TARGET_DIR)/make_message$(OBJ_FILE_EXT)
+
 $(TARGET_DIR)/parser_options$(OBJ_FILE_EXT): src/parser_options.h src/parser_options.cpp
 	$(CXX) src/parser_options.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
 	mv parser_options$(OBJ_FILE_EXT) $(TARGET_DIR)/parser_options$(OBJ_FILE_EXT)
@@ -238,6 +244,11 @@ $(TARGET_DIR)/token$(OBJ_FILE_EXT): src/token.h src/token.cpp
 	$(CXX) src/token.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
 	mv token$(OBJ_FILE_EXT) $(TARGET_DIR)/token$(OBJ_FILE_EXT)
 OBJECTS += $(TARGET_DIR)/token$(OBJ_FILE_EXT)
+
+$(TARGET_DIR)/message$(OBJ_FILE_EXT): src/message.h src/message.cpp
+	$(CXX) src/message.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
+	mv message$(OBJ_FILE_EXT) $(TARGET_DIR)/message$(OBJ_FILE_EXT)
+OBJECTS += $(TARGET_DIR)/message$(OBJ_FILE_EXT)
 
 TEST_O = $(TARGET_DIR)/test$(OBJ_FILE_EXT)
 $(TEST_O): test.cpp $(LIB_RUBY_PARSER_H)
@@ -275,7 +286,7 @@ test-valgrind: $(TARGET_DIR)/test-runner
 	valgrind --leak-check=full --error-exitcode=1 --num-callers=20 $(TARGET_DIR)/test-runner
 
 clean:
-	rm -rf $(TARGET_DIR)
+	rm -rf target
 	mkdir -p $(TARGET_DIR)
 
 test-cov:

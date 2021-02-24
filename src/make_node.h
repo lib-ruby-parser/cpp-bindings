@@ -2,7 +2,6 @@
 #define LIB_RUBY_PARSER_MAKE_NODE_H
 
 #include <cstddef>
-#include "bytes.h"
 #include "byte_ptr.h"
 
 namespace lib_ruby_parser {

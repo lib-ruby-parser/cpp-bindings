@@ -70,6 +70,23 @@ void test_tokens()
     assert_token(result->tokens[1], "EOF", "", 2, 2);
 }
 
+void test_diagnostic_eq()
+{
+    Diagnostic sample(ErrorLevel::ERROR, std::make_unique<CantAssignToSelf>(), std::make_unique<Loc>(0, 1));
+
+    Diagnostic diff_level(ErrorLevel::WARNING, std::make_unique<CantAssignToSelf>(), std::make_unique<Loc>(0, 1));
+    Diagnostic diff_message(ErrorLevel::ERROR, std::make_unique<CantAssignToNil>(), std::make_unique<Loc>(0, 1));
+    Diagnostic diff_loc(ErrorLevel::ERROR, std::make_unique<CantAssignToSelf>(), std::make_unique<Loc>(0, 2));
+
+    Diagnostic eq(ErrorLevel::ERROR, std::make_unique<CantAssignToSelf>(), std::make_unique<Loc>(0, 1));
+
+    assert(sample != diff_level);
+    assert(sample != diff_message);
+    assert(sample != diff_loc);
+
+    assert(sample == eq);
+}
+
 void test_diagnostics()
 {
     auto result = ParserResult::from_source(Bytes("self = 1; nil = 2"), ParserOptions());
@@ -78,12 +95,12 @@ void test_diagnostics()
 
     assert(result->diagnostics[0] == Diagnostic(
                                          ErrorLevel::ERROR,
-                                         std::string("Can't change the value of self"),
+                                         std::make_unique<CantAssignToSelf>(),
                                          std::make_unique<Loc>(0, 4)));
 
     assert(result->diagnostics[1] == Diagnostic(
                                          ErrorLevel::ERROR,
-                                         std::string("Can't assign to nil"),
+                                         std::make_unique<CantAssignToNil>(),
                                          std::make_unique<Loc>(10, 13)));
 }
 
@@ -239,7 +256,7 @@ void test_custom_decoder_error()
 
     assert(result->diagnostics[0] == Diagnostic(
                                          ErrorLevel::ERROR,
-                                         std::string("encoding error: DecodingError(\"test error\")"),
+                                         std::make_unique<EncodingError>("DecodingError(\"test error\")"),
                                          std::make_unique<Loc>(12, 15)));
 
     assert(state->input.to_string() == input.to_string());
@@ -288,6 +305,7 @@ int main()
     test(node);
     test(parse);
     test(tokens);
+    test(diagnostic_eq);
     test(diagnostics);
     test(comments);
     test(magic_comments);

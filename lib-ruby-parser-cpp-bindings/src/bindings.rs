@@ -75,137 +75,6 @@ extern "C" {
     pub fn byte_ptr_to_vec(byte_ptr: BytePtr) -> u8;
 }
 #[repr(C)]
-#[derive(Debug)]
-pub struct Bytes {
-    pub bytes_: *mut ::std::os::raw::c_char,
-    pub size_: u32,
-    pub borrowed: bool,
-}
-extern "C" {
-    #[link_name = "\u{1}__ZN15lib_ruby_parser5Bytes8into_ptrEv"]
-    pub fn Bytes_into_ptr(this: *mut Bytes) -> BytePtr;
-}
-extern "C" {
-    #[link_name = "\u{1}__ZNK15lib_ruby_parser5Bytes4sizeEv"]
-    pub fn Bytes_size(this: *const Bytes) -> u32;
-}
-extern "C" {
-    #[link_name = "\u{1}__ZNK15lib_ruby_parser5Bytes5cloneEv"]
-    pub fn Bytes_clone(this: *const Bytes) -> Bytes;
-}
-extern "C" {
-    #[link_name = "\u{1}__ZNK15lib_ruby_parser5Bytes2atEj"]
-    pub fn Bytes_at(this: *const Bytes, idx: u32) -> ::std::os::raw::c_char;
-}
-extern "C" {
-    #[link_name = "\u{1}__ZNK15lib_ruby_parser5Bytes5rangeEjj"]
-    pub fn Bytes_range(this: *const Bytes, begin: u32, end: u32) -> Bytes;
-}
-extern "C" {
-    #[link_name = "\u{1}__ZNK15lib_ruby_parser5Bytes9to_stringEv"]
-    pub fn Bytes_to_string(this: *const Bytes) -> string;
-}
-extern "C" {
-    #[link_name = "\u{1}__ZNK15lib_ruby_parser5Bytes15to_string_lossyEv"]
-    pub fn Bytes_to_string_lossy(this: *const Bytes) -> string;
-}
-extern "C" {
-    #[link_name = "\u{1}__ZN15lib_ruby_parser5Bytes13mark_borrowedEv"]
-    pub fn Bytes_mark_borrowed(this: *mut Bytes);
-}
-extern "C" {
-    #[link_name = "\u{1}__ZN15lib_ruby_parser5BytesC1Ev"]
-    pub fn Bytes_Bytes(this: *mut Bytes);
-}
-extern "C" {
-    #[link_name = "\u{1}__ZN15lib_ruby_parser5BytesC1ENSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEE"]
-    pub fn Bytes_Bytes1(this: *mut Bytes, s: string);
-}
-extern "C" {
-    #[link_name = "\u{1}__ZN15lib_ruby_parser5BytesC1EPcj"]
-    pub fn Bytes_Bytes2(this: *mut Bytes, ptr: *mut ::std::os::raw::c_char, size: u32);
-}
-extern "C" {
-    #[link_name = "\u{1}__ZN15lib_ruby_parser5BytesC1ENS_7BytePtrE"]
-    pub fn Bytes_Bytes3(this: *mut Bytes, byte_ptr: BytePtr);
-}
-extern "C" {
-    #[link_name = "\u{1}__ZN15lib_ruby_parser5BytesC1EOS0_"]
-    pub fn Bytes_Bytes4(this: *mut Bytes, arg1: *mut Bytes);
-}
-extern "C" {
-    #[link_name = "\u{1}__ZN15lib_ruby_parser5BytesD1Ev"]
-    pub fn Bytes_Bytes_destructor(this: *mut Bytes);
-}
-impl Bytes {
-    #[inline]
-    pub unsafe fn into_ptr(&mut self) -> BytePtr {
-        Bytes_into_ptr(self)
-    }
-    #[inline]
-    pub unsafe fn size(&self) -> u32 {
-        Bytes_size(self)
-    }
-    #[inline]
-    pub unsafe fn clone(&self) -> Bytes {
-        Bytes_clone(self)
-    }
-    #[inline]
-    pub unsafe fn at(&self, idx: u32) -> ::std::os::raw::c_char {
-        Bytes_at(self, idx)
-    }
-    #[inline]
-    pub unsafe fn range(&self, begin: u32, end: u32) -> Bytes {
-        Bytes_range(self, begin, end)
-    }
-    #[inline]
-    pub unsafe fn to_string(&self) -> string {
-        Bytes_to_string(self)
-    }
-    #[inline]
-    pub unsafe fn to_string_lossy(&self) -> string {
-        Bytes_to_string_lossy(self)
-    }
-    #[inline]
-    pub unsafe fn mark_borrowed(&mut self) {
-        Bytes_mark_borrowed(self)
-    }
-    #[inline]
-    pub unsafe fn new() -> Self {
-        let mut __bindgen_tmp = ::std::mem::MaybeUninit::uninit();
-        Bytes_Bytes(__bindgen_tmp.as_mut_ptr());
-        __bindgen_tmp.assume_init()
-    }
-    #[inline]
-    pub unsafe fn new1(s: string) -> Self {
-        let mut __bindgen_tmp = ::std::mem::MaybeUninit::uninit();
-        Bytes_Bytes1(__bindgen_tmp.as_mut_ptr(), s);
-        __bindgen_tmp.assume_init()
-    }
-    #[inline]
-    pub unsafe fn new2(ptr: *mut ::std::os::raw::c_char, size: u32) -> Self {
-        let mut __bindgen_tmp = ::std::mem::MaybeUninit::uninit();
-        Bytes_Bytes2(__bindgen_tmp.as_mut_ptr(), ptr, size);
-        __bindgen_tmp.assume_init()
-    }
-    #[inline]
-    pub unsafe fn new3(byte_ptr: BytePtr) -> Self {
-        let mut __bindgen_tmp = ::std::mem::MaybeUninit::uninit();
-        Bytes_Bytes3(__bindgen_tmp.as_mut_ptr(), byte_ptr);
-        __bindgen_tmp.assume_init()
-    }
-    #[inline]
-    pub unsafe fn new4(arg1: *mut Bytes) -> Self {
-        let mut __bindgen_tmp = ::std::mem::MaybeUninit::uninit();
-        Bytes_Bytes4(__bindgen_tmp.as_mut_ptr(), arg1);
-        __bindgen_tmp.assume_init()
-    }
-    #[inline]
-    pub unsafe fn destruct(&mut self) {
-        Bytes_Bytes_destructor(self)
-    }
-}
-#[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct Node {
     _unused: [u8; 0],
@@ -1091,16 +960,395 @@ extern "C" {
 }
 #[repr(i32)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
+pub enum ErrorLevel {
+    WARNING = 0,
+    ERROR = 1,
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct Diagnostic {
+    _unused: [u8; 0],
+}
+extern "C" {
+    pub fn make_fraction_after_numeric(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_no_digits_after_dot(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_unknown_type_of_percent_string(level: ErrorLevel, loc: *mut Loc)
+        -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_numeric_literal_without_digits(level: ErrorLevel, loc: *mut Loc)
+        -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_unterminated_list(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_unterminated_regexp(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_unterminated_string(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_unterminated_quoted_string(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_invalid_unicode_escape(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_too_large_unicode_codepoint(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_invalid_unicode_codepoint(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_multiple_codepoint_at_single_char(
+        level: ErrorLevel,
+        loc: *mut Loc,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_invalid_escape_character(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_invalid_hex_escape(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_unterminated_heredoc(
+        level: ErrorLevel,
+        loc: *mut Loc,
+        heredoc_id: BytePtr,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_unterminated_heredoc_id(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_slash_r_at_middle_of_line(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_d_star_interpreted_as_arg_prefix(
+        level: ErrorLevel,
+        loc: *mut Loc,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_star_interpreted_as_arg_prefix(level: ErrorLevel, loc: *mut Loc)
+        -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_ampersand_interpreted_as_arg_prefix(
+        level: ErrorLevel,
+        loc: *mut Loc,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_triple_dot_at_eol(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_parentheses_iterpreted_as_arglist(
+        level: ErrorLevel,
+        loc: *mut Loc,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_ambiguous_first_argument(
+        level: ErrorLevel,
+        loc: *mut Loc,
+        operator_: ::std::os::raw::c_char,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_ambiguous_operator(
+        level: ErrorLevel,
+        loc: *mut Loc,
+        operator_: BytePtr,
+        interpreted_as: BytePtr,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_invalid_character_syntax(
+        level: ErrorLevel,
+        loc: *mut Loc,
+        suggestion: BytePtr,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_invalid_octal_digit(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_trailing_char_in_number(
+        level: ErrorLevel,
+        loc: *mut Loc,
+        c: ::std::os::raw::c_char,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_embedded_document_meets_eof(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_invalid_char(
+        level: ErrorLevel,
+        loc: *mut Loc,
+        c: ::std::os::raw::c_char,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_incomplete_character_syntax(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_gvar_without_id(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_invalid_gvar_name(
+        level: ErrorLevel,
+        loc: *mut Loc,
+        c: ::std::os::raw::c_char,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_ivar_without_id(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_invalid_ivar_name(
+        level: ErrorLevel,
+        loc: *mut Loc,
+        c: ::std::os::raw::c_char,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_cvar_without_id(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_invalid_cvar_name(
+        level: ErrorLevel,
+        loc: *mut Loc,
+        c: ::std::os::raw::c_char,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_unknown_regex_options(
+        level: ErrorLevel,
+        loc: *mut Loc,
+        options: BytePtr,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_unterminated_unicode_escape(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_encoding_error(level: ErrorLevel, loc: *mut Loc, error: BytePtr)
+        -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_ambiguous_ternary_operator(
+        level: ErrorLevel,
+        loc: *mut Loc,
+        condition: BytePtr,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_ambiguous_regexp(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_else_without_rescue(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_begin_not_at_top_level(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_alias_nth_ref(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_csend_inside_masgn(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_class_or_module_name_must_be_constant(
+        level: ErrorLevel,
+        loc: *mut Loc,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_endless_setter_definition(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_unexpected_token(
+        level: ErrorLevel,
+        loc: *mut Loc,
+        token_name: BytePtr,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_class_definition_in_method_body(
+        level: ErrorLevel,
+        loc: *mut Loc,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_module_definition_in_method_body(
+        level: ErrorLevel,
+        loc: *mut Loc,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_invalid_return_in_class_or_module_body(
+        level: ErrorLevel,
+        loc: *mut Loc,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_const_argument(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_ivar_argument(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_gvar_argument(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_cvar_argument(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_no_such_local_variable(
+        level: ErrorLevel,
+        loc: *mut Loc,
+        var_name: BytePtr,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_ordinary_param_defined(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_numparam_used(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_tok_at_eol_without_expression(
+        level: ErrorLevel,
+        loc: *mut Loc,
+        token_name: BytePtr,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_end_in_method(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_comparison_after_comparison(
+        level: ErrorLevel,
+        loc: *mut Loc,
+        comparison: BytePtr,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_circular_argument_reference(
+        level: ErrorLevel,
+        loc: *mut Loc,
+        arg_name: BytePtr,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_dynamic_constant_assignment(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_cant_assign_to_self(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_cant_assign_to_nil(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_cant_assign_to_true(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_cant_assign_to_false(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_cant_assign_to_file(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_cant_assign_to_line(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_cant_assign_to_encoding(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_cant_assign_to_numparam(
+        level: ErrorLevel,
+        loc: *mut Loc,
+        numparam: BytePtr,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_cant_set_variable(
+        level: ErrorLevel,
+        loc: *mut Loc,
+        var_name: BytePtr,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_block_given_to_yield(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_block_and_block_arg_given(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_symbol_literal_with_interpolation(
+        level: ErrorLevel,
+        loc: *mut Loc,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_reserved_for_numparam(
+        level: ErrorLevel,
+        loc: *mut Loc,
+        numparam: BytePtr,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_key_must_be_valid_as_local_variable(
+        level: ErrorLevel,
+        loc: *mut Loc,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_duplicate_variable_name(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_duplicate_key_name(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_singleton_literal(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_nth_ref_is_too_big(
+        level: ErrorLevel,
+        loc: *mut Loc,
+        nth_ref: BytePtr,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_duplicated_argument_name(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_regex_error(level: ErrorLevel, loc: *mut Loc, error: BytePtr) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_invalid_symbol(
+        level: ErrorLevel,
+        loc: *mut Loc,
+        symbol: BytePtr,
+    ) -> *mut Diagnostic;
+}
+extern "C" {
+    pub fn make_void_value_expression(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+#[repr(i32)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum CommentType {
     INLINE = 0,
     DOCUMENT = 1,
     UNKNOWN = 2,
-}
-#[repr(i32)]
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
-pub enum ErrorLevel {
-    WARNING = 0,
-    ERROR = 1,
 }
 #[repr(i32)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
@@ -1118,11 +1366,6 @@ pub struct Token {
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct Comment {
-    _unused: [u8; 0],
-}
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct Diagnostic {
     _unused: [u8; 0],
 }
 #[repr(C)]
@@ -1186,9 +1429,6 @@ extern "C" {
 }
 extern "C" {
     pub fn make_comment(kind: CommentType, location: *mut Loc) -> *mut Comment;
-}
-extern "C" {
-    pub fn make_diagnostic(level: ErrorLevel, message: BytePtr, loc: *mut Loc) -> *mut Diagnostic;
 }
 extern "C" {
     pub fn make_magic_comment(

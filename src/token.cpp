@@ -25,13 +25,13 @@ namespace lib_ruby_parser
 
     std::ostream &operator<<(std::ostream &os, const Token &token)
     {
-        os << "[" << token.token_type << ", " << token.token_value << ", " << *(token.loc.get()) << "]";
+        os << "[" << token.token_type << ", " << token.token_value << ", " << *(token.loc) << "]";
         return os;
     }
 
     bool Token::operator==(const Token &other)
     {
-        return (token_type == other.token_type) && (token_value == other.token_value) && (*(loc.get()) == *(other.loc.get()));
+        return (token_type == other.token_type) && (token_value == other.token_value) && (*loc == *(other.loc));
     }
 
     bool Token::operator!=(const Token &other)

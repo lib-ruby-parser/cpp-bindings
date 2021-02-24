@@ -18,3 +18,18 @@ pub(crate) use field_type::FieldType;
 
 mod cpp_from_rust_gen_rs;
 pub(crate) use cpp_from_rust_gen_rs::CppFromRustGen;
+
+mod message_h;
+pub(crate) use message_h::MessageH;
+
+mod message_cpp;
+pub(crate) use message_cpp::MessageCpp;
+
+mod make_message_h;
+pub(crate) use make_message_h::MakeMessageH;
+
+mod make_message_cpp;
+pub(crate) use make_message_cpp::MakeMessageCpp;
+
+mod message_gen_rs;
+pub(crate) use message_gen_rs::MessageGenRs;

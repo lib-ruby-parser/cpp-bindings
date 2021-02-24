@@ -15,6 +15,14 @@ fn build_cpp_files() {
 
     gen::MakeNodeH::new(&nodes).write();
     gen::MakeNodeCpp::new(&nodes).write();
+
+    let messages = lib_ruby_parser_nodes::messages();
+
+    gen::MessageH::new(&messages).write();
+    gen::MessageCpp::new(&messages).write();
+
+    gen::MakeMessageH::new(&messages).write();
+    gen::MakeMessageCpp::new(&messages).write();
 }
 
 #[cfg(feature = "generate-bindings")]
@@ -52,7 +60,10 @@ fn build_bindings() {
 fn build_rust_files() {
     let nodes = lib_ruby_parser_nodes::nodes();
 
-    gen::CppFromRustGen::new(&nodes).write()
+    gen::CppFromRustGen::new(&nodes).write();
+
+    let messages = lib_ruby_parser_nodes::messages();
+    gen::MessageGenRs::new(&messages).write();
 }
 
 #[cfg(feature = "generate-bindings")]

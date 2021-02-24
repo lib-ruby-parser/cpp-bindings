@@ -13,7 +13,7 @@ namespace lib_ruby_parser
 
     bool MagicComment::operator==(const MagicComment &other)
     {
-        return (kind == other.kind) && (*(key_l.get()) == *(other.key_l.get())) && (*(value_l.get()) == *(other.value_l.get()));
+        return (kind == other.kind) && (*key_l == *(other.key_l)) && (*value_l == *(other.value_l));
     }
 
     bool MagicComment::operator!=(const MagicComment &other)

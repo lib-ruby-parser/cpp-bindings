@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include "make_node.h"
+#include "make_message.h"
 #include "comment_type.h"
 #include "error_level.h"
 #include "magic_comment_kind.h"
@@ -60,7 +61,7 @@ namespace lib_ruby_parser
                     BytePtr input);
 
                 Comment *make_comment(CommentType kind, Loc *location);
-                Diagnostic *make_diagnostic(ErrorLevel level, BytePtr message, Loc *loc);
+                // Diagnostic *make_diagnostic(ErrorLevel level, BytePtr message, Loc *loc);
                 MagicComment *make_magic_comment(MagicCommentKind kind, Loc *key_l, Loc *value_l);
                 Loc *make_loc(uint32_t begin, uint32_t end);
                 Token *make_token(int token_type, BytePtr token_value, Loc *loc);

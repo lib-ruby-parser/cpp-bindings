@@ -5,17 +5,43 @@ namespace lib_ruby_parser
 {
 
     Diagnostic::Diagnostic(ErrorLevel level,
-                           std::string message,
+                           diagnostic_message_variant_t message,
                            std::unique_ptr<Loc> loc)
     {
         this->level = level;
-        this->message = message;
+        this->message = std::move(message);
         this->loc = std::move(loc);
     }
 
     bool Diagnostic::operator==(const Diagnostic &other)
     {
-        return (level == other.level) && (message == other.message) && (*(loc.get()) == *(other.loc.get()));
+        if (level != other.level)
+        {
+            return false;
+        }
+
+        if (*loc != *(other.loc))
+        {
+            return false;
+        }
+
+        bool x = std::visit([](auto &&lhs, auto &&rhs) {
+            using LhsT = std::decay_t<decltype(lhs)>;
+            using RhsT = std::decay_t<decltype(rhs)>;
+
+            if constexpr (std::is_same_v<LhsT, RhsT>)
+            {
+                if (*lhs == *rhs)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        },
+                            message, other.message);
+
+        return x;
     }
 
     bool Diagnostic::operator!=(const Diagnostic &other)
@@ -36,6 +62,6 @@ namespace lib_ruby_parser
         default:
             break;
         }
-        return os << ": " << diagnostic.message << *(diagnostic.loc.get());
+        return os << ": " << *(diagnostic.loc.get());
     }
 } // namespace lib_ruby_parser

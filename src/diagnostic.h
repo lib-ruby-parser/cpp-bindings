@@ -6,6 +6,7 @@
 #include <iostream>
 #include "loc.h"
 #include "error_level.h"
+#include "message.h"
 
 namespace lib_ruby_parser
 {
@@ -13,15 +14,27 @@ namespace lib_ruby_parser
     {
     public:
         ErrorLevel level;
-        std::string message;
+        diagnostic_message_variant_t message;
         std::unique_ptr<Loc> loc;
 
         Diagnostic() = delete;
         Diagnostic(Diagnostic &&) = default;
         Diagnostic(const Diagnostic &) = delete;
         explicit Diagnostic(ErrorLevel level,
-                            std::string message,
+                            diagnostic_message_variant_t message,
                             std::unique_ptr<Loc> loc);
+
+        template <typename T>
+        bool is()
+        {
+            return std::holds_alternative<std::unique_ptr<T>>(message);
+        }
+
+        template <typename T>
+        T *get()
+        {
+            return std::get<std::unique_ptr<T>>(message).get();
+        }
 
         bool operator==(const Diagnostic &other);
         bool operator!=(const Diagnostic &other);

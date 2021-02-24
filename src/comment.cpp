@@ -10,7 +10,7 @@ namespace lib_ruby_parser
 
     bool Comment::operator==(const Comment &other)
     {
-        return (kind == other.kind) && (*(location.get()) == *(other.location.get()));
+        return (kind == other.kind) && (*location == *(other.location));
     }
 
     bool Comment::operator!=(const Comment &other)
