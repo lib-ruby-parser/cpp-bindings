@@ -90,6 +90,7 @@ impl<'a> CppClassDeclaration<'a> {
     fn code(&self) -> String {
         format!(
             "
+{comment}
 class {class_name}
 {{
 public:
@@ -100,22 +101,37 @@ public:
     {class_name}(const {class_name} &) = delete;
     explicit {class_name}({constructor_args});
 }};",
+            comment = self.comment(),
             class_name = self.node.struct_name,
             fields_declaration = self.fields_declaration().join("\n    "),
             constructor_args = self.constructor_args().join(", ")
         )
     }
 
+    fn comment(&self) -> String {
+        self.node
+            .comment
+            .lines()
+            .map(|l| format!("// {}", l).trim_end().to_owned())
+            .collect()
+    }
+
     fn fields_declaration(&self) -> Vec<String> {
         self.node
             .fields
             .iter()
-            .map(|f| {
-                format!(
+            .flat_map(|f| {
+                let mut lines = f
+                    .comment
+                    .lines()
+                    .map(|l| format!("// {}", l).trim_end().to_owned())
+                    .collect::<Vec<_>>();
+                lines.push(format!(
                     "{field_type} {field_name};",
                     field_type = FieldType::new(&f.field_type).cpp_type(),
                     field_name = Field::new(f).cpp_name()
-                )
+                ));
+                lines
             })
             .collect()
     }
