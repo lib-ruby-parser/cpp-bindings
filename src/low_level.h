@@ -143,6 +143,15 @@ namespace lib_ruby_parser
             }
         } // namespace token_rewriter
 
+        namespace loc
+        {
+            extern "C"
+            {
+                uint32_t loc_begin(Loc *loc);
+                uint32_t loc_end(Loc *loc);
+            }
+        } // namespace loc
+
         extern "C"
         {
 

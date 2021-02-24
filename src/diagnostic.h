@@ -7,6 +7,7 @@
 #include "loc.h"
 #include "error_level.h"
 #include "message.h"
+#include "bytes.h"
 
 namespace lib_ruby_parser
 {
@@ -40,6 +41,9 @@ namespace lib_ruby_parser
         bool operator!=(const Diagnostic &other);
 
         friend std::ostream &operator<<(std::ostream &os, const Diagnostic &diagnostic);
+
+        std::string render_message();
+        std::string render(const Bytes &input);
     };
 
 } // namespace lib_ruby_parser

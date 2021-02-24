@@ -87,6 +87,17 @@ void test_diagnostic_eq()
     assert(sample == eq);
 }
 
+void test_diagnostic_render()
+{
+    Diagnostic d(ErrorLevel::ERROR, std::make_unique<CantAssignToSelf>(), std::make_unique<Loc>(0, 1));
+    Bytes input("2 + 2 - 3");
+
+    assert(d.render_message() == "Can't change the value of self");
+    assert(d.render(input) == "(eval):1:0: error: Can't change the value of self\n\
+(eval):1: 2 + 2 - 3\n\
+(eval):1: ^");
+}
+
 void test_diagnostics()
 {
     auto result = ParserResult::from_source(Bytes("self = 1; nil = 2"), ParserOptions());
@@ -306,6 +317,7 @@ int main()
     test(parse);
     test(tokens);
     test(diagnostic_eq);
+    test(diagnostic_render);
     test(diagnostics);
     test(comments);
     test(magic_comments);

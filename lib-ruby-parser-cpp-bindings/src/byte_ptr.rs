@@ -120,3 +120,13 @@ impl From<BytePtr> for Vec<u8> {
         byte_ptr.into_vec()
     }
 }
+
+impl From<BytePtr> for lib_ruby_parser::source::Input {
+    fn from(byte_ptr: BytePtr) -> Self {
+        let bytes: &[u8] = byte_ptr.into();
+        let bytes = bytes.to_vec();
+        let mut input = Self::new("(eval)", None);
+        input.set_bytes(bytes);
+        input
+    }
+}

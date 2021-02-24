@@ -1,3 +1,5 @@
+mod helpers;
+
 mod node_h;
 pub(crate) use node_h::NodeH;
 
@@ -40,4 +42,5 @@ pub(crate) use render_message_h::RenderMessageH;
 mod render_message_cpp;
 pub(crate) use render_message_cpp::RenderMessageCpp;
 
-mod helpers;
+mod render_message_rs;
+pub(crate) use render_message_rs::RenderMessageRs;

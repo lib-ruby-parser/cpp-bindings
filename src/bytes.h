@@ -14,8 +14,6 @@ namespace lib_ruby_parser
         uint32_t size_;
         bool borrowed = false;
 
-        BytePtr borrow_ptr() const;
-
     public:
         Bytes();
         ~Bytes();
@@ -28,6 +26,7 @@ namespace lib_ruby_parser
         Bytes(const Bytes &) = delete;
         Bytes &operator=(Bytes &&other);
 
+        BytePtr borrow_ptr() const;
         BytePtr into_ptr();
         uint32_t size() const;
         Bytes clone() const;

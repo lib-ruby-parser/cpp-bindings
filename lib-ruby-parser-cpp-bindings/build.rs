@@ -67,6 +67,7 @@ fn build_rust_files() {
 
     let messages = lib_ruby_parser_nodes::messages();
     gen::MessageGenRs::new(&messages).write();
+    gen::RenderMessageRs::new(&messages).write();
 }
 
 #[cfg(feature = "generate-bindings")]

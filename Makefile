@@ -250,6 +250,11 @@ $(TARGET_DIR)/message$(OBJ_FILE_EXT): src/message.h src/message.cpp
 	mv message$(OBJ_FILE_EXT) $(TARGET_DIR)/message$(OBJ_FILE_EXT)
 OBJECTS += $(TARGET_DIR)/message$(OBJ_FILE_EXT)
 
+$(TARGET_DIR)/render_message$(OBJ_FILE_EXT): src/render_message.h src/render_message.cpp
+	$(CXX) src/render_message.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
+	mv render_message$(OBJ_FILE_EXT) $(TARGET_DIR)/render_message$(OBJ_FILE_EXT)
+OBJECTS += $(TARGET_DIR)/render_message$(OBJ_FILE_EXT)
+
 TEST_O = $(TARGET_DIR)/test$(OBJ_FILE_EXT)
 $(TEST_O): test.cpp $(LIB_RUBY_PARSER_H)
 	$(CXX) test.cpp $(CXXFLAGS) $(CXXOBJFLAGS)

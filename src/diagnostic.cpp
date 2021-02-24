@@ -1,5 +1,6 @@
 #include "diagnostic.h"
 #include "helpers.h"
+#include "render_message.h"
 
 namespace lib_ruby_parser
 {
@@ -47,6 +48,17 @@ namespace lib_ruby_parser
     bool Diagnostic::operator!=(const Diagnostic &other)
     {
         return !(*this == other);
+    }
+
+    std::string Diagnostic::render_message()
+    {
+        BytePtr ptr = render_message_diagnostic(this);
+        return byte_ptr_to_owned_string(ptr);
+    }
+    std::string Diagnostic::render(const Bytes &input)
+    {
+        BytePtr ptr = render_diagnostic(this, input.borrow_ptr());
+        return byte_ptr_to_owned_string(ptr);
     }
 
     std::ostream &operator<<(std::ostream &os, const Diagnostic &diagnostic)

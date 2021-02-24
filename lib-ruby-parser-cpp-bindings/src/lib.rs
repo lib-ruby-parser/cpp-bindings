@@ -22,6 +22,7 @@ mod magic_comment;
 mod message_gen;
 mod parser_options;
 mod parser_result;
+mod render_message;
 mod token;
 mod token_rewriter;
 
