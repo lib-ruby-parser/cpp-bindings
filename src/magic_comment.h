@@ -2,11 +2,12 @@
 #define LIB_RUBY_PARSER_MAGIC_COMMENT_H
 
 #include <memory>
-#include "loc.h"
 #include "magic_comment_kind.h"
 
 namespace lib_ruby_parser
 {
+    class Loc;
+
     class MagicComment
     {
     public:

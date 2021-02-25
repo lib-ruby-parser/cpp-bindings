@@ -2,11 +2,12 @@
 #define LIB_RUBY_PARSER_COMMENT_H
 
 #include <memory>
-#include "loc.h"
 #include "comment_type.h"
 
 namespace lib_ruby_parser
 {
+    class Loc;
+
     class Comment
     {
     public:

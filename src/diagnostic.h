@@ -4,13 +4,14 @@
 #include <string>
 #include <memory>
 #include <iostream>
-#include "loc.h"
 #include "error_level.h"
 #include "message.h"
 #include "bytes.h"
 
 namespace lib_ruby_parser
 {
+    class Loc;
+
     class Diagnostic
     {
     public:

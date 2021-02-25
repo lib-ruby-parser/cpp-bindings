@@ -3,10 +3,10 @@
 
 #include <string>
 #include <cstddef>
-#include "helpers.h"
-#include "bytes.h"
 #include <iostream>
 #include <memory>
+#include "bytes.h"
+#include "loc.h"
 
 namespace lib_ruby_parser
 {
@@ -17,7 +17,7 @@ namespace lib_ruby_parser
         Bytes token_value;
         std::unique_ptr<Loc> loc;
 
-        Token() = default;
+        Token() = delete;
         Token(Token &&) = default;
         Token(const Token &) = delete;
         Token &operator=(Token &&) = default;

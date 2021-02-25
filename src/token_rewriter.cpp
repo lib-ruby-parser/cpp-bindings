@@ -1,5 +1,4 @@
 #include "token_rewriter.h"
-#include "helpers.h"
 
 namespace lib_ruby_parser
 {
@@ -16,12 +15,5 @@ namespace lib_ruby_parser
         TokenRewriter::LexStateAction result;
         result.kind = TokenRewriter::LexStateAction::Kind::KEEP;
         return result;
-    }
-
-    TokenRewriter::Result::Result(Token token, TokenRewriter::RewriteAction rewrite_action, TokenRewriter::LexStateAction lex_state_action)
-    {
-        this->token = std::move(token);
-        this->rewrite_action = rewrite_action;
-        this->lex_state_action = lex_state_action;
     }
 } // namespace lib_ruby_parser

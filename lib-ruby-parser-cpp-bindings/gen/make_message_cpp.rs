@@ -20,6 +20,7 @@ impl MakeMessageCpp {
         format!(
             "#include \"make_message.h\"
 #include \"diagnostic.h\"
+#include \"loc.h\"
 
 namespace lib_ruby_parser {{
 

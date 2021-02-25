@@ -1,9 +1,14 @@
 #include "diagnostic.h"
 #include "helpers.h"
-#include "render_message.h"
 
 namespace lib_ruby_parser
 {
+    class Loc
+    {
+    public:
+        bool operator!=(const Loc &other);
+        friend std::ostream &operator<<(std::ostream &os, const Loc &loc);
+    };
 
     Diagnostic::Diagnostic(ErrorLevel level,
                            diagnostic_message_variant_t message,
@@ -48,6 +53,12 @@ namespace lib_ruby_parser
     bool Diagnostic::operator!=(const Diagnostic &other)
     {
         return !(*this == other);
+    }
+
+    extern "C"
+    {
+        BytePtr render_message_diagnostic(Diagnostic *diagnostic);
+        BytePtr render_diagnostic(Diagnostic *diagnostic, BytePtr input);
     }
 
     std::string Diagnostic::render_message()

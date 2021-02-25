@@ -2,6 +2,12 @@
 
 namespace lib_ruby_parser
 {
+    class Loc
+    {
+    public:
+        bool operator==(const Loc &other);
+    };
+
     Comment::Comment(CommentType kind, std::unique_ptr<Loc> location)
     {
         this->kind = kind;

@@ -4,7 +4,6 @@
 #include <string>
 #include "token.h"
 #include "bytes.h"
-#include "helpers.h"
 
 namespace lib_ruby_parser
 {
@@ -40,7 +39,7 @@ namespace lib_ruby_parser
             RewriteAction rewrite_action;
             LexStateAction lex_state_action;
             Result() = delete;
-            explicit Result(Token token, TokenRewriter::RewriteAction rewrite_action, LexStateAction lex_state_action);
+            explicit Result(Token token, TokenRewriter::RewriteAction rewrite_action, LexStateAction lex_state_action) : token(std::move(token)), rewrite_action(rewrite_action), lex_state_action(lex_state_action){};
         };
 
         virtual Result rewrite_token(Token token, Bytes input) = 0;
