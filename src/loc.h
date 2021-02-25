@@ -1,10 +1,11 @@
 #ifndef LIB_RUBY_PARSER_LOC_H
 #define LIB_RUBY_PARSER_LOC_H
 
-#include <cstddef>
+#include <stdint.h>
 #include <string>
 #include <iostream>
 #include "bytes.h"
+#include "input.h"
 
 namespace lib_ruby_parser
 {
@@ -22,7 +23,7 @@ namespace lib_ruby_parser
         bool operator==(const Loc &other);
         bool operator!=(const Loc &other);
         uint32_t size();
-        Bytes source(Bytes &input);
+        Bytes source(Input &input);
 
         friend std::ostream &operator<<(std::ostream &os, const Loc &loc);
     };

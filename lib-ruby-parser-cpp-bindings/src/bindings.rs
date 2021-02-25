@@ -1424,7 +1424,7 @@ extern "C" {
         diagnostics: DiagnosticVec,
         comments: CommentVec,
         magic_comments: MagicCommentVec,
-        input: BytePtr,
+        input: *mut ::std::os::raw::c_void,
     ) -> *mut ParserResult;
 }
 extern "C" {
@@ -1537,7 +1537,4 @@ extern "C" {
 }
 extern "C" {
     pub fn loc_end(loc: *mut Loc) -> u32;
-}
-extern "C" {
-    pub fn token_name(id: ::std::os::raw::c_int) -> BytePtr;
 }

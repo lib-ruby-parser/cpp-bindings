@@ -43,6 +43,10 @@ impl BytePtr {
     pub(crate) fn free(self) {
         unsafe { free_byte_ptr(self) }
     }
+
+    pub(crate) fn empty() -> Self {
+        Self::new(std::ptr::null_mut(), 0)
+    }
 }
 
 impl From<Vec<u8>> for BytePtr {

@@ -24,7 +24,7 @@ namespace lib_ruby_parser
         return end - begin;
     }
 
-    Bytes Loc::source(Bytes &input)
+    Bytes Loc::source(Input &input)
     {
         return input.range(begin, begin + size());
     }

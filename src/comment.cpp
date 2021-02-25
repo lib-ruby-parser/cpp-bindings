@@ -8,12 +8,6 @@ namespace lib_ruby_parser
         bool operator==(const Loc &other);
     };
 
-    Comment::Comment(CommentType kind, std::unique_ptr<Loc> location)
-    {
-        this->kind = kind;
-        this->location = std::move(location);
-    }
-
     bool Comment::operator==(const Comment &other)
     {
         return (kind == other.kind) && (*location == *(other.location));

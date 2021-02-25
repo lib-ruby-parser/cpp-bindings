@@ -1,6 +1,5 @@
 use crate::bindings;
 use crate::ptr::Ptr;
-use crate::BytePtr;
 
 impl From<lib_ruby_parser::ParserResult> for Ptr<bindings::ParserResult> {
     fn from(parser_result: lib_ruby_parser::ParserResult) -> Ptr<bindings::ParserResult> {
@@ -20,7 +19,7 @@ impl From<lib_ruby_parser::ParserResult> for Ptr<bindings::ParserResult> {
         let comments = bindings::CommentVec::from(comments);
         let magic_comments = bindings::MagicCommentVec::from(magic_comments);
 
-        let input = BytePtr::from(input);
+        let input = Box::into_raw(Box::new(input)) as *mut std::ffi::c_void;
 
         let ptr = unsafe {
             bindings::make_parser_result(ast, tokens, diagnostics, comments, magic_comments, input)

@@ -14,6 +14,7 @@ namespace lib_ruby_parser
 
     extern "C"
     {
+
         BytePtr token_name(int id);
     }
 

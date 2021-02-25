@@ -30,11 +30,8 @@ endif
 BINDINGS_DIR = lib-ruby-parser-cpp-bindings
 
 ifeq ($(DETECTED_OS), Windows)
-	# CXXFLAGS += /Wall
-	CXXFLAGS += /std:c++17 /nologo /bigobj
+	CXXFLAGS += /std:c++17 /nologo /bigobj /MT /Zi
 	CXXOBJFLAGS += /c /Fo
-	CXXFLAGS += /MT /Zi
-	# CXXEXECFLAGS = advapi32.lib ws2_32.lib userenv.lib msvcrt.lib
 	ifeq ($(BUILD_ENV), debug)
 		CXXFLAGS += /Od /DEBUG
 	else
@@ -46,7 +43,6 @@ ifeq ($(DETECTED_OS), Windows)
 	EXEC_EXT = .exe
 
 	CXX_SET_OUT_FILE = /link /OUT:
-	LD_SET_OUT_FILE = /OUT:
 	LIST_DEPS = dumpbin /dependents
 	RUST_OBJ_FILE = lib_ruby_parser_cpp_bindings.lib
 endif
@@ -68,7 +64,6 @@ ifeq ($(DETECTED_OS), Linux)
 	EXEC_EXT =
 
 	CXX_SET_OUT_FILE = -o #
-	LD_SET_OUT_FILE = -o #
 	LIST_DEPS = ldd
 	RUST_OBJ_FILE = liblib_ruby_parser_cpp_bindings.a
 endif
@@ -89,7 +84,6 @@ ifeq ($(DETECTED_OS), Darwin)
 	EXEC_EXT =
 
 	CXX_SET_OUT_FILE = -o #
-	LD_SET_OUT_FILE = -o #
 	LIST_DEPS = otool -L
 	RUST_OBJ_FILE = liblib_ruby_parser_cpp_bindings.a
 endif
@@ -134,6 +128,7 @@ $(LIB_RUBY_PARSER_H):
 	cat src/magic_comment_kind.h >> $(LIB_RUBY_PARSER_TMP_H)
 
 	cat src/bytes.h >> $(LIB_RUBY_PARSER_TMP_H)
+	cat src/input.h >> $(LIB_RUBY_PARSER_TMP_H)
 	cat src/loc.h >> $(LIB_RUBY_PARSER_TMP_H)
 	cat src/token.h >> $(LIB_RUBY_PARSER_TMP_H)
 
@@ -255,15 +250,15 @@ $(TARGET_DIR)/render_message$(OBJ_FILE_EXT): src/render_message.h src/render_mes
 	mv render_message$(OBJ_FILE_EXT) $(TARGET_DIR)/render_message$(OBJ_FILE_EXT)
 OBJECTS += $(TARGET_DIR)/render_message$(OBJ_FILE_EXT)
 
+$(TARGET_DIR)/input$(OBJ_FILE_EXT): src/input.h src/input.cpp
+	$(CXX) src/input.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
+	mv input$(OBJ_FILE_EXT) $(TARGET_DIR)/input$(OBJ_FILE_EXT)
+OBJECTS += $(TARGET_DIR)/input$(OBJ_FILE_EXT)
+
 TEST_O = $(TARGET_DIR)/test$(OBJ_FILE_EXT)
 $(TEST_O): test.cpp $(LIB_RUBY_PARSER_H)
 	$(CXX) test.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
 	mv test$(OBJ_FILE_EXT) $(TEST_O)
-
-HEADERS = src/lib-ruby-parser.h \
-	src/comment_type.h \
-	src/error_level.h \
-	src/magic_comment_kind.h
 
 LIB_RUBY_PARSER_STATIC = $(TARGET_DIR)/lib-ruby-parser$(STATIC_LIB_EXT)
 
@@ -277,7 +272,7 @@ endif
 $(LIB_RUBY_PARSER_STATIC): $(RUST_OBJ) $(OBJECTS)
 	$(BUILD_STATIC)
 
-# // tests
+# tests
 
 TEST_DEPS = $(LIB_RUBY_PARSER_STATIC) $(TEST_O)
 
@@ -301,7 +296,7 @@ test-cov:
 	llvm-cov report $(TARGET_DIR)/test-runner -instr-profile=$(TARGET_DIR)/test.profdata
 	# llvm-cov show $(TARGET_DIR)/test-runner -instr-profile=$(TARGET_DIR)/test.profdata
 
-# // releases
+# releases
 
 STATIC_RELEASE_LIB = $(TARGET_DIR)/$(RELEASE_FILE)$(STATIC_LIB_EXT)
 

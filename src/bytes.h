@@ -1,5 +1,5 @@
-#ifndef LIB_RUBY_PARSER_INPUT_H
-#define LIB_RUBY_PARSER_INPUT_H
+#ifndef LIB_RUBY_PARSER_BYTES_H
+#define LIB_RUBY_PARSER_BYTES_H
 
 #include <vector>
 #include <string>
@@ -43,4 +43,4 @@ namespace lib_ruby_parser
     };
 } // namespace lib_ruby_parser
 
-#endif // LIB_RUBY_PARSER_INPUT_H
+#endif // LIB_RUBY_PARSER_BYTES_H

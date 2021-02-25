@@ -61,7 +61,7 @@ namespace lib_ruby_parser
                     DiagnosticVec diagnostics,
                     CommentVec comments,
                     MagicCommentVec magic_comments,
-                    BytePtr input)
+                    void *input)
                 {
                     auto result = new ParserResult(
                         std::unique_ptr<Node>(ast),
@@ -69,7 +69,7 @@ namespace lib_ruby_parser
                         diagnostics_vec_to_cpp_vec(diagnostics),
                         comments_vec_to_cpp_vec(comments),
                         magic_comments_vec_to_cpp_vec(magic_comments),
-                        Bytes(input));
+                        Input(input));
 
                     return result;
                 }

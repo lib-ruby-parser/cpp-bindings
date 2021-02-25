@@ -1,7 +1,7 @@
 #ifndef LIB_RUBY_PARSER_LOW_LEVEL_H
 #define LIB_RUBY_PARSER_LOW_LEVEL_H
 
-#include <cstddef>
+#include <stdint.h>
 #include "make_node.h"
 #include "make_message.h"
 #include "comment_type.h"
@@ -58,7 +58,7 @@ namespace lib_ruby_parser
                     DiagnosticVec diagnostics,
                     CommentVec comments,
                     MagicCommentVec magic_comments,
-                    BytePtr input);
+                    void *input);
 
                 Comment *make_comment(CommentType kind, Loc *location);
                 // Diagnostic *make_diagnostic(ErrorLevel level, BytePtr message, Loc *loc);
@@ -151,13 +151,7 @@ namespace lib_ruby_parser
                 uint32_t loc_end(Loc *loc);
             }
         } // namespace loc
-
-        extern "C"
-        {
-
-            BytePtr token_name(int id);
-        }
-    } // namespace low_level
+    }     // namespace low_level
 } // namespace lib_ruby_parser
 
 #endif // LIB_RUBY_PARSER_LOW_LEVEL_H

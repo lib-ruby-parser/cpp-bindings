@@ -2,7 +2,7 @@
 #define LIB_RUBY_PARSER_TOKEN_H
 
 #include <string>
-#include <cstddef>
+#include <stdint.h>
 #include <iostream>
 #include <memory>
 #include "bytes.h"

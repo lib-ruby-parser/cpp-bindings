@@ -11,7 +11,7 @@ env:
 
 jobs:
   test:
-    name: test on ${{ matrix.build.os }}
+    name: ${{matrix.build.name}} on ${{ matrix.build.os }}
     runs-on: ${{ matrix.build.os }}
     env:
       CARGO_BUILD_TARGET: ${{ matrix.build.target }}
@@ -29,10 +29,26 @@ jobs:
             cxx: clang++-9
             ld: ld.lld-9
             cargoflags: --features="generate-bindings,onig"
-            run: |
-              make build-static test-valgrind
-              make clean
-              CXXFLAGS="-fsanitize=address" make test
+            name: valgrind
+            run: make test-valgrind
+
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            cc: clang-9
+            cxx: clang++-9
+            ld: ld.lld-9
+            cargoflags: --features="generate-bindings,onig"
+            name: -fsanitize=address
+            run: CXXFLAGS="-fsanitize=address" make test
+
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            cc: clang-9
+            cxx: clang++-9
+            ld: ld.lld-9
+            cargoflags: --features="generate-bindings,onig"
+            name: test
+            run: make test
 
           - os: macos-latest
             target: x86_64-apple-darwin
@@ -40,10 +56,8 @@ jobs:
             cxx: clang++
             ld: ld
             cargoflags: --features="generate-bindings,onig"
-            run: |
-              make build-static
-              make clean
-              CXXFLAGS="-fsanitize=address" make test
+            name: test
+            run: make test
 
           - os: windows-latest
             target: x86_64-pc-windows-msvc
@@ -51,7 +65,8 @@ jobs:
             cxx: cl.exe
             ld: link.exe
             cargoflags: ""
-            run: make build-static
+            name: test
+            run: make test
 
     steps:
       - name: setup msvc on windows
