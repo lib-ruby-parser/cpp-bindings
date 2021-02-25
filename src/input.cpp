@@ -17,7 +17,8 @@ namespace lib_ruby_parser
 
     Input::~Input()
     {
-        input_free(this->ptr);
+        // FIXME
+        // input_free(this->ptr);
     }
 
     const char *Input::source()
