@@ -1,4 +1,4 @@
-use super::helpers::{map_node_fields, map_nodes};
+use crate::gen::helpers::{map_node_fields, map_nodes};
 use lib_ruby_parser_nodes::FieldType;
 
 pub(crate) struct CppFromRustGen<'a> {

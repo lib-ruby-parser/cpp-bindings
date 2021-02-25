@@ -10,22 +10,22 @@ mod gen;
 fn build_cpp_files() {
     let nodes = lib_ruby_parser_nodes::nodes();
 
-    gen::NodeH::new(&nodes).write();
-    gen::NodeCpp::new(&nodes).write();
+    gen::cpp::NodeH::new(&nodes).write();
+    gen::cpp::NodeCpp::new(&nodes).write();
 
-    gen::MakeNodeH::new(&nodes).write();
-    gen::MakeNodeCpp::new(&nodes).write();
+    gen::cpp::MakeNodeH::new(&nodes).write();
+    gen::cpp::MakeNodeCpp::new(&nodes).write();
 
     let messages = lib_ruby_parser_nodes::messages();
 
-    gen::MessageH::new(&messages).write();
-    gen::MessageCpp::new(&messages).write();
+    gen::cpp::MessageH::new(&messages).write();
+    gen::cpp::MessageCpp::new(&messages).write();
 
-    gen::MakeMessageH::new(&messages).write();
-    gen::MakeMessageCpp::new(&messages).write();
+    gen::cpp::MakeMessageH::new(&messages).write();
+    gen::cpp::MakeMessageCpp::new(&messages).write();
 
-    gen::RenderMessageH::new(&messages).write();
-    gen::RenderMessageCpp::new(&messages).write();
+    gen::cpp::RenderMessageH::new(&messages).write();
+    gen::cpp::RenderMessageCpp::new(&messages).write();
 }
 
 #[cfg(feature = "generate-bindings")]
@@ -63,11 +63,11 @@ fn build_bindings() {
 fn build_rust_files() {
     let nodes = lib_ruby_parser_nodes::nodes();
 
-    gen::CppFromRustGen::new(&nodes).write();
+    gen::rust::CppFromRustGen::new(&nodes).write();
 
     let messages = lib_ruby_parser_nodes::messages();
-    gen::MessageGenRs::new(&messages).write();
-    gen::RenderMessageRs::new(&messages).write();
+    gen::rust::MessageGenRs::new(&messages).write();
+    gen::rust::RenderMessageRs::new(&messages).write();
 }
 
 #[cfg(feature = "generate-bindings")]

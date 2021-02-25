@@ -1,3 +1,9 @@
+mod field;
+pub(crate) use field::Field;
+
+mod field_type;
+pub(crate) use field_type::FieldType;
+
 pub(crate) fn camel_case_to_underscored(s: &str) -> String {
     let mut words = vec![];
     let mut word = String::from("");

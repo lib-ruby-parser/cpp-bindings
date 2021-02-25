@@ -1,5 +1,6 @@
-use super::helpers::camel_case_to_underscored;
-use super::helpers::{all_messages, map_message_fields, map_messages};
+use crate::gen::helpers::{
+    all_messages, camel_case_to_underscored, map_message_fields, map_messages,
+};
 
 pub(crate) struct RenderMessageRs {
     messages: Vec<lib_ruby_parser_nodes::Message>,

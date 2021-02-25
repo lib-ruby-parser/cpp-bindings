@@ -1,5 +1,5 @@
-use super::helpers::{map_node_fields, map_nodes};
-use super::{Field, FieldType};
+use crate::gen::helpers::{map_node_fields, map_nodes};
+use crate::gen::helpers::{Field, FieldType};
 
 pub(crate) struct NodeCpp<'a> {
     nodes: &'a [lib_ruby_parser_nodes::Node],

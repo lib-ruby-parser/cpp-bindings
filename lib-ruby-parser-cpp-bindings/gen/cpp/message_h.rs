@@ -1,5 +1,5 @@
-use super::helpers::MessageCppField;
-use super::helpers::{all_messages, map_message_fields, map_messages};
+use crate::gen::helpers::MessageCppField;
+use crate::gen::helpers::{all_messages, map_message_fields, map_messages};
 
 pub(crate) struct MessageH {
     messages: Vec<lib_ruby_parser_nodes::Message>,

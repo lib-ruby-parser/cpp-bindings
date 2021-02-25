@@ -1,6 +1,6 @@
 use std::ops::Deref;
 
-use super::helpers::{
+use crate::gen::helpers::{
     all_messages, camel_case_to_underscored, map_message_fields, map_messages, MessageCppField,
 };
 
