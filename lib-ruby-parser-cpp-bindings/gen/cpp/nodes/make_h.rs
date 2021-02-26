@@ -16,11 +16,12 @@ impl<'a> MakeH<'a> {
 
     fn contents(&self) -> String {
         format!(
-            "#ifndef LIB_RUBY_PARSER_MAKE_NODE_H
-#define LIB_RUBY_PARSER_MAKE_NODE_H
+            "#ifndef LIB_RUBY_PARSER_GEN_NODES_MAKE_H
+#define LIB_RUBY_PARSER_GEN_NODES_MAKE_H
 
 #include <stdint.h>
 #include \"../../byte_ptr.h\"
+#include \"../../node.h\"
 
 namespace lib_ruby_parser {{
 
@@ -46,7 +47,7 @@ struct NodeVec
 }}
 }}
 
-#endif // LIB_RUBY_PARSER_MAKE_NODE_H",
+#endif // LIB_RUBY_PARSER_GEN_NODES_MAKE_H",
             make_fn_decls = self.make_fn_decls().join("\n")
         )
     }

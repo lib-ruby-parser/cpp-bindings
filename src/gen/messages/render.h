@@ -1,5 +1,5 @@
-#ifndef LIB_RUBY_PARSER_RENDER_MESSAGE_H
-#define LIB_RUBY_PARSER_RENDER_MESSAGE_H
+#ifndef LIB_RUBY_PARSER_GEN_MESSAGES_RENDER_H
+#define LIB_RUBY_PARSER_GEN_MESSAGES_RENDER_H
 
 #include "../../error_level.h"
 #include "../../byte_ptr.h"
@@ -190,4 +190,4 @@ BytePtr render_diagnostic(Diagnostic *diagnostic, BytePtr input);
 
 }
 
-#endif // LIB_RUBY_PARSER_RENDER_MESSAGE_H
+#endif // LIB_RUBY_PARSER_GEN_MESSAGES_RENDER_H

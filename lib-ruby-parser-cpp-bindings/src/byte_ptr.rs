@@ -1,4 +1,4 @@
-use crate::bindings::{free_byte_ptr, BytePtr};
+use crate::bindings::{free_byte_ptr2, BytePtr};
 
 impl BytePtr {
     pub(crate) fn new(ptr: *const i8, size: usize) -> Self {
@@ -41,7 +41,7 @@ impl BytePtr {
     }
 
     pub(crate) fn free(self) {
-        unsafe { free_byte_ptr(self) }
+        unsafe { free_byte_ptr2(self) }
     }
 
     pub(crate) fn empty() -> Self {

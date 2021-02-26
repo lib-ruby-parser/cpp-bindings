@@ -10,8 +10,10 @@ mod gen;
 fn build_cpp_files() {
     let nodes = lib_ruby_parser_nodes::nodes();
 
-    gen::cpp::nodes::NodeH::new(&nodes).write();
-    gen::cpp::nodes::NodeCpp::new(&nodes).write();
+    gen::cpp::nodes::ClassesH::new(&nodes).write();
+    gen::cpp::nodes::ClassesCpp::new(&nodes).write();
+
+    gen::cpp::nodes::VariantH::new(&nodes).write();
 
     gen::cpp::nodes::MakeH::new(&nodes).write();
     gen::cpp::nodes::MakeCpp::new(&nodes).write();
@@ -43,13 +45,76 @@ fn build_bindings() {
         .clang_args(&["-v", "-x", "c++", "-std=c++17"])
         .disable_name_namespacing()
         .opaque_type("std::.*")
-        .whitelist_function("lib_ruby_parser::.*")
-        .whitelist_type("lib_ruby_parser::.*")
-        .whitelist_var("lib_ruby_parser::.*")
-        .derive_copy(true)
-        .rustified_enum("lib_ruby_parser::CommentType")
-        .rustified_enum("lib_ruby_parser::MagicCommentKind")
+        .whitelist_recursively(false)
+        // low_level namespace
+        .whitelist_function("lib_ruby_parser::low_level::.*")
+        .whitelist_type("lib_ruby_parser::low_level::.*")
+        .whitelist_var("lib_ruby_parser::low_level::.*")
+        .blacklist_function("lib_ruby_parser::low_level::custom_decoder::CustomDecoderResult.*")
+        // make_node and make_message functions
+        .whitelist_function("lib_ruby_parser::make_.*")
+        // extern "C" types
+        .whitelist_type("lib_ruby_parser::BytePtr")
+        .whitelist_type("lib_ruby_parser::NodeVec")
+        // C++ class Node
+        .whitelist_type("lib_ruby_parser::Node")
+        .opaque_type("lib_ruby_parser::Node")
+        .blacklist_function("lib_ruby_parser::Node::.*")
+        // C++ class Loc
+        .whitelist_type("lib_ruby_parser::Loc")
+        .opaque_type("lib_ruby_parser::Loc")
+        .blacklist_function("lib_ruby_parser::Loc.*")
+        // C++ class Input
+        .whitelist_type("lib_ruby_parser::Input")
+        .opaque_type("lib_ruby_parser::Input")
+        .blacklist_function("lib_ruby_parser::Input.*")
+        // C++ class Bytes
+        .whitelist_type("lib_ruby_parser::Bytes")
+        .opaque_type("lib_ruby_parser::Bytes")
+        .blacklist_function("lib_ruby_parser::Bytes.*")
+        // C++ class Diagnostic
+        .whitelist_type("lib_ruby_parser::Diagnostic")
+        .opaque_type("lib_ruby_parser::Diagnostic")
+        .blacklist_function("lib_ruby_parser::Diagnostic.*")
+        // C++ class Token
+        .whitelist_type("lib_ruby_parser::Token")
+        .opaque_type("lib_ruby_parser::Token")
+        .blacklist_function("lib_ruby_parser::Token.*")
+        // C++ class Comment
+        .whitelist_type("lib_ruby_parser::Comment")
+        .opaque_type("lib_ruby_parser::Comment")
+        .blacklist_function("lib_ruby_parser::Comment.*")
+        // C++ class MagicComment
+        .whitelist_type("lib_ruby_parser::MagicComment")
+        .opaque_type("lib_ruby_parser::MagicComment")
+        .blacklist_function("lib_ruby_parser::MagicComment.*")
+        // C++ class CustomDecoder
+        .whitelist_type("lib_ruby_parser::CustomDecoder")
+        .opaque_type("lib_ruby_parser::CustomDecoder")
+        .blacklist_function("lib_ruby_parser::CustomDecoder.*")
+        // C++ class TokenRewriter
+        .whitelist_type("lib_ruby_parser::TokenRewriter")
+        .opaque_type("lib_ruby_parser::TokenRewriter")
+        .blacklist_function("lib_ruby_parser::TokenRewriter.*")
+        // C++ class ParserOptions
+        .whitelist_type("lib_ruby_parser::ParserOptions")
+        .opaque_type("lib_ruby_parser::ParserOptions")
+        .blacklist_function("lib_ruby_parser::ParserOptions.*")
+        // C++ class ParserResult
+        .whitelist_type("lib_ruby_parser::ParserResult")
+        .opaque_type("lib_ruby_parser::ParserResult")
+        .blacklist_function("lib_ruby_parser::ParserResult.*")
+        // C++ enum ErrorLevel
+        .whitelist_type("lib_ruby_parser::ErrorLevel")
         .rustified_enum("lib_ruby_parser::ErrorLevel")
+        // C++ enum CommentType
+        .whitelist_type("lib_ruby_parser::CommentType")
+        .rustified_enum("lib_ruby_parser::CommentType")
+        // C++ enum MagicCommentKind
+        .whitelist_type("lib_ruby_parser::MagicCommentKind")
+        .rustified_enum("lib_ruby_parser::MagicCommentKind")
+        .derive_copy(true)
+        .derive_debug(true)
         .rustified_enum("lib_ruby_parser::low_level::token_rewriter::RawRewriteAction")
         .rustified_enum("lib_ruby_parser::low_level::token_rewriter::RawLexStateAction")
         .layout_tests(false)

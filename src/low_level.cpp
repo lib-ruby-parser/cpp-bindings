@@ -181,6 +181,11 @@ namespace lib_ruby_parser
                 {
                     free(s);
                 }
+
+                void free_byte_ptr2(BytePtr byte_ptr)
+                {
+                    ::lib_ruby_parser::free_byte_ptr(byte_ptr);
+                }
             }
         } // namespace helpers
 

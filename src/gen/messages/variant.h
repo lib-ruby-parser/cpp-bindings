@@ -1,5 +1,5 @@
-#ifndef LIB_RUBY_PARSER_MESSAGE_VARIANT_H
-#define LIB_RUBY_PARSER_MESSAGE_VARIANT_H
+#ifndef LIB_RUBY_PARSER_GEN_MESSAGES_VARIANT_H
+#define LIB_RUBY_PARSER_GEN_MESSAGES_VARIANT_H
 
 #include <string>
 #include <variant>
@@ -98,4 +98,4 @@ using diagnostic_message_variant_t = std::variant<
 
 }
 
-#endif // LIB_RUBY_PARSER_MESSAGE_VARIANT_H
+#endif // LIB_RUBY_PARSER_GEN_MESSAGES_VARIANT_H

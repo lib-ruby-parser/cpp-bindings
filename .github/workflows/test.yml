@@ -30,7 +30,7 @@ jobs:
           #   ld: ld.lld-9
           #   cargoflags: --features="generate-bindings,onig"
           #   name: valgrind
-          #   run: make test-valgrind
+          #   run: make clean test-valgrind
 
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
@@ -39,7 +39,7 @@ jobs:
             ld: ld.lld-9
             cargoflags: --features="generate-bindings,onig"
             name: -fsanitize=address
-            run: CXXFLAGS="-fsanitize=address" make test
+            run: CXXFLAGS="-fsanitize=address" make clean test
 
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
@@ -48,7 +48,7 @@ jobs:
             ld: ld.lld-9
             cargoflags: --features="generate-bindings,onig"
             name: test
-            run: make test
+            run: make clean test
 
           - os: macos-latest
             target: x86_64-apple-darwin
@@ -57,7 +57,7 @@ jobs:
             ld: ld
             cargoflags: --features="generate-bindings,onig"
             name: test
-            run: make test
+            run: make clean test
 
           - os: windows-latest
             target: x86_64-pc-windows-msvc
@@ -66,7 +66,7 @@ jobs:
             ld: link.exe
             cargoflags: ""
             name: test
-            run: make test
+            run: make clean test
 
     steps:
       - name: setup msvc on windows

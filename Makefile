@@ -136,7 +136,9 @@ $(LIB_RUBY_PARSER_H):
 	cat src/gen/messages/variant.h >> $(LIB_RUBY_PARSER_TMP_H)
 	cat src/message.h >> $(LIB_RUBY_PARSER_TMP_H)
 
-	cat src/gen/nodes/node.h >> $(LIB_RUBY_PARSER_TMP_H)
+	cat src/gen/nodes/classes.h >> $(LIB_RUBY_PARSER_TMP_H)
+	cat src/gen/nodes/variant.h >> $(LIB_RUBY_PARSER_TMP_H)
+	cat src/node.h >> $(LIB_RUBY_PARSER_TMP_H)
 
 	cat src/comment.h >> $(LIB_RUBY_PARSER_TMP_H)
 	cat src/custom_decoder.h >> $(LIB_RUBY_PARSER_TMP_H)
@@ -158,6 +160,8 @@ $(LIB_RUBY_PARSER_H):
 		grep -v "#endif // LIB_RUBY_PARSER_" \
 		>> $(LIB_RUBY_PARSER_H)
 	echo "#endif // LIB_RUBY_PARSER_H" >> $(LIB_RUBY_PARSER_H)
+
+	rm -f $(LIB_RUBY_PARSER_TMP_H)
 
 # objects
 OBJECTS =
@@ -181,15 +185,15 @@ OBJECTS += $(TARGET_DIR)/gen/messages/render$(OBJ_FILE_EXT)
 
 # gen/nodes
 
+$(TARGET_DIR)/gen/nodes/classes$(OBJ_FILE_EXT): src/gen/nodes/classes.h src/gen/nodes/classes.cpp
+	$(CXX) src/gen/nodes/classes.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
+	mv classes$(OBJ_FILE_EXT) $(TARGET_DIR)/gen/nodes/classes$(OBJ_FILE_EXT)
+OBJECTS += $(TARGET_DIR)/gen/nodes/classes$(OBJ_FILE_EXT)
+
 $(TARGET_DIR)/gen/nodes/make$(OBJ_FILE_EXT): src/gen/nodes/make.h src/gen/nodes/make.cpp
 	$(CXX) src/gen/nodes/make.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
 	mv make$(OBJ_FILE_EXT) $(TARGET_DIR)/gen/nodes/make$(OBJ_FILE_EXT)
 OBJECTS += $(TARGET_DIR)/gen/nodes/make$(OBJ_FILE_EXT)
-
-$(TARGET_DIR)/gen/nodes/node$(OBJ_FILE_EXT): src/gen/nodes/node.h src/gen/nodes/node.cpp
-	$(CXX) src/gen/nodes/node.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
-	mv node$(OBJ_FILE_EXT) $(TARGET_DIR)/gen/nodes/node$(OBJ_FILE_EXT)
-OBJECTS += $(TARGET_DIR)/gen/nodes/node$(OBJ_FILE_EXT)
 
 # non-gen
 

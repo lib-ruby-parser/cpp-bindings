@@ -1,5 +1,5 @@
-#ifndef LIB_RUBY_PARSER_MAKE_MESSAGE_H
-#define LIB_RUBY_PARSER_MAKE_MESSAGE_H
+#ifndef LIB_RUBY_PARSER_GEN_MESSAGES_MAKE_H
+#define LIB_RUBY_PARSER_GEN_MESSAGES_MAKE_H
 
 #include "../../error_level.h"
 #include "../../byte_ptr.h"
@@ -101,4 +101,4 @@ Diagnostic *make_void_value_expression(ErrorLevel level, Loc *loc);
 
 }
 
-#endif // LIB_RUBY_PARSER_MAKE_MESSAGE_H
+#endif // LIB_RUBY_PARSER_GEN_MESSAGES_MAKE_H

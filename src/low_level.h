@@ -102,6 +102,7 @@ namespace lib_ruby_parser
             extern "C"
             {
                 void free_str(char *s);
+                void free_byte_ptr2(BytePtr byte_ptr);
             }
         } // namespace helpers
 

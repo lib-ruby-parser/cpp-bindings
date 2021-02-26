@@ -18,8 +18,8 @@ impl ClassesH {
 
     fn contents(&self) -> String {
         format!(
-            "#ifndef LIB_RUBY_PARSER_MESSAGE_CLASSES_H
-#define LIB_RUBY_PARSER_MESSAGE_CLASSES_H
+            "#ifndef LIB_RUBY_PARSER_GEN_MESSAGES_CLASSES_H
+#define LIB_RUBY_PARSER_GEN_MESSAGES_CLASSES_H
 
 #include <string>
 #include <variant>
@@ -39,7 +39,7 @@ public:
 
 }}
 
-#endif // LIB_RUBY_PARSER_MESSAGE_CLASSES_H
+#endif // LIB_RUBY_PARSER_GEN_MESSAGES_CLASSES_H
 ",
             message_classes = self.message_classes().join("\n"),
         )

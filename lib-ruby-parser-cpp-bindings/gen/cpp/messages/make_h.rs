@@ -20,8 +20,8 @@ impl MakeH {
 
     fn contents(&self) -> String {
         format!(
-            "#ifndef LIB_RUBY_PARSER_MAKE_MESSAGE_H
-#define LIB_RUBY_PARSER_MAKE_MESSAGE_H
+            "#ifndef LIB_RUBY_PARSER_GEN_MESSAGES_MAKE_H
+#define LIB_RUBY_PARSER_GEN_MESSAGES_MAKE_H
 
 #include \"../../error_level.h\"
 #include \"../../byte_ptr.h\"
@@ -39,7 +39,7 @@ extern \"C\" {{
 
 }}
 
-#endif // LIB_RUBY_PARSER_MAKE_MESSAGE_H
+#endif // LIB_RUBY_PARSER_GEN_MESSAGES_MAKE_H
 ",
             make_fns = self.make_fns().join("\n")
         )
