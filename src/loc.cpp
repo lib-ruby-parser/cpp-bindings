@@ -9,6 +9,8 @@ namespace lib_ruby_parser
         this->end = end;
     }
 
+    Loc::~Loc() {}
+
     bool Loc::operator==(const Loc &other)
     {
         return (begin == other.begin) && (end == other.end);

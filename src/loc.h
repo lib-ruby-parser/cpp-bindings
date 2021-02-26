@@ -19,6 +19,7 @@ namespace lib_ruby_parser
         Loc(Loc &&) = default;
         Loc(const Loc &) = default;
         explicit Loc(uint32_t begin, uint32_t end);
+        ~Loc();
 
         bool operator==(const Loc &other);
         bool operator!=(const Loc &other);

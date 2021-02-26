@@ -132,6 +132,8 @@ $(LIB_RUBY_PARSER_H):
 	cat src/loc.h >> $(LIB_RUBY_PARSER_TMP_H)
 	cat src/token.h >> $(LIB_RUBY_PARSER_TMP_H)
 
+	cat src/message_classes.h >> $(LIB_RUBY_PARSER_TMP_H)
+	cat src/message_variant.h >> $(LIB_RUBY_PARSER_TMP_H)
 	cat src/message.h >> $(LIB_RUBY_PARSER_TMP_H)
 
 	cat src/node.h >> $(LIB_RUBY_PARSER_TMP_H)
@@ -240,10 +242,15 @@ $(TARGET_DIR)/token$(OBJ_FILE_EXT): src/token.h src/token.cpp
 	mv token$(OBJ_FILE_EXT) $(TARGET_DIR)/token$(OBJ_FILE_EXT)
 OBJECTS += $(TARGET_DIR)/token$(OBJ_FILE_EXT)
 
-$(TARGET_DIR)/message$(OBJ_FILE_EXT): src/message.h src/message.cpp
-	$(CXX) src/message.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
-	mv message$(OBJ_FILE_EXT) $(TARGET_DIR)/message$(OBJ_FILE_EXT)
-OBJECTS += $(TARGET_DIR)/message$(OBJ_FILE_EXT)
+$(TARGET_DIR)/message_classes$(OBJ_FILE_EXT): src/message_classes.h src/message_classes.cpp
+	$(CXX) src/message_classes.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
+	mv message_classes$(OBJ_FILE_EXT) $(TARGET_DIR)/message_classes$(OBJ_FILE_EXT)
+OBJECTS += $(TARGET_DIR)/message_classes$(OBJ_FILE_EXT)
+
+# $(TARGET_DIR)/message$(OBJ_FILE_EXT): src/message.h src/message.cpp
+# 	$(CXX) src/message.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
+# 	mv message$(OBJ_FILE_EXT) $(TARGET_DIR)/message$(OBJ_FILE_EXT)
+# OBJECTS += $(TARGET_DIR)/message$(OBJ_FILE_EXT)
 
 $(TARGET_DIR)/render_message$(OBJ_FILE_EXT): src/render_message.h src/render_message.cpp
 	$(CXX) src/render_message.cpp $(CXXFLAGS) $(CXXOBJFLAGS)

@@ -23,14 +23,14 @@ jobs:
       fail-fast: false
       matrix:
         build:
-          - os: ubuntu-latest
-            target: x86_64-unknown-linux-gnu
-            cc: clang-9
-            cxx: clang++-9
-            ld: ld.lld-9
-            cargoflags: --features="generate-bindings,onig"
-            name: valgrind
-            run: make test-valgrind
+          # - os: ubuntu-latest
+          #   target: x86_64-unknown-linux-gnu
+          #   cc: clang-9
+          #   cxx: clang++-9
+          #   ld: ld.lld-9
+          #   cargoflags: --features="generate-bindings,onig"
+          #   name: valgrind
+          #   run: make test-valgrind
 
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu

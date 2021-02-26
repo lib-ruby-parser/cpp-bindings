@@ -1,4 +1,4 @@
-#include "message.h"
+#include "message_classes.h"
 #include <iostream>
 
 namespace lib_ruby_parser {

@@ -1,5 +1,6 @@
 #include "render_message.h"
 #include "diagnostic.h"
+#include "message.h"
 
 namespace lib_ruby_parser {
 
@@ -265,7 +266,7 @@ BytePtr render_message_diagnostic(Diagnostic *diagnostic)
         if constexpr (std::is_same_v<MessageT, std::unique_ptr<VoidValueExpression>>) {
             return render_message_void_value_expression(diagnostic->level, diagnostic->loc.get());
         }
-    }, diagnostic->message);
+    }, diagnostic->message->variant);
 }
 
 BytePtr render_diagnostic(Diagnostic *diagnostic, BytePtr input)
@@ -528,7 +529,7 @@ BytePtr render_diagnostic(Diagnostic *diagnostic, BytePtr input)
         if constexpr (std::is_same_v<MessageT, std::unique_ptr<VoidValueExpression>>) {
             return render_void_value_expression(diagnostic->level, diagnostic->loc.get(), input);
         }
-    }, diagnostic->message);
+    }, diagnostic->message->variant);
 }
 
 }

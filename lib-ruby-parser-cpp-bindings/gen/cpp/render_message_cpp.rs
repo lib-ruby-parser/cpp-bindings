@@ -23,6 +23,7 @@ impl RenderMessageCpp {
         format!(
             "#include \"render_message.h\"
 #include \"diagnostic.h\"
+#include \"message.h\"
 
 namespace lib_ruby_parser {{
 
@@ -34,7 +35,7 @@ BytePtr render_message_diagnostic(Diagnostic *diagnostic)
         using MessageT = std::decay_t<decltype(message)>;
 
         {render_message_if_constexp_branches}
-    }}, diagnostic->message);
+    }}, diagnostic->message->variant);
 }}
 
 BytePtr render_diagnostic(Diagnostic *diagnostic, BytePtr input)
@@ -43,7 +44,7 @@ BytePtr render_diagnostic(Diagnostic *diagnostic, BytePtr input)
         using MessageT = std::decay_t<decltype(message)>;
 
         {render_if_constexp_branches}
-    }}, diagnostic->message);
+    }}, diagnostic->message->variant);
 }}
 
 }}

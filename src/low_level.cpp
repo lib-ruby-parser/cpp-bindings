@@ -10,6 +10,7 @@
 #include "magic_comment.h"
 #include "parser_options.h"
 #include "parser_result.h"
+#include "message.h"
 
 namespace lib_ruby_parser
 {
@@ -78,11 +79,6 @@ namespace lib_ruby_parser
                 {
                     return new Comment(kind, std::unique_ptr<Loc>(location));
                 }
-
-                // Diagnostic *make_diagnostic(ErrorLevel level, BytePtr message, Loc *loc)
-                // {
-                //     return new Diagnostic(level, byte_ptr_to_owned_string(message), std::unique_ptr<Loc>(loc));
-                // }
 
                 MagicComment *make_magic_comment(MagicCommentKind kind, Loc *key_l, Loc *value_l)
                 {

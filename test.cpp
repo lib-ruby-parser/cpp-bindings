@@ -70,26 +70,9 @@ void test_tokens()
     assert_token(result->tokens[1], "EOF", "", 2, 2);
 }
 
-void test_diagnostic_eq()
-{
-    Diagnostic sample(ErrorLevel::ERROR, std::make_unique<CantAssignToSelf>(), std::make_unique<Loc>(0, 1));
-
-    Diagnostic diff_level(ErrorLevel::WARNING, std::make_unique<CantAssignToSelf>(), std::make_unique<Loc>(0, 1));
-    Diagnostic diff_message(ErrorLevel::ERROR, std::make_unique<CantAssignToNil>(), std::make_unique<Loc>(0, 1));
-    Diagnostic diff_loc(ErrorLevel::ERROR, std::make_unique<CantAssignToSelf>(), std::make_unique<Loc>(0, 2));
-
-    Diagnostic eq(ErrorLevel::ERROR, std::make_unique<CantAssignToSelf>(), std::make_unique<Loc>(0, 1));
-
-    assert(sample != diff_level);
-    assert(sample != diff_message);
-    assert(sample != diff_loc);
-
-    assert(sample == eq);
-}
-
 void test_diagnostic_render()
 {
-    Diagnostic d(ErrorLevel::ERROR, std::make_unique<CantAssignToSelf>(), std::make_unique<Loc>(0, 1));
+    Diagnostic d(ErrorLevel::ERROR, std::make_unique<DiagnosticMessage>(std::make_unique<CantAssignToSelf>()), std::make_unique<Loc>(0, 1));
     Bytes input("2 + 2 - 3");
 
     assert(d.render_message() == "Can't change the value of self");
@@ -104,15 +87,13 @@ void test_diagnostics()
 
     assert(result->diagnostics.size() == 2);
 
-    assert(result->diagnostics[0] == Diagnostic(
-                                         ErrorLevel::ERROR,
-                                         std::make_unique<CantAssignToSelf>(),
-                                         std::make_unique<Loc>(0, 4)));
+    assert(result->diagnostics[0].level == ErrorLevel::ERROR);
+    assert(result->diagnostics[0].message->is<CantAssignToSelf>());
+    assert(*(result->diagnostics[0].loc) == Loc(0, 4));
 
-    assert(result->diagnostics[1] == Diagnostic(
-                                         ErrorLevel::ERROR,
-                                         std::make_unique<CantAssignToNil>(),
-                                         std::make_unique<Loc>(10, 13)));
+    assert(result->diagnostics[1].level == ErrorLevel::ERROR);
+    assert(result->diagnostics[1].message->is<CantAssignToNil>());
+    assert(*(result->diagnostics[1].loc) == Loc(10, 13));
 }
 
 void test_comments()
@@ -265,10 +246,10 @@ void test_custom_decoder_error()
     assert(result->ast == nullptr);
     assert(result->diagnostics.size() == 1);
 
-    assert(result->diagnostics[0] == Diagnostic(
-                                         ErrorLevel::ERROR,
-                                         std::make_unique<EncodingError>("DecodingError(\"test error\")"),
-                                         std::make_unique<Loc>(12, 15)));
+    assert(result->diagnostics[0].level == ErrorLevel::ERROR);
+    assert(result->diagnostics[0].message->is<EncodingError>());
+    assert(result->diagnostics[0].message->get<EncodingError>()->error == "DecodingError(\"test error\")");
+    assert(*(result->diagnostics[0].loc) == Loc(12, 15));
 
     assert(state->input.to_string() == input.to_string());
     assert(state->encoding == "BAR");
@@ -316,7 +297,6 @@ int main()
     test(node);
     test(parse);
     test(tokens);
-    test(diagnostic_eq);
     test(diagnostic_render);
     test(diagnostics);
     test(comments);

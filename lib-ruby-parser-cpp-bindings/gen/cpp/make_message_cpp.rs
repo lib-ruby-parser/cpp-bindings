@@ -21,8 +21,10 @@ impl MakeMessageCpp {
     fn contents(&self) -> String {
         format!(
             "#include \"make_message.h\"
-#include \"diagnostic.h\"
+#include \"message_variant.h\"
+#include \"message.h\"
 #include \"loc.h\"
+#include \"diagnostic.h\"
 
 namespace lib_ruby_parser {{
 
@@ -52,8 +54,10 @@ impl<'a> MakeFn<'a> {
         format!(
             "Diagnostic *make_{lower}({ctor_args})
 {{
-    diagnostic_message_variant_t message = std::make_unique<{class_name}>({c_message_args_to_cpp});
-    return new Diagnostic(level, std::move(message), std::unique_ptr<Loc>(loc));
+    return new Diagnostic(
+        level,
+        std::make_unique<DiagnosticMessage>(std::make_unique<{class_name}>({c_message_args_to_cpp})),
+        std::unique_ptr<Loc>(loc));
 }}",
             lower = camel_case_to_underscored(&self.message.name).to_lowercase(),
             ctor_args = [

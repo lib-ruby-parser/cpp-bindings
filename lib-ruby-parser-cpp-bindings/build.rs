@@ -18,8 +18,10 @@ fn build_cpp_files() {
 
     let messages = lib_ruby_parser_nodes::messages();
 
-    gen::cpp::MessageH::new(&messages).write();
-    gen::cpp::MessageCpp::new(&messages).write();
+    gen::cpp::MessageClassesH::new(&messages).write();
+    gen::cpp::MessageClassesCpp::new(&messages).write();
+
+    gen::cpp::MessageVariantH::new(&messages).write();
 
     gen::cpp::MakeMessageH::new(&messages).write();
     gen::cpp::MakeMessageCpp::new(&messages).write();

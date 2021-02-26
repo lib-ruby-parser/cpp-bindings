@@ -1,11 +1,11 @@
 use crate::gen::helpers::MessageCppField;
 use crate::gen::helpers::{all_messages, map_message_fields, map_messages};
 
-pub(crate) struct MessageH {
+pub(crate) struct MessageClassesH {
     messages: Vec<lib_ruby_parser_nodes::Message>,
 }
 
-impl MessageH {
+impl MessageClassesH {
     pub(crate) fn new(registry: &lib_ruby_parser_nodes::Messages) -> Self {
         Self {
             messages: all_messages(registry),
@@ -13,13 +13,13 @@ impl MessageH {
     }
 
     pub(crate) fn write(&self) {
-        std::fs::write("../src/message.h", self.contents()).unwrap()
+        std::fs::write("../src/message_classes.h", self.contents()).unwrap()
     }
 
     fn contents(&self) -> String {
         format!(
-            "#ifndef LIB_RUBY_PARSER_MESSAGE_H
-#define LIB_RUBY_PARSER_MESSAGE_H
+            "#ifndef LIB_RUBY_PARSER_MESSAGE_CLASSES_H
+#define LIB_RUBY_PARSER_MESSAGE_CLASSES_H
 
 #include <string>
 #include <variant>
@@ -28,7 +28,7 @@ impl MessageH {
 
 namespace lib_ruby_parser {{
 
-class DiagnosticMessage
+class BaseDiagnosticMessage
 {{
 public:
     std::string render_message();
@@ -37,25 +37,16 @@ public:
 
 {message_classes}
 
-using diagnostic_message_variant_t = std::variant<
-    {variants}
->;
-
 }}
 
-#endif // LIB_RUBY_PARSER_MESSAGE_H
+#endif // LIB_RUBY_PARSER_MESSAGE_CLASSES_H
 ",
             message_classes = self.message_classes().join("\n"),
-            variants = self.variants().join(",\n    ")
         )
     }
 
     fn message_classes(&self) -> Vec<String> {
         map_messages(&self.messages, |m| MessageClass::new(m).code())
-    }
-
-    fn variants(&self) -> Vec<String> {
-        map_messages(&self.messages, |m| format!("std::unique_ptr<{}>", m.name))
     }
 }
 
@@ -70,7 +61,7 @@ impl<'a> MessageClass<'a> {
 
     fn code(&self) -> String {
         format!(
-            "class {class_name}: public DiagnosticMessage {{
+            "class {class_name}: public BaseDiagnosticMessage {{
 public:
     {fields_declaration}
     explicit {class_name}({args});
