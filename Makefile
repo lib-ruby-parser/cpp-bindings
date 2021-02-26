@@ -132,11 +132,11 @@ $(LIB_RUBY_PARSER_H):
 	cat src/loc.h >> $(LIB_RUBY_PARSER_TMP_H)
 	cat src/token.h >> $(LIB_RUBY_PARSER_TMP_H)
 
-	cat src/message_classes.h >> $(LIB_RUBY_PARSER_TMP_H)
-	cat src/message_variant.h >> $(LIB_RUBY_PARSER_TMP_H)
+	cat src/gen/messages/classes.h >> $(LIB_RUBY_PARSER_TMP_H)
+	cat src/gen/messages/variant.h >> $(LIB_RUBY_PARSER_TMP_H)
 	cat src/message.h >> $(LIB_RUBY_PARSER_TMP_H)
 
-	cat src/node.h >> $(LIB_RUBY_PARSER_TMP_H)
+	cat src/gen/nodes/node.h >> $(LIB_RUBY_PARSER_TMP_H)
 
 	cat src/comment.h >> $(LIB_RUBY_PARSER_TMP_H)
 	cat src/custom_decoder.h >> $(LIB_RUBY_PARSER_TMP_H)
@@ -161,6 +161,37 @@ $(LIB_RUBY_PARSER_H):
 
 # objects
 OBJECTS =
+
+# gen/messages
+
+$(TARGET_DIR)/gen/messages/classes$(OBJ_FILE_EXT): src/gen/messages/classes.h src/gen/messages/classes.cpp
+	$(CXX) src/gen/messages/classes.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
+	mv classes$(OBJ_FILE_EXT) $(TARGET_DIR)/gen/messages/classes$(OBJ_FILE_EXT)
+OBJECTS += $(TARGET_DIR)/gen/messages/classes$(OBJ_FILE_EXT)
+
+$(TARGET_DIR)/gen/messages/make$(OBJ_FILE_EXT): src/gen/messages/make.h src/gen/messages/make.cpp
+	$(CXX) src/gen/messages/make.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
+	mv make$(OBJ_FILE_EXT) $(TARGET_DIR)/gen/messages/make$(OBJ_FILE_EXT)
+OBJECTS += $(TARGET_DIR)/gen/messages/make$(OBJ_FILE_EXT)
+
+$(TARGET_DIR)/gen/messages/render$(OBJ_FILE_EXT): src/gen/messages/render.h src/gen/messages/render.cpp
+	$(CXX) src/gen/messages/render.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
+	mv render$(OBJ_FILE_EXT) $(TARGET_DIR)/gen/messages/render$(OBJ_FILE_EXT)
+OBJECTS += $(TARGET_DIR)/gen/messages/render$(OBJ_FILE_EXT)
+
+# gen/nodes
+
+$(TARGET_DIR)/gen/nodes/make$(OBJ_FILE_EXT): src/gen/nodes/make.h src/gen/nodes/make.cpp
+	$(CXX) src/gen/nodes/make.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
+	mv make$(OBJ_FILE_EXT) $(TARGET_DIR)/gen/nodes/make$(OBJ_FILE_EXT)
+OBJECTS += $(TARGET_DIR)/gen/nodes/make$(OBJ_FILE_EXT)
+
+$(TARGET_DIR)/gen/nodes/node$(OBJ_FILE_EXT): src/gen/nodes/node.h src/gen/nodes/node.cpp
+	$(CXX) src/gen/nodes/node.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
+	mv node$(OBJ_FILE_EXT) $(TARGET_DIR)/gen/nodes/node$(OBJ_FILE_EXT)
+OBJECTS += $(TARGET_DIR)/gen/nodes/node$(OBJ_FILE_EXT)
+
+# non-gen
 
 $(TARGET_DIR)/byte_ptr$(OBJ_FILE_EXT): src/byte_ptr.h src/byte_ptr.cpp
 	$(CXX) src/byte_ptr.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
@@ -197,25 +228,10 @@ $(TARGET_DIR)/low_level$(OBJ_FILE_EXT): src/low_level.h src/low_level.cpp
 	mv low_level$(OBJ_FILE_EXT) $(TARGET_DIR)/low_level$(OBJ_FILE_EXT)
 OBJECTS += $(TARGET_DIR)/low_level$(OBJ_FILE_EXT)
 
-$(TARGET_DIR)/node$(OBJ_FILE_EXT): src/node.h src/node.cpp
-	$(CXX) src/node.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
-	mv node$(OBJ_FILE_EXT) $(TARGET_DIR)/node$(OBJ_FILE_EXT)
-OBJECTS += $(TARGET_DIR)/node$(OBJ_FILE_EXT)
-
 $(TARGET_DIR)/magic_comment$(OBJ_FILE_EXT): src/magic_comment.h src/magic_comment.cpp
 	$(CXX) src/magic_comment.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
 	mv magic_comment$(OBJ_FILE_EXT) $(TARGET_DIR)/magic_comment$(OBJ_FILE_EXT)
 OBJECTS += $(TARGET_DIR)/magic_comment$(OBJ_FILE_EXT)
-
-$(TARGET_DIR)/make_node$(OBJ_FILE_EXT): src/make_node.h src/make_node.cpp
-	$(CXX) src/make_node.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
-	mv make_node$(OBJ_FILE_EXT) $(TARGET_DIR)/make_node$(OBJ_FILE_EXT)
-OBJECTS += $(TARGET_DIR)/make_node$(OBJ_FILE_EXT)
-
-$(TARGET_DIR)/make_message$(OBJ_FILE_EXT): src/make_message.h src/make_message.cpp
-	$(CXX) src/make_message.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
-	mv make_message$(OBJ_FILE_EXT) $(TARGET_DIR)/make_message$(OBJ_FILE_EXT)
-OBJECTS += $(TARGET_DIR)/make_message$(OBJ_FILE_EXT)
 
 $(TARGET_DIR)/parser_options$(OBJ_FILE_EXT): src/parser_options.h src/parser_options.cpp
 	$(CXX) src/parser_options.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
@@ -241,21 +257,6 @@ $(TARGET_DIR)/token$(OBJ_FILE_EXT): src/token.h src/token.cpp
 	$(CXX) src/token.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
 	mv token$(OBJ_FILE_EXT) $(TARGET_DIR)/token$(OBJ_FILE_EXT)
 OBJECTS += $(TARGET_DIR)/token$(OBJ_FILE_EXT)
-
-$(TARGET_DIR)/message_classes$(OBJ_FILE_EXT): src/message_classes.h src/message_classes.cpp
-	$(CXX) src/message_classes.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
-	mv message_classes$(OBJ_FILE_EXT) $(TARGET_DIR)/message_classes$(OBJ_FILE_EXT)
-OBJECTS += $(TARGET_DIR)/message_classes$(OBJ_FILE_EXT)
-
-# $(TARGET_DIR)/message$(OBJ_FILE_EXT): src/message.h src/message.cpp
-# 	$(CXX) src/message.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
-# 	mv message$(OBJ_FILE_EXT) $(TARGET_DIR)/message$(OBJ_FILE_EXT)
-# OBJECTS += $(TARGET_DIR)/message$(OBJ_FILE_EXT)
-
-$(TARGET_DIR)/render_message$(OBJ_FILE_EXT): src/render_message.h src/render_message.cpp
-	$(CXX) src/render_message.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
-	mv render_message$(OBJ_FILE_EXT) $(TARGET_DIR)/render_message$(OBJ_FILE_EXT)
-OBJECTS += $(TARGET_DIR)/render_message$(OBJ_FILE_EXT)
 
 $(TARGET_DIR)/input$(OBJ_FILE_EXT): src/input.h src/input.cpp
 	$(CXX) src/input.cpp $(CXXFLAGS) $(CXXOBJFLAGS)
@@ -295,6 +296,8 @@ test-valgrind: $(TARGET_DIR)/test-runner
 clean:
 	rm -rf target
 	mkdir -p $(TARGET_DIR)
+	mkdir -p $(TARGET_DIR)/gen/nodes
+	mkdir -p $(TARGET_DIR)/gen/messages
 
 test-cov:
 	$(CXX) test.cpp $(RUST_OBJ) $(CXXFLAGS) $(CXXEXECFLAGS) -fprofile-instr-generate -fcoverage-mapping -o $(TARGET_DIR)/test

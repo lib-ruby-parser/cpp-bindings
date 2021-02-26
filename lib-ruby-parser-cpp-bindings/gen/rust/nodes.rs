@@ -1,17 +1,17 @@
 use crate::gen::helpers::{map_node_fields, map_nodes};
 use lib_ruby_parser_nodes::FieldType;
 
-pub(crate) struct CppFromRustGen<'a> {
+pub(crate) struct Nodes<'a> {
     nodes: &'a [lib_ruby_parser_nodes::Node],
 }
 
-impl<'a> CppFromRustGen<'a> {
+impl<'a> Nodes<'a> {
     pub(crate) fn new(nodes: &'a [lib_ruby_parser_nodes::Node]) -> Self {
         Self { nodes }
     }
 
     pub(crate) fn write(&self) {
-        std::fs::write("src/cpp_from_rust_gen.rs", self.contents()).unwrap()
+        std::fs::write("src/gen/nodes.rs", self.contents()).unwrap()
     }
 
     fn contents(&self) -> String {

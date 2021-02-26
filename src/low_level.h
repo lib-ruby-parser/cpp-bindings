@@ -2,8 +2,8 @@
 #define LIB_RUBY_PARSER_LOW_LEVEL_H
 
 #include <stdint.h>
-#include "make_node.h"
-#include "make_message.h"
+#include "gen/nodes/make.h"
+#include "gen/messages/make.h"
 #include "comment_type.h"
 #include "error_level.h"
 #include "magic_comment_kind.h"

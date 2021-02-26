@@ -4,7 +4,7 @@
 #include <string>
 #include <variant>
 #include <memory>
-#include "bytes.h"
+#include "../../bytes.h"
 
 namespace lib_ruby_parser {
 

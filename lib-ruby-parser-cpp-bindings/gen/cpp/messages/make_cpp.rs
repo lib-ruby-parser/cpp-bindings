@@ -3,11 +3,11 @@ use crate::gen::helpers::{
     all_messages, camel_case_to_underscored, map_message_fields, map_messages,
 };
 
-pub(crate) struct MakeMessageCpp {
+pub(crate) struct MakeCpp {
     messages: Vec<lib_ruby_parser_nodes::Message>,
 }
 
-impl MakeMessageCpp {
+impl MakeCpp {
     pub(crate) fn new(registry: &lib_ruby_parser_nodes::Messages) -> Self {
         Self {
             messages: all_messages(registry),
@@ -15,16 +15,16 @@ impl MakeMessageCpp {
     }
 
     pub(crate) fn write(&self) {
-        std::fs::write("../src/make_message.cpp", self.contents()).unwrap()
+        std::fs::write("../src/gen/messages/make.cpp", self.contents()).unwrap()
     }
 
     fn contents(&self) -> String {
         format!(
-            "#include \"make_message.h\"
-#include \"message_variant.h\"
-#include \"message.h\"
-#include \"loc.h\"
-#include \"diagnostic.h\"
+            "#include \"make.h\"
+#include \"variant.h\"
+#include \"../../message.h\"
+#include \"../../loc.h\"
+#include \"../../diagnostic.h\"
 
 namespace lib_ruby_parser {{
 

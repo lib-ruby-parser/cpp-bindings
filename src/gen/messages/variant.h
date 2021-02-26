@@ -4,7 +4,7 @@
 #include <string>
 #include <variant>
 #include <memory>
-#include "message_classes.h"
+#include "classes.h"
 
 namespace lib_ruby_parser {
 

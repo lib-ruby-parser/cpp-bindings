@@ -1,24 +1,24 @@
 use crate::gen::helpers::{map_node_fields, map_nodes};
 use crate::gen::helpers::{Field, FieldType};
 
-pub(crate) struct MakeNodeCpp<'a> {
+pub(crate) struct MakeCpp<'a> {
     nodes: &'a [lib_ruby_parser_nodes::Node],
 }
 
-impl<'a> MakeNodeCpp<'a> {
+impl<'a> MakeCpp<'a> {
     pub(crate) fn new(nodes: &'a [lib_ruby_parser_nodes::Node]) -> Self {
         Self { nodes }
     }
 
     pub(crate) fn write(&self) {
-        std::fs::write("../src/make_node.cpp", self.contents()).unwrap()
+        std::fs::write("../src/gen/nodes/make.cpp", self.contents()).unwrap()
     }
 
     fn contents(&self) -> String {
         format!(
             "
 #include <vector>
-#include \"make_node.h\"
+#include \"make.h\"
 #include \"node.h\"
 
 namespace lib_ruby_parser {{

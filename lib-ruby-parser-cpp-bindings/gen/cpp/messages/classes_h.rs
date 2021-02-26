@@ -1,11 +1,11 @@
 use crate::gen::helpers::MessageCppField;
 use crate::gen::helpers::{all_messages, map_message_fields, map_messages};
 
-pub(crate) struct MessageClassesH {
+pub(crate) struct ClassesH {
     messages: Vec<lib_ruby_parser_nodes::Message>,
 }
 
-impl MessageClassesH {
+impl ClassesH {
     pub(crate) fn new(registry: &lib_ruby_parser_nodes::Messages) -> Self {
         Self {
             messages: all_messages(registry),
@@ -13,7 +13,7 @@ impl MessageClassesH {
     }
 
     pub(crate) fn write(&self) {
-        std::fs::write("../src/message_classes.h", self.contents()).unwrap()
+        std::fs::write("../src/gen/messages/classes.h", self.contents()).unwrap()
     }
 
     fn contents(&self) -> String {
@@ -24,7 +24,7 @@ impl MessageClassesH {
 #include <string>
 #include <variant>
 #include <memory>
-#include \"bytes.h\"
+#include \"../../bytes.h\"
 
 namespace lib_ruby_parser {{
 

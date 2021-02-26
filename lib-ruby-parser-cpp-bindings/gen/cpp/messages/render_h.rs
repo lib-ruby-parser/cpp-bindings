@@ -2,11 +2,11 @@ use crate::gen::helpers::camel_case_to_underscored;
 use crate::gen::helpers::MessageCppField;
 use crate::gen::helpers::{all_messages, map_message_fields, map_messages};
 
-pub(crate) struct RenderMessageH {
+pub(crate) struct RenderH {
     messages: Vec<lib_ruby_parser_nodes::Message>,
 }
 
-impl RenderMessageH {
+impl RenderH {
     pub(crate) fn new(registry: &lib_ruby_parser_nodes::Messages) -> Self {
         Self {
             messages: all_messages(registry),
@@ -14,7 +14,7 @@ impl RenderMessageH {
     }
 
     pub(crate) fn write(&self) {
-        std::fs::write("../src/render_message.h", self.contents()).unwrap()
+        std::fs::write("../src/gen/messages/render.h", self.contents()).unwrap()
     }
 
     fn contents(&self) -> String {
@@ -22,8 +22,8 @@ impl RenderMessageH {
             "#ifndef LIB_RUBY_PARSER_RENDER_MESSAGE_H
 #define LIB_RUBY_PARSER_RENDER_MESSAGE_H
 
-#include \"error_level.h\"
-#include \"byte_ptr.h\"
+#include \"../../error_level.h\"
+#include \"../../byte_ptr.h\"
 
 namespace lib_ruby_parser {{
 

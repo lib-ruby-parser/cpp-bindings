@@ -3,18 +3,6 @@
 
 namespace lib_ruby_parser
 {
-    class Loc
-    {
-    public:
-        bool operator!=(const Loc &other);
-        friend std::ostream &operator<<(std::ostream &os, const Loc &loc);
-    };
-
-    class DiagnosticMessage
-    {
-    public:
-        ~DiagnosticMessage();
-    };
 
     Diagnostic::Diagnostic(ErrorLevel level,
                            std::unique_ptr<DiagnosticMessage> message,

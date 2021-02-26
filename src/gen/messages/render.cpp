@@ -1,6 +1,6 @@
-#include "render_message.h"
-#include "diagnostic.h"
-#include "message.h"
+#include "render.h"
+#include "../../diagnostic.h"
+#include "../../message.h"
 
 namespace lib_ruby_parser {
 

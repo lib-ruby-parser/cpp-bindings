@@ -9,7 +9,7 @@ extern crate lib_ruby_parser;
 mod bindings;
 mod byte_ptr;
 mod cpp_from_rust;
-mod cpp_from_rust_gen;
+mod gen;
 mod node;
 mod ptr;
 
@@ -19,10 +19,8 @@ mod diagnostic;
 mod list;
 mod loc;
 mod magic_comment;
-mod message_gen;
 mod parser_options;
 mod parser_result;
-mod render_message;
 mod token;
 mod token_rewriter;
 

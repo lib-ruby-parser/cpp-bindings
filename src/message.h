@@ -4,7 +4,7 @@
 #include <string>
 #include <variant>
 #include <memory>
-#include "message_variant.h"
+#include "gen/messages/variant.h"
 
 namespace lib_ruby_parser
 {

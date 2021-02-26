@@ -1,6 +1,6 @@
 
 #include <vector>
-#include "make_node.h"
+#include "make.h"
 #include "node.h"
 
 namespace lib_ruby_parser {

@@ -1,11 +1,11 @@
 use crate::gen::helpers::camel_case_to_underscored;
 use crate::gen::helpers::{all_messages, map_message_fields, map_messages};
 
-pub(crate) struct MessageGenRs {
+pub(crate) struct Messages {
     messages: Vec<lib_ruby_parser_nodes::Message>,
 }
 
-impl MessageGenRs {
+impl Messages {
     pub(crate) fn new(registry: &lib_ruby_parser_nodes::Messages) -> Self {
         Self {
             messages: all_messages(registry),
@@ -13,7 +13,7 @@ impl MessageGenRs {
     }
 
     pub(crate) fn write(&self) {
-        std::fs::write("src/message_gen.rs", self.contents()).unwrap()
+        std::fs::write("src/gen/messages.rs", self.contents()).unwrap()
     }
 
     fn contents(&self) -> String {

@@ -2,11 +2,11 @@ use crate::gen::helpers::{
     all_messages, camel_case_to_underscored, map_message_fields, map_messages,
 };
 
-pub(crate) struct RenderMessageRs {
+pub(crate) struct RenderMessage {
     messages: Vec<lib_ruby_parser_nodes::Message>,
 }
 
-impl RenderMessageRs {
+impl RenderMessage {
     pub(crate) fn new(registry: &lib_ruby_parser_nodes::Messages) -> Self {
         Self {
             messages: all_messages(registry),
@@ -14,7 +14,7 @@ impl RenderMessageRs {
     }
 
     pub(crate) fn write(&self) {
-        std::fs::write("src/render_message.rs", self.contents()).unwrap()
+        std::fs::write("src/gen/render_message.rs", self.contents()).unwrap()
     }
 
     fn contents(&self) -> String {

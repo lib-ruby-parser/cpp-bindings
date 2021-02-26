@@ -6,12 +6,11 @@
 #include <iostream>
 #include "error_level.h"
 #include "bytes.h"
+#include "loc.h"
+#include "message.h"
 
 namespace lib_ruby_parser
 {
-    class Loc;
-    class DiagnosticMessage;
-
     class Diagnostic
     {
     public:

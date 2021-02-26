@@ -4,11 +4,11 @@ use crate::gen::helpers::{
     all_messages, camel_case_to_underscored, map_message_fields, map_messages, MessageCppField,
 };
 
-pub(crate) struct RenderMessageCpp {
+pub(crate) struct RenderCpp {
     messages: Vec<lib_ruby_parser_nodes::Message>,
 }
 
-impl RenderMessageCpp {
+impl RenderCpp {
     pub(crate) fn new(registry: &lib_ruby_parser_nodes::Messages) -> Self {
         Self {
             messages: all_messages(registry),
@@ -16,14 +16,14 @@ impl RenderMessageCpp {
     }
 
     pub(crate) fn write(&self) {
-        std::fs::write("../src/render_message.cpp", self.contents()).unwrap()
+        std::fs::write("../src/gen/messages/render.cpp", self.contents()).unwrap()
     }
 
     fn contents(&self) -> String {
         format!(
-            "#include \"render_message.h\"
-#include \"diagnostic.h\"
-#include \"message.h\"
+            "#include \"render.h\"
+#include \"../../diagnostic.h\"
+#include \"../../message.h\"
 
 namespace lib_ruby_parser {{
 

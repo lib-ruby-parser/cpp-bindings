@@ -1,8 +1,8 @@
 #ifndef LIB_RUBY_PARSER_RENDER_MESSAGE_H
 #define LIB_RUBY_PARSER_RENDER_MESSAGE_H
 
-#include "error_level.h"
-#include "byte_ptr.h"
+#include "../../error_level.h"
+#include "../../byte_ptr.h"
 
 namespace lib_ruby_parser {
 

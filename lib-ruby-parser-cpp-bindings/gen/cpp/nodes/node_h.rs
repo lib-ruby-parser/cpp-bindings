@@ -11,7 +11,7 @@ impl<'a> NodeH<'a> {
     }
 
     pub(crate) fn write(&self) {
-        std::fs::write("../src/node.h", self.contents()).unwrap()
+        std::fs::write("../src/gen/nodes/node.h", self.contents()).unwrap()
     }
 
     fn contents(&self) -> String {
@@ -23,8 +23,8 @@ impl<'a> NodeH<'a> {
 #include <vector>
 #include <string>
 #include <variant>
-#include \"loc.h\"
-#include \"bytes.h\"
+#include \"../../loc.h\"
+#include \"../../bytes.h\"
 
 namespace lib_ruby_parser {{
 

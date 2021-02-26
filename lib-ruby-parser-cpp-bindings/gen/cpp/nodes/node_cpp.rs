@@ -11,7 +11,7 @@ impl<'a> NodeCpp<'a> {
     }
 
     pub(crate) fn write(&self) {
-        std::fs::write("../src/node.cpp", self.contents()).unwrap()
+        std::fs::write("../src/gen/nodes/node.cpp", self.contents()).unwrap()
     }
 
     fn contents(&self) -> String {

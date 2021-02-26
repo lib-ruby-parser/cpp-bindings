@@ -1,10 +1,10 @@
 use crate::gen::helpers::{all_messages, map_messages};
 
-pub(crate) struct MessageVariantH {
+pub(crate) struct VariantH {
     messages: Vec<lib_ruby_parser_nodes::Message>,
 }
 
-impl MessageVariantH {
+impl VariantH {
     pub(crate) fn new(registry: &lib_ruby_parser_nodes::Messages) -> Self {
         Self {
             messages: all_messages(registry),
@@ -12,7 +12,7 @@ impl MessageVariantH {
     }
 
     pub(crate) fn write(&self) {
-        std::fs::write("../src/message_variant.h", self.contents()).unwrap()
+        std::fs::write("../src/gen/messages/variant.h", self.contents()).unwrap()
     }
 
     fn contents(&self) -> String {
@@ -23,7 +23,7 @@ impl MessageVariantH {
 #include <string>
 #include <variant>
 #include <memory>
-#include \"message_classes.h\"
+#include \"classes.h\"
 
 namespace lib_ruby_parser {{
 
