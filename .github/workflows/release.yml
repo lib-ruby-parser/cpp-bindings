@@ -110,7 +110,7 @@ jobs:
       - name: build rust object
         shell: bash
         run: |
-          make setup
+          make clean
           make rust-object
 
       - name: build
