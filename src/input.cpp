@@ -1,4 +1,5 @@
 #include "input.h"
+#include <iostream>
 
 namespace lib_ruby_parser
 {
@@ -15,10 +16,18 @@ namespace lib_ruby_parser
         this->ptr = ptr;
     }
 
+    Input::Input(Input &&input)
+    {
+        this->ptr = input.ptr;
+        input.ptr = nullptr;
+    }
+
     Input::~Input()
     {
-        // FIXME
-        // input_free(this->ptr);
+        if (this->ptr != nullptr)
+        {
+            input_free(this->ptr);
+        }
     }
 
     const char *Input::source()

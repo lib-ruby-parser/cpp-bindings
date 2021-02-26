@@ -15,7 +15,7 @@ namespace lib_ruby_parser
         Input() = default;
         explicit Input(void *);
         Input(const Input &) = delete;
-        Input(Input &&) = default;
+        Input(Input &&);
         ~Input();
 
         const char *source();
