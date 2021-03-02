@@ -9,9 +9,9 @@ namespace lib_ruby_parser
 {
     class Input
     {
+    public:
         void *ptr;
 
-    public:
         Input() = default;
         explicit Input(void *);
         Input(const Input &) = delete;
