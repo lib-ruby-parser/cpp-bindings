@@ -11,7 +11,7 @@ env:
 
 jobs:
   test:
-    name: ${{matrix.build.name}} on ${{ matrix.build.os }}
+    name: ${{matrix.build.name}}
     runs-on: ${{ matrix.build.os }}
     env:
       CARGO_BUILD_TARGET: ${{ matrix.build.target }}
@@ -38,7 +38,7 @@ jobs:
             cxx: clang++-9
             ld: ld.lld-9
             cargoflags: --features="generate-bindings,onig"
-            name: -fsanitize=address
+            name: asan
             run: CXXFLAGS="-fsanitize=address" make clean test
 
           - os: ubuntu-latest
@@ -47,7 +47,7 @@ jobs:
             cxx: clang++-9
             ld: ld.lld-9
             cargoflags: --features="generate-bindings,onig"
-            name: test
+            name: test on linux
             run: make clean test
 
           - os: macos-latest
@@ -56,7 +56,7 @@ jobs:
             cxx: clang++
             ld: ld
             cargoflags: --features="generate-bindings,onig"
-            name: test
+            name: test on mac
             run: make clean test
 
           - os: windows-latest
@@ -65,7 +65,7 @@ jobs:
             cxx: cl.exe
             ld: link.exe
             cargoflags: ""
-            name: test
+            name: test on windows
             run: make clean test
 
     steps:
@@ -89,12 +89,6 @@ jobs:
 
       - name: checkout
         uses: actions/checkout@v2
-
-      - name: build rust object
-        shell: bash
-        run: |
-          make setup
-          make rust-object
 
       - name: install valgrind
         if: runner.os == 'Linux'
