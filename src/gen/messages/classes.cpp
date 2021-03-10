@@ -160,6 +160,10 @@ EncodingError::EncodingError(std::string error)
 {
     this->error = error;
 }
+InvalidMultibyteChar::InvalidMultibyteChar()
+{
+    
+}
 AmbiguousTernaryOperator::AmbiguousTernaryOperator(std::string condition)
 {
     this->condition = condition;
@@ -500,6 +504,10 @@ bool UnterminatedUnicodeEscape::operator==(const UnterminatedUnicodeEscape &)
 bool EncodingError::operator==(const EncodingError &other)
 {
     return error == other.error;
+}
+bool InvalidMultibyteChar::operator==(const InvalidMultibyteChar &)
+{
+    return true;
 }
 bool AmbiguousTernaryOperator::operator==(const AmbiguousTernaryOperator &other)
 {

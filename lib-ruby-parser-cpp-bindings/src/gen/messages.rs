@@ -138,6 +138,9 @@ impl From<lib_ruby_parser::Diagnostic> for Ptr<bindings::Diagnostic> {
                 let error = BytePtr::from(error);
                 unsafe { bindings::make_encoding_error(level, loc, error) }
             },
+            lib_ruby_parser::DiagnosticMessage::InvalidMultibyteChar {  } => {
+                unsafe { bindings::make_invalid_multibyte_char(level, loc, ) }
+            },
             lib_ruby_parser::DiagnosticMessage::AmbiguousTernaryOperator { condition } => {
                 let condition = BytePtr::from(condition);
                 unsafe { bindings::make_ambiguous_ternary_operator(level, loc, condition) }

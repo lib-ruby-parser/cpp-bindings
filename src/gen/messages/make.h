@@ -50,6 +50,7 @@ Diagnostic *make_invalid_cvar_name(ErrorLevel level, Loc *loc, char c);
 Diagnostic *make_unknown_regex_options(ErrorLevel level, Loc *loc, BytePtr options);
 Diagnostic *make_unterminated_unicode_escape(ErrorLevel level, Loc *loc);
 Diagnostic *make_encoding_error(ErrorLevel level, Loc *loc, BytePtr error);
+Diagnostic *make_invalid_multibyte_char(ErrorLevel level, Loc *loc);
 Diagnostic *make_ambiguous_ternary_operator(ErrorLevel level, Loc *loc, BytePtr condition);
 Diagnostic *make_ambiguous_regexp(ErrorLevel level, Loc *loc);
 Diagnostic *make_else_without_rescue(ErrorLevel level, Loc *loc);

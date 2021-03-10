@@ -128,6 +128,9 @@ BytePtr render_message_diagnostic(Diagnostic *diagnostic)
         if constexpr (std::is_same_v<MessageT, std::unique_ptr<EncodingError>>) {
             return render_message_encoding_error(diagnostic->level, diagnostic->loc.get(), make_byte_ptr(message->error.c_str(), message->error.length()));
         }
+        if constexpr (std::is_same_v<MessageT, std::unique_ptr<InvalidMultibyteChar>>) {
+            return render_message_invalid_multibyte_char(diagnostic->level, diagnostic->loc.get());
+        }
         if constexpr (std::is_same_v<MessageT, std::unique_ptr<AmbiguousTernaryOperator>>) {
             return render_message_ambiguous_ternary_operator(diagnostic->level, diagnostic->loc.get(), make_byte_ptr(message->condition.c_str(), message->condition.length()));
         }
@@ -390,6 +393,9 @@ BytePtr render_diagnostic(Diagnostic *diagnostic, BytePtr input)
         }
         if constexpr (std::is_same_v<MessageT, std::unique_ptr<EncodingError>>) {
             return render_encoding_error(diagnostic->level, diagnostic->loc.get(), make_byte_ptr(message->error.c_str(), message->error.length()), input);
+        }
+        if constexpr (std::is_same_v<MessageT, std::unique_ptr<InvalidMultibyteChar>>) {
+            return render_invalid_multibyte_char(diagnostic->level, diagnostic->loc.get(), input);
         }
         if constexpr (std::is_same_v<MessageT, std::unique_ptr<AmbiguousTernaryOperator>>) {
             return render_ambiguous_ternary_operator(diagnostic->level, diagnostic->loc.get(), make_byte_ptr(message->condition.c_str(), message->condition.length()), input);

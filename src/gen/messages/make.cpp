@@ -279,6 +279,13 @@ Diagnostic *make_encoding_error(ErrorLevel level, Loc *loc, BytePtr error)
         std::make_unique<DiagnosticMessage>(std::make_unique<EncodingError>(byte_ptr_to_owned_string(error))),
         std::unique_ptr<Loc>(loc));
 }
+Diagnostic *make_invalid_multibyte_char(ErrorLevel level, Loc *loc)
+{
+    return new Diagnostic(
+        level,
+        std::make_unique<DiagnosticMessage>(std::make_unique<InvalidMultibyteChar>()),
+        std::unique_ptr<Loc>(loc));
+}
 Diagnostic *make_ambiguous_ternary_operator(ErrorLevel level, Loc *loc, BytePtr condition)
 {
     return new Diagnostic(

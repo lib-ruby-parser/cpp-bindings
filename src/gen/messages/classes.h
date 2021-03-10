@@ -250,6 +250,12 @@ public:
     explicit EncodingError(std::string error);
     bool operator==(const EncodingError &other);
 };
+class InvalidMultibyteChar: public BaseDiagnosticMessage {
+public:
+    
+    explicit InvalidMultibyteChar();
+    bool operator==(const InvalidMultibyteChar &other);
+};
 class AmbiguousTernaryOperator: public BaseDiagnosticMessage {
 public:
     std::string condition;

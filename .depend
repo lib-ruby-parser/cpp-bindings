@@ -58,6 +58,27 @@ target/debug/token_rewriter.o: src/token_rewriter.cpp \
   src/token_rewriter.h src/token.h src/bytes.h src/byte_ptr.h src/loc.h \
   src/input.h
 
+target/debug/gen/messages/classes.o: src/gen/messages/classes.cpp \
+  src/gen/messages/classes.h src/gen/messages/../../bytes.h \
+  src/gen/messages/../../byte_ptr.h
+
+target/debug/gen/messages/make.o: src/gen/messages/make.cpp \
+  src/gen/messages/make.h src/gen/messages/../../error_level.h \
+  src/gen/messages/../../byte_ptr.h src/gen/messages/variant.h \
+  src/gen/messages/classes.h src/gen/messages/../../bytes.h \
+  src/gen/messages/../../message.h \
+  src/gen/messages/../../gen/messages/variant.h \
+  src/gen/messages/../../loc.h src/gen/messages/../../input.h \
+  src/gen/messages/../../diagnostic.h
+
+target/debug/gen/messages/render.o: src/gen/messages/render.cpp \
+  src/gen/messages/render.h src/gen/messages/../../error_level.h \
+  src/gen/messages/../../byte_ptr.h src/gen/messages/../../diagnostic.h \
+  src/gen/messages/../../bytes.h src/gen/messages/../../loc.h \
+  src/gen/messages/../../input.h src/gen/messages/../../message.h \
+  src/gen/messages/../../gen/messages/variant.h \
+  src/gen/messages/classes.h
+
 target/debug/gen/nodes/classes.o: src/gen/nodes/classes.cpp \
   src/gen/nodes/classes.h src/gen/nodes/../../loc.h \
   src/gen/nodes/../../bytes.h src/gen/nodes/../../byte_ptr.h \

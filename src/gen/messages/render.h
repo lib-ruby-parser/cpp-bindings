@@ -50,6 +50,7 @@ BytePtr render_message_invalid_cvar_name(ErrorLevel level, Loc *loc, char c);
 BytePtr render_message_unknown_regex_options(ErrorLevel level, Loc *loc, BytePtr options);
 BytePtr render_message_unterminated_unicode_escape(ErrorLevel level, Loc *loc);
 BytePtr render_message_encoding_error(ErrorLevel level, Loc *loc, BytePtr error);
+BytePtr render_message_invalid_multibyte_char(ErrorLevel level, Loc *loc);
 BytePtr render_message_ambiguous_ternary_operator(ErrorLevel level, Loc *loc, BytePtr condition);
 BytePtr render_message_ambiguous_regexp(ErrorLevel level, Loc *loc);
 BytePtr render_message_else_without_rescue(ErrorLevel level, Loc *loc);
@@ -136,6 +137,7 @@ BytePtr render_invalid_cvar_name(ErrorLevel level, Loc *loc, char c, BytePtr inp
 BytePtr render_unknown_regex_options(ErrorLevel level, Loc *loc, BytePtr options, BytePtr input);
 BytePtr render_unterminated_unicode_escape(ErrorLevel level, Loc *loc, BytePtr input);
 BytePtr render_encoding_error(ErrorLevel level, Loc *loc, BytePtr error, BytePtr input);
+BytePtr render_invalid_multibyte_char(ErrorLevel level, Loc *loc, BytePtr input);
 BytePtr render_ambiguous_ternary_operator(ErrorLevel level, Loc *loc, BytePtr condition, BytePtr input);
 BytePtr render_ambiguous_regexp(ErrorLevel level, Loc *loc, BytePtr input);
 BytePtr render_else_without_rescue(ErrorLevel level, Loc *loc, BytePtr input);

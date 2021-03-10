@@ -48,6 +48,7 @@ using diagnostic_message_variant_t = std::variant<
     std::unique_ptr<UnknownRegexOptions>,
     std::unique_ptr<UnterminatedUnicodeEscape>,
     std::unique_ptr<EncodingError>,
+    std::unique_ptr<InvalidMultibyteChar>,
     std::unique_ptr<AmbiguousTernaryOperator>,
     std::unique_ptr<AmbiguousRegexp>,
     std::unique_ptr<ElseWithoutRescue>,

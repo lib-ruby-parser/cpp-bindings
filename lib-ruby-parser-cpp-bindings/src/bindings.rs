@@ -1091,6 +1091,9 @@ extern "C" {
         -> *mut Diagnostic;
 }
 extern "C" {
+    pub fn make_invalid_multibyte_char(level: ErrorLevel, loc: *mut Loc) -> *mut Diagnostic;
+}
+extern "C" {
     pub fn make_ambiguous_ternary_operator(
         level: ErrorLevel,
         loc: *mut Loc,

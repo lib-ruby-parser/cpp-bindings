@@ -472,6 +472,18 @@ pub extern "C" fn render_message_encoding_error(level: bindings::ErrorLevel, loc
 }
 
 #[no_mangle]
+pub extern "C" fn render_message_invalid_multibyte_char(level: bindings::ErrorLevel, loc: *mut bindings::Loc) -> BytePtr {
+    let level = lib_ruby_parser::ErrorLevel::from(level);
+    let loc = lib_ruby_parser::Loc::from(Ptr::new(loc));
+    
+    let message = lib_ruby_parser::DiagnosticMessage::InvalidMultibyteChar {  };
+    let diagnostic = lib_ruby_parser::Diagnostic::new(level, message, loc);
+
+    let message = diagnostic.render_message();
+    BytePtr::from(message)
+}
+
+#[no_mangle]
 pub extern "C" fn render_message_ambiguous_ternary_operator(level: bindings::ErrorLevel, loc: *mut bindings::Loc, condition: BytePtr) -> BytePtr {
     let level = lib_ruby_parser::ErrorLevel::from(level);
     let loc = lib_ruby_parser::Loc::from(Ptr::new(loc));
@@ -1526,6 +1538,19 @@ pub extern "C" fn render_encoding_error(level: bindings::ErrorLevel, loc: *mut b
     let input = lib_ruby_parser::source::Input::from(input);
     let error = error.to_string().unwrap();
     let message = lib_ruby_parser::DiagnosticMessage::EncodingError { error };
+    let diagnostic = lib_ruby_parser::Diagnostic::new(level, message, loc);
+
+    let rendered = diagnostic.render(&input);
+    BytePtr::from(rendered)
+}
+
+#[no_mangle]
+pub extern "C" fn render_invalid_multibyte_char(level: bindings::ErrorLevel, loc: *mut bindings::Loc, input: BytePtr) -> BytePtr {
+    let level = lib_ruby_parser::ErrorLevel::from(level);
+    let loc = lib_ruby_parser::Loc::from(Ptr::new(loc));
+    let input = lib_ruby_parser::source::Input::from(input);
+    
+    let message = lib_ruby_parser::DiagnosticMessage::InvalidMultibyteChar {  };
     let diagnostic = lib_ruby_parser::Diagnostic::new(level, message, loc);
 
     let rendered = diagnostic.render(&input);
