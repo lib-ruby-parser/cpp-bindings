@@ -31,3 +31,6 @@ clean:
 	mkdir -p $(TARGET_DIR)
 	mkdir -p $(TARGET_DIR)/gen/nodes
 	mkdir -p $(TARGET_DIR)/gen/messages
+
+# fuzzer
+include fuzzer/build.mk
