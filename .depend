@@ -1,0 +1,72 @@
+target/debug/byte_ptr.o: src/byte_ptr.cpp src/byte_ptr.h
+
+target/debug/bytes.o: src/bytes.cpp src/bytes.h src/byte_ptr.h
+
+target/debug/comment.o: src/comment.cpp src/comment.h src/comment_type.h
+
+target/debug/custom_decoder.o: src/custom_decoder.cpp \
+  src/custom_decoder.h src/bytes.h src/byte_ptr.h src/helpers.h
+
+target/debug/diagnostic.o: src/diagnostic.cpp src/diagnostic.h \
+  src/error_level.h src/bytes.h src/byte_ptr.h src/loc.h src/input.h \
+  src/message.h src/gen/messages/variant.h src/gen/messages/classes.h \
+  src/gen/messages/../../bytes.h src/helpers.h
+
+target/debug/helpers.o: src/helpers.cpp src/helpers.h
+
+target/debug/input.o: src/input.cpp src/input.h src/bytes.h \
+  src/byte_ptr.h
+
+target/debug/loc.o: src/loc.cpp src/loc.h src/bytes.h src/byte_ptr.h \
+  src/input.h
+
+target/debug/low_level.o: src/low_level.cpp src/low_level.h \
+  src/gen/nodes/make.h src/gen/nodes/../../byte_ptr.h \
+  src/gen/nodes/../../node.h src/gen/nodes/variant.h \
+  src/gen/nodes/classes.h src/gen/nodes/../../loc.h src/bytes.h \
+  src/byte_ptr.h src/input.h src/gen/nodes/../../bytes.h \
+  src/gen/messages/make.h src/gen/messages/../../error_level.h \
+  src/gen/messages/../../byte_ptr.h src/comment_type.h src/error_level.h \
+  src/magic_comment_kind.h src/comment.h src/loc.h src/custom_decoder.h \
+  src/helpers.h src/token.h src/diagnostic.h src/message.h \
+  src/gen/messages/variant.h src/gen/messages/classes.h \
+  src/gen/messages/../../bytes.h src/magic_comment.h \
+  src/parser_options.h src/token_rewriter.h src/parser_result.h \
+  src/node.h
+
+target/debug/magic_comment.o: src/magic_comment.cpp src/magic_comment.h \
+  src/magic_comment_kind.h
+
+target/debug/parser_options.o: src/parser_options.cpp \
+  src/parser_options.h src/custom_decoder.h src/bytes.h src/byte_ptr.h \
+  src/token_rewriter.h src/token.h src/loc.h src/input.h
+
+target/debug/parser_result.o: src/parser_result.cpp src/parser_result.h \
+  src/bytes.h src/byte_ptr.h src/node.h src/gen/nodes/variant.h \
+  src/gen/nodes/classes.h src/gen/nodes/../../loc.h src/input.h \
+  src/gen/nodes/../../bytes.h src/gen/nodes/../../node.h src/token.h \
+  src/loc.h src/diagnostic.h src/error_level.h src/message.h \
+  src/gen/messages/variant.h src/gen/messages/classes.h \
+  src/gen/messages/../../bytes.h src/comment.h src/comment_type.h \
+  src/magic_comment.h src/magic_comment_kind.h src/parser_options.h \
+  src/custom_decoder.h src/token_rewriter.h
+
+target/debug/token.o: src/token.cpp src/token.h src/bytes.h \
+  src/byte_ptr.h src/loc.h src/input.h
+
+target/debug/token_rewriter.o: src/token_rewriter.cpp \
+  src/token_rewriter.h src/token.h src/bytes.h src/byte_ptr.h src/loc.h \
+  src/input.h
+
+target/debug/gen/nodes/classes.o: src/gen/nodes/classes.cpp \
+  src/gen/nodes/classes.h src/gen/nodes/../../loc.h \
+  src/gen/nodes/../../bytes.h src/gen/nodes/../../byte_ptr.h \
+  src/gen/nodes/../../input.h src/gen/nodes/../../node.h \
+  src/gen/nodes/../../gen/nodes/variant.h
+
+target/debug/gen/nodes/make.o: src/gen/nodes/make.cpp \
+  src/gen/nodes/make.h src/gen/nodes/../../byte_ptr.h \
+  src/gen/nodes/../../node.h src/gen/nodes/../../gen/nodes/variant.h \
+  src/gen/nodes/classes.h src/gen/nodes/../../loc.h \
+  src/gen/nodes/../../bytes.h src/gen/nodes/../../input.h
+

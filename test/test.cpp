@@ -4,7 +4,7 @@
 #include <fstream>
 #include <streambuf>
 #include <assert.h>
-#include "target/lib-ruby-parser.h"
+#include "../target/lib-ruby-parser.h"
 
 using namespace lib_ruby_parser;
 
@@ -145,7 +145,7 @@ void test_loc_source()
 
 void test_parse_all()
 {
-    std::ifstream file("all_nodes.rb");
+    std::ifstream file("test/all_nodes.rb");
     std::string source((std::istreambuf_iterator<char>(file)),
                        std::istreambuf_iterator<char>());
 
