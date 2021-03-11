@@ -44,14 +44,12 @@ impl<'a> NodeImplementation<'a> {
 
     fn code(&self) -> String {
         format!(
-            "{class_name}::{class_name}({args})
-{{
-{constructor}
-}}
+            "{class_name}::{class_name}({args}):
+    {member_initializer_list} {{}}
 ",
             class_name = self.node.struct_name,
             args = self.args().join(", "),
-            constructor = self.construtor_stmts().join("\n")
+            member_initializer_list = self.member_initializer_list().join(",\n    ")
         )
     }
 
@@ -65,7 +63,7 @@ impl<'a> NodeImplementation<'a> {
         })
     }
 
-    fn construtor_stmts(&self) -> Vec<String> {
+    fn member_initializer_list(&self) -> Vec<String> {
         map_node_fields(&self.node.fields, |f| {
             let field_name = Field::new(f).cpp_name();
 
@@ -74,11 +72,7 @@ impl<'a> NodeImplementation<'a> {
                 rhs = format!("std::move({})", rhs)
             }
 
-            format!(
-                "this->{field_name} = {rhs};",
-                field_name = field_name,
-                rhs = rhs
-            )
+            format!("{field_name}({rhs})", field_name = field_name, rhs = rhs)
         })
     }
 }

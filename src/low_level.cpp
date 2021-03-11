@@ -113,14 +113,14 @@ namespace lib_ruby_parser
 
                     auto cpp_result = decoder->rewrite(encoding, std::move(input));
 
-                    if (cpp_result.success)
+                    if (std::holds_alternative<Bytes>(cpp_result.data))
                     {
-                        auto output_ptr = cpp_result.output.into_ptr();
+                        auto output_ptr = std::get<Bytes>(cpp_result.data).into_ptr();
                         return CustomDecoderResult::Ok(output_ptr);
                     }
                     else
                     {
-                        return CustomDecoderResult::Error(Bytes(cpp_result.error_message).into_ptr());
+                        return CustomDecoderResult::Error(Bytes(std::get<std::string>(cpp_result.data)).into_ptr());
                     }
                 }
 

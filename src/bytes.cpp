@@ -14,13 +14,6 @@ namespace lib_ruby_parser
         return result;
     }
 
-    Bytes::Bytes()
-    {
-        this->size_ = 0;
-        this->bytes_ = nullptr;
-        this->borrowed = false;
-    }
-
     Bytes::~Bytes()
     {
         if (borrowed)

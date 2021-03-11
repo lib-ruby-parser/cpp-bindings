@@ -15,7 +15,6 @@ namespace lib_ruby_parser
         bool borrowed = false;
 
     public:
-        Bytes();
         ~Bytes();
 
         explicit Bytes(std::string s);

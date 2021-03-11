@@ -156,6 +156,7 @@ void test_parse_all()
 class DummyDecoderState
 {
 public:
+    DummyDecoderState() : encoding(""), input("") {}
     std::string encoding;
     Bytes input;
 };
@@ -163,35 +164,26 @@ public:
 class DummyDecoder : public CustomDecoder
 {
 public:
-    bool return_error;
-    Bytes output_to_return;
-    std::string error_to_return;
+    std::variant<Bytes, std::string> return_value;
 
     std::shared_ptr<DummyDecoderState> state;
 
-    DummyDecoder()
-    {
-        this->return_error = false;
-        this->output_to_return = Bytes("");
-        this->error_to_return = "";
-        this->state = std::make_shared<DummyDecoderState>();
-    }
+    DummyDecoder() = delete;
+    explicit DummyDecoder(Bytes bytes) : return_value(std::move(bytes)),
+                                         state(std::make_shared<DummyDecoderState>()) {}
+    explicit DummyDecoder(std::string error) : return_value(std::move(error)),
+                                               state(std::make_shared<DummyDecoderState>()) {}
+
     virtual ~DummyDecoder() = default;
 
     static std::unique_ptr<DummyDecoder> AlwaysFailWith(std::string error_to_return)
     {
-        auto result = std::make_unique<DummyDecoder>();
-        result->return_error = true;
-        result->error_to_return = error_to_return;
-        return result;
+        return std::make_unique<DummyDecoder>(error_to_return);
     }
 
     static std::unique_ptr<DummyDecoder> AlwaysRewriteTo(Bytes output_to_return)
     {
-        auto result = std::make_unique<DummyDecoder>();
-        result->return_error = false;
-        result->output_to_return = std::move(output_to_return);
-        return result;
+        return std::make_unique<DummyDecoder>(std::move(output_to_return));
     }
 
     virtual CustomDecoder::Result rewrite(std::string encoding, Bytes input)
@@ -199,13 +191,13 @@ public:
         this->state->encoding = encoding;
         this->state->input = input.clone();
 
-        if (return_error)
+        if (std::holds_alternative<Bytes>(return_value))
         {
-            return Result::Error(error_to_return);
+            return Result::Ok(std::move(std::get<Bytes>(return_value)));
         }
         else
         {
-            return Result::Ok(std::move(output_to_return));
+            return Result::Error(std::move(std::get<std::string>(return_value)));
         }
     }
 };

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <variant>
 #include "bytes.h"
 
 namespace lib_ruby_parser
@@ -13,11 +14,11 @@ namespace lib_ruby_parser
         class Result
         {
         public:
-            bool success;
-            Bytes output;
-            std::string error_message;
+            std::variant<Bytes, std::string> data;
 
-            Result() = default;
+            Result() = delete;
+            explicit Result(Bytes output);
+            explicit Result(std::string error_message);
             Result(Result &&) = default;
             Result(const Result &) = delete;
 

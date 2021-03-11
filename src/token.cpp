@@ -5,12 +5,9 @@ namespace lib_ruby_parser
     Token::Token(
         int token_type,
         Bytes token_value,
-        std::unique_ptr<Loc> loc)
-    {
-        this->token_type = token_type;
-        this->token_value = std::move(token_value);
-        this->loc = std::move(loc);
-    }
+        std::unique_ptr<Loc> loc) : token_type(token_type),
+                                    token_value(std::move(token_value)),
+                                    loc(std::move(loc)) {}
 
     extern "C"
     {

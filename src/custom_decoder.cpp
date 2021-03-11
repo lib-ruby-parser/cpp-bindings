@@ -4,19 +4,16 @@
 
 namespace lib_ruby_parser
 {
+    CustomDecoder::Result::Result(Bytes output) : data(std::move(output)){};
+    CustomDecoder::Result::Result(std::string error_message) : data(std::move(error_message)){};
+
     CustomDecoder::Result CustomDecoder::Result::Ok(Bytes output)
     {
-        CustomDecoder::Result result;
-        result.success = true;
-        result.output = std::move(output);
-        return result;
+        return CustomDecoder::Result(std::move(output));
     }
 
     CustomDecoder::Result CustomDecoder::Result::Error(std::string error_message)
     {
-        CustomDecoder::Result result;
-        result.success = false;
-        result.error_message = std::move(error_message);
-        return result;
+        return CustomDecoder::Result(std::move(error_message));
     }
 } // namespace lib_ruby_parser
