@@ -6,7 +6,7 @@ namespace lib_ruby_parser {
 
 extern "C" {
 
-BytePtr render_message_diagnostic(Diagnostic *diagnostic)
+BytePtr render_message_diagnostic(const Diagnostic *diagnostic)
 {
     return std::visit([diagnostic](auto &&message) {
         using MessageT = std::decay_t<decltype(message)>;
@@ -272,7 +272,7 @@ BytePtr render_message_diagnostic(Diagnostic *diagnostic)
     }, diagnostic->message->variant);
 }
 
-BytePtr render_diagnostic(Diagnostic *diagnostic, BytePtr input)
+BytePtr render_diagnostic(const Diagnostic *diagnostic, BytePtr input)
 {
     return std::visit([diagnostic, input](auto &&message) {
         using MessageT = std::decay_t<decltype(message)>;

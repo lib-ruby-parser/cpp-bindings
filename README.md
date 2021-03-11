@@ -1,12 +1,12 @@
 # C++ bindings for `lib-ruby-parser`
 
-tldr; You can find examples in `test.c`. Valgrind and ASAN give no errors.
+tldr; You can find examples in `test/test.cpp`. Valgrind and ASAN give no errors.
 
 ## API
 
 All classes/methods are defined in the `lib_ruby_parser` namespace.
 
-1. `ParserResult::from_source(std::string source)`
+1. `ParserResult::from_source(Bytes source, ParserOptions options)`
 
     Parses given input into `ParserResult`, has the following fields:
     ```cpp
@@ -26,7 +26,7 @@ All classes/methods are defined in the `lib_ruby_parser` namespace.
     std::vector<MagicComment> magic_comments;
 
     // Decoded input
-    std::string input;
+    Input input;
     ```
 
 2. `Node::is<T>` where `T` is one of the ~100 node types.
@@ -61,9 +61,11 @@ All classes/methods are defined in the `lib_ruby_parser` namespace.
 
     ```cpp
     ErrorLevel level; // enum with WARNING and ERROR values
-    std::string message;
+    std::unique_ptr<DiagnosticMessage> message;
     std::unique_ptr<Loc> loc;
     ```
+
+    can be rendered either using `render_message()` or `render(const Bytes &)`
 
 7. `Comment` has the following fields:
 
@@ -77,7 +79,7 @@ All classes/methods are defined in the `lib_ruby_parser` namespace.
     ```cpp
     uint32_t begin;
     uint32_t end;
-    std::string source(const std::string &input);
+    std::string source(Input &input);
     ```
 
     `input` is what you get from `ParserResult::from`. It can be different from your original source if it has magic encoding comment.

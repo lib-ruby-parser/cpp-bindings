@@ -60,6 +60,7 @@ fn build_bindings() {
         .whitelist_type("lib_ruby_parser::Node")
         .opaque_type("lib_ruby_parser::Node")
         .blacklist_function("lib_ruby_parser::Node::.*")
+        .blacklist_function("lib_ruby_parser::Node_Node")
         // C++ class Loc
         .whitelist_type("lib_ruby_parser::Loc")
         .opaque_type("lib_ruby_parser::Loc")

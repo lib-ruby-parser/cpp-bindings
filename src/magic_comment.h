@@ -3,16 +3,27 @@
 
 #include <memory>
 #include "magic_comment_kind.h"
+#include "loc.h"
 
 namespace lib_ruby_parser
 {
-    class Loc;
-
+    // Representation of the magic comment (i.e. a special comment at the top of the file)
     class MagicComment
     {
     public:
+        // Kind of the magic comment
         MagicCommentKind kind;
+
+        // Location of the key
+        //
+        // "# encoding: foo"
+        //    ~~~~~~~~
         std::unique_ptr<Loc> key_l;
+
+        // Location of the value
+        //
+        // "# encoding: foo"
+        //              ~~~
         std::unique_ptr<Loc> value_l;
 
         MagicComment() = delete;

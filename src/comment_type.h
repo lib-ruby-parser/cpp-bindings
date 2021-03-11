@@ -3,6 +3,7 @@
 
 namespace lib_ruby_parser
 {
+    // Comment type enum.
     enum class CommentType
     {
         INLINE,

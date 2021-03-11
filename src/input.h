@@ -7,9 +7,12 @@
 
 namespace lib_ruby_parser
 {
+    // Representation of the source code
     class Input
     {
     public:
+        // Pointer to Rust struct
+        // Touching it may cause a segfault
         void *ptr;
 
         Input() = default;
@@ -18,9 +21,14 @@ namespace lib_ruby_parser
         Input(Input &&);
         ~Input();
 
-        const char *source();
-        Bytes range(uint32_t begin, uint32_t end);
-        uint32_t size();
+        // Returns source of the input
+        const char *source() const;
+
+        // Returns part of the input with a given begin..end range
+        Bytes range(uint32_t begin, uint32_t end) const;
+
+        // Returns size of the input
+        uint32_t size() const;
     };
 }
 

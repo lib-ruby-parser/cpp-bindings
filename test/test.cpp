@@ -186,7 +186,7 @@ public:
         return std::make_unique<DummyDecoder>(std::move(output_to_return));
     }
 
-    virtual CustomDecoder::Result rewrite(std::string encoding, Bytes input)
+    virtual CustomDecoder::Result rewrite(const std::string &encoding, const Bytes &input)
     {
         this->state->encoding = encoding;
         this->state->input = input.clone();
@@ -250,7 +250,7 @@ void test_custom_decoder_error()
 class CustomTokenRewriter : public TokenRewriter
 {
 public:
-    virtual Result rewrite_token(Token token, Bytes input)
+    virtual Result rewrite_token(Token &token, const Bytes &input)
     {
         (void)input; // suppress the warning
 

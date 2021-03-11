@@ -36,8 +36,8 @@ extern \"C\" {{
 
 {render_fns}
 
-BytePtr render_message_diagnostic(Diagnostic *diagnostic);
-BytePtr render_diagnostic(Diagnostic *diagnostic, BytePtr input);
+BytePtr render_message_diagnostic(const Diagnostic *diagnostic);
+BytePtr render_diagnostic(const Diagnostic *diagnostic, BytePtr input);
 
 }}
 

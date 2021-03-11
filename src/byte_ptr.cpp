@@ -32,20 +32,20 @@ namespace lib_ruby_parser
         }
     }
 
-    std::string byte_ptr_to_owned_string(BytePtr byte_ptr)
+    std::string byte_ptr_to_owned_string(const BytePtr &byte_ptr)
     {
         auto result = std::string(byte_ptr.ptr, byte_ptr.size);
         free_byte_ptr(byte_ptr);
         return result;
     }
 
-    std::string byte_ptr_to_utf8_lossy_string(BytePtr byte_ptr)
+    std::string byte_ptr_to_utf8_lossy_string(const BytePtr &byte_ptr)
     {
         auto utf8_byte_ptr = byte_ptr_to_utf8_lossy_byte_ptr(byte_ptr);
         return byte_ptr_to_owned_string(utf8_byte_ptr);
     }
 
-    std::vector<char> byte_ptr_to_vec(BytePtr byte_ptr)
+    std::vector<char> byte_ptr_to_vec(const BytePtr &byte_ptr)
     {
         auto vec = std::vector<char>();
         vec.reserve(byte_ptr.size);

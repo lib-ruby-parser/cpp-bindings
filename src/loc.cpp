@@ -21,12 +21,12 @@ namespace lib_ruby_parser
         return !(*this == other);
     }
 
-    uint32_t Loc::size()
+    uint32_t Loc::size() const
     {
         return end - begin;
     }
 
-    Bytes Loc::source(Input &input)
+    Bytes Loc::source(const Input &input) const
     {
         return input.range(begin, begin + size());
     }

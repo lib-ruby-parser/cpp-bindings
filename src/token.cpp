@@ -15,7 +15,7 @@ namespace lib_ruby_parser
         BytePtr token_name(int id);
     }
 
-    std::string Token::name()
+    std::string Token::name() const
     {
         BytePtr ptr = token_name(token_type);
         return byte_ptr_to_owned_string(ptr);

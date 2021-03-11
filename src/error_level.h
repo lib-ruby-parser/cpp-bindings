@@ -3,6 +3,7 @@
 
 namespace lib_ruby_parser
 {
+    // Level of the diagnostic (warning or error)
     enum class ErrorLevel
     {
         WARNING,

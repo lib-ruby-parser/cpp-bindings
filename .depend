@@ -2,7 +2,8 @@ target/debug/byte_ptr.o: src/byte_ptr.cpp src/byte_ptr.h
 
 target/debug/bytes.o: src/bytes.cpp src/bytes.h src/byte_ptr.h
 
-target/debug/comment.o: src/comment.cpp src/comment.h src/comment_type.h
+target/debug/comment.o: src/comment.cpp src/comment.h src/comment_type.h \
+  src/loc.h src/bytes.h src/byte_ptr.h src/input.h
 
 target/debug/custom_decoder.o: src/custom_decoder.cpp \
   src/custom_decoder.h src/bytes.h src/byte_ptr.h src/helpers.h
@@ -35,7 +36,17 @@ target/debug/low_level.o: src/low_level.cpp src/low_level.h \
   src/node.h
 
 target/debug/magic_comment.o: src/magic_comment.cpp src/magic_comment.h \
-  src/magic_comment_kind.h
+  src/magic_comment_kind.h src/loc.h src/bytes.h src/byte_ptr.h \
+  src/input.h
+
+target/debug/message.o: src/message.cpp src/message.h \
+  src/gen/messages/variant.h src/gen/messages/classes.h \
+  src/gen/messages/../../bytes.h src/byte_ptr.h
+
+target/debug/node.o: src/node.cpp src/node.h src/gen/nodes/variant.h \
+  src/gen/nodes/classes.h src/gen/nodes/../../loc.h src/bytes.h \
+  src/byte_ptr.h src/input.h src/gen/nodes/../../bytes.h \
+  src/gen/nodes/../../node.h
 
 target/debug/parser_options.o: src/parser_options.cpp \
   src/parser_options.h src/custom_decoder.h src/bytes.h src/byte_ptr.h \

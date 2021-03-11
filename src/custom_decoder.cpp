@@ -16,4 +16,6 @@ namespace lib_ruby_parser
     {
         return CustomDecoder::Result(std::move(error_message));
     }
+
+    CustomDecoder::~CustomDecoder() {}
 } // namespace lib_ruby_parser

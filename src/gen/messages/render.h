@@ -185,8 +185,8 @@ BytePtr render_regex_error(ErrorLevel level, Loc *loc, BytePtr error, BytePtr in
 BytePtr render_invalid_symbol(ErrorLevel level, Loc *loc, BytePtr symbol, BytePtr input);
 BytePtr render_void_value_expression(ErrorLevel level, Loc *loc, BytePtr input);
 
-BytePtr render_message_diagnostic(Diagnostic *diagnostic);
-BytePtr render_diagnostic(Diagnostic *diagnostic, BytePtr input);
+BytePtr render_message_diagnostic(const Diagnostic *diagnostic);
+BytePtr render_diagnostic(const Diagnostic *diagnostic, BytePtr input);
 
 }
 

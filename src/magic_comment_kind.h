@@ -3,6 +3,7 @@
 
 namespace lib_ruby_parser
 {
+    // Kind of the magic comment
     enum class MagicCommentKind
     {
         ENCODING,

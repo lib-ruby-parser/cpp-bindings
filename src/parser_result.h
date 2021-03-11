@@ -2,6 +2,7 @@
 #define LIB_RUBY_PARSER_PARSER_RESULT_H
 
 #include <string>
+#include <vector>
 #include <memory>
 #include <stdint.h>
 #include "bytes.h"
@@ -15,14 +16,26 @@
 
 namespace lib_ruby_parser
 {
+    // Result of the parser with all captured data
     class ParserResult
     {
     public:
+        // AST node
         std::unique_ptr<Node> ast;
+
+        // A list of tokens, empty if `ParserOptions::record_tokens` is set to false
         std::vector<Token> tokens;
+
+        // A list of diagnostic messages (warnings and errors)
         std::vector<Diagnostic> diagnostics;
+
+        // A list of comments
         std::vector<Comment> comments;
+
+        // A list of magic comments
         std::vector<MagicComment> magic_comments;
+
+        // Decoded input.
         Input input;
 
         ParserResult() = delete;
@@ -32,14 +45,10 @@ namespace lib_ruby_parser
             std::vector<Diagnostic> diagnostics,
             std::vector<Comment> comments,
             std::vector<MagicComment> magic_comments,
-            Input input) : ast(std::move(ast)),
-                           tokens(std::move(tokens)),
-                           diagnostics(std::move(diagnostics)),
-                           comments(std::move(comments)),
-                           magic_comments(std::move(magic_comments)),
-                           input(std::move(input)){};
+            Input input);
 
-        static std::unique_ptr<ParserResult> from_source(Bytes source, ParserOptions options);
+        // The main method of this library. Performs parsing of the given `source` according to given `options`.
+        static std::unique_ptr<ParserResult> from_source(Bytes source, const ParserOptions &options);
     };
 } // namespace lib_ruby_parser
 

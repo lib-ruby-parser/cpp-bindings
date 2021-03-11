@@ -9,10 +9,14 @@
 
 namespace lib_ruby_parser
 {
+    // Represents some location in the source
     class Loc
     {
     public:
+        // Begin of the range
         uint32_t begin;
+
+        // End of the range
         uint32_t end;
 
         Loc() = delete;
@@ -23,8 +27,12 @@ namespace lib_ruby_parser
 
         bool operator==(const Loc &other);
         bool operator!=(const Loc &other);
-        uint32_t size();
-        Bytes source(Input &input);
+
+        // Returns size of the range
+        uint32_t size() const;
+
+        // Returns source of the range
+        Bytes source(const Input &input) const;
 
         friend std::ostream &operator<<(std::ostream &os, const Loc &loc);
     };

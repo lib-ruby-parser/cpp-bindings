@@ -30,17 +30,17 @@ namespace lib_ruby_parser
         }
     }
 
-    const char *Input::source()
+    const char *Input::source() const
     {
         return input_source(this->ptr);
     }
 
-    Bytes Input::range(uint32_t begin, uint32_t end)
+    Bytes Input::range(uint32_t begin, uint32_t end) const
     {
         return Bytes(input_range(ptr, begin, end));
     }
 
-    uint32_t Input::size()
+    uint32_t Input::size() const
     {
         return input_size(this->ptr);
     }

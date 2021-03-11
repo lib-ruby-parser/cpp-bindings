@@ -2,12 +2,6 @@
 
 namespace lib_ruby_parser
 {
-    class Loc
-    {
-    public:
-        bool operator==(const Loc &other);
-    };
-
     MagicComment::MagicComment(MagicCommentKind kind,
                                std::unique_ptr<Loc> key_l,
                                std::unique_ptr<Loc> value_l)

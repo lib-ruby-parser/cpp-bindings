@@ -15,16 +15,17 @@ namespace lib_ruby_parser
 
     extern "C"
     {
-        BytePtr render_message_diagnostic(Diagnostic *diagnostic);
-        BytePtr render_diagnostic(Diagnostic *diagnostic, BytePtr input);
+        BytePtr render_message_diagnostic(const Diagnostic *diagnostic);
+        BytePtr render_diagnostic(const Diagnostic *diagnostic, BytePtr input);
     }
 
-    std::string Diagnostic::render_message()
+    std::string Diagnostic::render_message() const
     {
         BytePtr ptr = render_message_diagnostic(this);
         return byte_ptr_to_owned_string(ptr);
     }
-    std::string Diagnostic::render(const Bytes &input)
+
+    std::string Diagnostic::render(const Bytes &input) const
     {
         BytePtr ptr = render_diagnostic(this, input.borrow_ptr());
         return byte_ptr_to_owned_string(ptr);

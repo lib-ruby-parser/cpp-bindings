@@ -220,7 +220,7 @@ namespace lib_ruby_parser
                     auto input = Bytes(input_ptr);
                     input.mark_borrowed();
 
-                    auto cpp_result = rewriter->rewrite_token(std::move(token), std::move(input));
+                    auto cpp_result = rewriter->rewrite_token(token, input);
 
                     RawTokenRewriterResult c_result;
 

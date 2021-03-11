@@ -11,11 +11,17 @@
 
 namespace lib_ruby_parser
 {
+    // Diagnostic message returned from the parser
     class Diagnostic
     {
     public:
+        // Level of the diagnostic (error or warning)
         ErrorLevel level;
+
+        // Message of the diagnostic
         std::unique_ptr<DiagnosticMessage> message;
+
+        // Location of the diagnostic
         std::unique_ptr<Loc> loc;
 
         Diagnostic() = delete;
@@ -25,8 +31,11 @@ namespace lib_ruby_parser
                             std::unique_ptr<DiagnosticMessage> message,
                             std::unique_ptr<Loc> loc);
 
-        std::string render_message();
-        std::string render(const Bytes &input);
+        // Renders a message of the diagnostic into a string
+        std::string render_message() const;
+
+        // Renders full diagnostic into a string
+        std::string render(const Bytes &input) const;
     };
 
 } // namespace lib_ruby_parser

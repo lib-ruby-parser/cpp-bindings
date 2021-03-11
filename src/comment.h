@@ -3,22 +3,25 @@
 
 #include <memory>
 #include "comment_type.h"
+#include "loc.h"
 
 namespace lib_ruby_parser
 {
-    class Loc;
-
+    // Representation of the comment in source code
     class Comment
     {
     public:
+        // Kind of the comment
         CommentType kind;
+
+        // Location of the comment
         std::unique_ptr<Loc> location;
 
         Comment() = delete;
         Comment(Comment &&) = default;
         Comment(const Comment &) = delete;
-        explicit Comment(CommentType kind, std::unique_ptr<Loc> location) : kind(kind),
-                                                                            location(std::move(location)){};
+
+        explicit Comment(CommentType kind, std::unique_ptr<Loc> location);
 
         bool operator==(const Comment &other);
         bool operator!=(const Comment &other);
