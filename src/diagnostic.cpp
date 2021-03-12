@@ -1,5 +1,4 @@
 #include "diagnostic.h"
-#include "helpers.h"
 
 namespace lib_ruby_parser
 {

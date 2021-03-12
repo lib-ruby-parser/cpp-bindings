@@ -4,7 +4,6 @@
 #include "loc.h"
 #include "bytes.h"
 #include "custom_decoder.h"
-#include "helpers.h"
 #include "token.h"
 #include "diagnostic.h"
 #include "magic_comment.h"

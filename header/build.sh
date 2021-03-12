@@ -22,7 +22,6 @@ cat src/node.h >> $LIB_RUBY_PARSER_TMP_H
 cat src/comment.h >> $LIB_RUBY_PARSER_TMP_H
 cat src/custom_decoder.h >> $LIB_RUBY_PARSER_TMP_H
 cat src/diagnostic.h >> $LIB_RUBY_PARSER_TMP_H
-cat src/helpers.h >> $LIB_RUBY_PARSER_TMP_H
 cat src/magic_comment.h >> $LIB_RUBY_PARSER_TMP_H
 cat src/token_rewriter.h >> $LIB_RUBY_PARSER_TMP_H
 
