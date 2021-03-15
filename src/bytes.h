@@ -17,11 +17,6 @@ namespace lib_ruby_parser
         // Size of the byte sequence
         uint32_t size_;
 
-        // Indicates that Bytes are "borrowed",
-        // when set to true disables cleanup in destructor.
-        // TODO: remove this hack by making a cleanup on all call sites.
-        bool borrowed = false;
-
     public:
         // Destructor
         ~Bytes();
@@ -65,9 +60,7 @@ namespace lib_ruby_parser
         // Invalid UTF-8 bytes are replaced with a special REPLACEMENT char.
         std::string to_string_lossy() const;
 
-        // Marks `this` as borrowed, so that destructor will not free the inner pointer.
-        // TODO: remove this hack.
-        void mark_borrowed();
+        void nullify();
 
         bool operator==(const Bytes &other);
         bool operator==(const std::string &other);

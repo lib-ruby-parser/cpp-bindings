@@ -16,10 +16,6 @@ namespace lib_ruby_parser
 
     Bytes::~Bytes()
     {
-        if (borrowed)
-        {
-            return;
-        }
         if (size_ != 0 && bytes_ != nullptr)
         {
             free(bytes_);
@@ -59,11 +55,9 @@ namespace lib_ruby_parser
     {
         this->size_ = other.size_;
         this->bytes_ = other.bytes_;
-        this->borrowed = other.borrowed;
 
         other.size_ = 0;
         other.bytes_ = nullptr;
-        other.borrowed = true;
     }
 
     Bytes &Bytes::operator=(Bytes &&other)
@@ -74,11 +68,9 @@ namespace lib_ruby_parser
         }
         this->size_ = other.size_;
         this->bytes_ = other.bytes_;
-        this->borrowed = other.borrowed;
 
         other.size_ = 0;
         other.bytes_ = nullptr;
-        other.borrowed = true;
 
         return *this;
     }
@@ -129,9 +121,10 @@ namespace lib_ruby_parser
         return byte_ptr_to_owned_string(utf8_ptr);
     }
 
-    void Bytes::mark_borrowed()
+    void Bytes::nullify()
     {
-        this->borrowed = true;
+        this->bytes_ = nullptr;
+        this->size_ = 0;
     }
 
     bool Bytes::operator==(const Bytes &other)

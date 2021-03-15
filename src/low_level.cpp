@@ -108,9 +108,9 @@ namespace lib_ruby_parser
                 {
                     auto encoding = std::string(encoding_ptr.ptr, encoding_ptr.size);
                     auto input = Bytes((char *)input_ptr.ptr, input_ptr.size);
-                    input.mark_borrowed();
 
-                    auto cpp_result = decoder->rewrite(encoding, std::move(input));
+                    auto cpp_result = decoder->rewrite(encoding, input);
+                    input.nullify();
 
                     if (std::holds_alternative<Bytes>(cpp_result.data))
                     {
@@ -217,9 +217,9 @@ namespace lib_ruby_parser
                 {
                     auto token = token_from_raw_token(raw_token);
                     auto input = Bytes(input_ptr);
-                    input.mark_borrowed();
 
                     auto cpp_result = rewriter->rewrite_token(token, input);
+                    input.nullify();
 
                     RawTokenRewriterResult c_result;
 
