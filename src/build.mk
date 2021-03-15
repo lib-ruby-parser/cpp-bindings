@@ -38,10 +38,17 @@ ALL_HEADERS = $(wildcard src/*.h) $(wildcard src/gen/messages/*.h) $(wildcard sr
 OBJECTS = $(foreach src,$(ALL_SRCS), $(patsubst src/%.cpp,$(TARGET_DIR)/%.$(OBJ_FILE_EXT),$(src)))
 
 include .depend
+
+ifeq ($(DETECTED_OS), Windows)
+	GENERATE_DEPEND =
+else
+	GENERATE_DEPEND = rm -f .depend && \
+		touch .depend && \
+		$(foreach src,$(ALL_SRCS), $(CXX) -MT $(patsubst src/%.cpp,$(TARGET_DIR)/%.$(OBJ_FILE_EXT),$(src)) -MM $(src) >> .depend; echo "" >> .depend;)
+endif
+
 .depend: $(ALL_SRCS) $(ALL_HEADERS)
-	rm -f "$@"
-	touch "$@"
-	$(foreach src,$(ALL_SRCS), $(CXX) -MT $(patsubst src/%.cpp,$(TARGET_DIR)/%.$(OBJ_FILE_EXT),$(src)) -MM $(src) >> $@; echo "" >> $@;)
+	$(GENERATE_DEPEND)
 depend: .depend
 
 $(TARGET_DIR)/%.$(OBJ_FILE_EXT): filename = $(patsubst $(TARGET_DIR)/%.$(OBJ_FILE_EXT),%,$@)
