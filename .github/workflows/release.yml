@@ -58,7 +58,8 @@ jobs:
             cxx: clang++-9
             ld: ld.lld-9
             cargoflags: --features="onig"
-            output: lib-ruby-parser-x86_64-unknown-linux-gnu.a
+            output: lib-ruby-parser.a
+            upload_as: lib-ruby-parser-x86_64-unknown-linux-gnu.a
 
           - os: macos-latest
             target: x86_64-apple-darwin
@@ -66,7 +67,8 @@ jobs:
             cxx: clang++
             ld: ld
             cargoflags: --features="onig"
-            output: lib-ruby-parser-x86_64-apple-darwin.a
+            output: lib-ruby-parser.a
+            upload_as: lib-ruby-parser-x86_64-apple-darwin.a
 
           - os: windows-latest
             target: x86_64-pc-windows-msvc
@@ -74,7 +76,8 @@ jobs:
             cxx: cl.exe
             ld: link.exe
             cargoflags: ""
-            output: lib-ruby-parser-x86_64-pc-windows-msvc.lib
+            output: lib-ruby-parser.lib
+            upload_as: lib-ruby-parser-x86_64-pc-windows-msvc.lib
 
     steps:
       - name: setup msvc on windows
@@ -107,15 +110,9 @@ jobs:
           profile: minimal
           override: true
 
-      - name: build rust object
-        shell: bash
-        run: |
-          make clean
-          make rust-object
-
       - name: build
         shell: bash
-        run: make build-static
+        run: make clean build-static
 
       - name: show asset
         shell: bash
@@ -128,7 +125,7 @@ jobs:
         with:
           upload_url: ${{ env.RELEASE_UPLOAD_URL }}
           asset_path: target/release/${{ matrix.build.output }}
-          asset_name: ${{ matrix.build.output }}
+          asset_name: ${{ matrix.build.upload_as }}
           asset_content_type: application/octet-stream
 
   upload-headers:
@@ -158,10 +155,7 @@ jobs:
           override: true
 
       - name: generate lib-ruby-parser.h
-        run: |
-          make setup
-          make gen-headers
-          make target/lib-ruby-parser.h
+        run: make clean target/lib-ruby-parser.h
 
       - name: show asset
         run: ls -l target/lib-ruby-parser.h
