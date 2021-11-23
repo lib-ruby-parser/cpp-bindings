@@ -11,73 +11,78 @@ env:
 
 jobs:
   test:
-    name: ${{matrix.build.name}}
+    name: ${{ matrix.build.name }}
     runs-on: ${{ matrix.build.os }}
     env:
-      CARGO_BUILD_TARGET: ${{ matrix.build.target }}
-      CC: ${{ matrix.build.cc }}
+      BUILD_ENV: debug
+      TARGET: ${{ matrix.build.target }}
       CXX: ${{ matrix.build.cxx }}
       LD: ${{ matrix.build.ld }}
-      CARGOFLAGS: ${{ matrix.build.cargoflags }}
+      AR: ${{ matrix.build.ar }}
     strategy:
       fail-fast: false
       matrix:
         build:
-          - os: ubuntu-latest
+          - name: test on linux (clang)
+            os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
-            cc: clang-9
-            cxx: clang++-9
-            ld: ld.lld-9
-            cargoflags: --features="generate-bindings,onig"
-            name: valgrind
-            run: make clean test-valgrind
+            cxx: clang++-12
+            ld: ld.lld-12
+            ar: llvm-ar-12
+            run: make tests/run
 
-          - os: ubuntu-latest
-            target: x86_64-unknown-linux-gnu
-            cc: clang-9
-            cxx: clang++-9
-            ld: ld.lld-9
-            cargoflags: --features="generate-bindings,onig"
-            name: asan
-            run: CXXFLAGS="-fsanitize=address" make clean test
-
-          - os: ubuntu-latest
-            target: x86_64-unknown-linux-gnu
-            cc: clang-9
-            cxx: clang++-9
-            ld: ld.lld-9
-            cargoflags: --features="generate-bindings,onig"
-            name: test on linux
-            run: make clean test
-
-          - os: macos-latest
+          - name: test on mac (clang)
+            os: macos-latest
             target: x86_64-apple-darwin
-            cc: clang
             cxx: clang++
             ld: ld
-            cargoflags: --features="generate-bindings,onig"
-            name: test on mac
-            run: make clean test
+            ar: ar
+            run: |
+              $CC --version
+              make tests/run
 
-          - os: windows-latest
+          - name: test on windows (msvc)
+            os: windows-latest
             target: x86_64-pc-windows-msvc
-            cc: cl.exe
             cxx: cl.exe
             ld: link.exe
-            cargoflags: ""
-            name: test on windows
-            run: make clean test
+            run: |
+              make tests/run
+
+          - name: test on windows (mingw)
+            os: windows-latest
+            target: x86_64-pc-windows-gnu
+            cxx: g++
+            ld: ld
+            ar: ar
+            run: |
+              gcc --version
+              make tests/run
+
+          - name: valgrind
+            os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            cxx: clang++-12
+            ld: ld.lld-12
+            ar: llvm-ar-12
+            run: |
+              sudo apt-get update
+              sudo apt-get install -y valgrind libtool-bin
+              make tests/runner
+              valgrind ./tests/runner
+
+          - name: asan
+            os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            cxx: clang++-12
+            ld: ld.lld-12
+            ar: llvm-ar-12
+            run: ASAN_OPTIONS=detect_leaks=1 CXXFLAGS="-fsanitize=address" make tests/run
 
     steps:
       - name: setup msvc on windows
         if: runner.os == 'Windows'
         uses: ilammy/msvc-dev-cmd@v1
-
-      - name: fix linker on windows
-        if: runner.os == 'Windows'
-        run: |
-          rm "C:\\Program Files\\Git\\usr\\bin\\link.exe"
-          which -a link.exe
 
       - name: install rust
         uses: actions-rs/toolchain@v1
@@ -87,15 +92,18 @@ jobs:
           target: ${{ matrix.build.target }}
           override: true
 
+      - name: print rustc detailed version
+        run: rustc --version --verbose
+
       - name: checkout
         uses: actions/checkout@v2
 
-      - name: install valgrind
-        if: runner.os == 'Linux'
+      - name: codegen
+        env:
+          RUSTFLAGS: ""
         run: |
-          sudo apt-get update
-          sudo apt-get install -y valgrind
+          make do-codegen
+          make token_ids.h
 
       - name: run tests
-        shell: bash
         run: ${{ matrix.build.run }}

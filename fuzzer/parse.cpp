@@ -1,5 +1,5 @@
-#include <stdint.h>
-#include <stddef.h>
+#include <cstdint>
+#include <cstddef>
 #include <string>
 
 #include "../target/lib-ruby-parser.h"

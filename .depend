@@ -1,101 +1,75 @@
-target/debug/byte_ptr.o: src/byte_ptr.cpp src/byte_ptr.h
 
-target/debug/bytes.o: src/bytes.cpp src/bytes.h src/byte_ptr.h
+alloc.o: alloc.cpp alloc.hpp
 
-target/debug/comment.o: src/comment.cpp src/comment.h src/comment_type.h \
-  src/loc.h src/bytes.h src/byte_ptr.h src/input.h
+api.o: api.cpp api.hpp parser_options.hpp string.hpp decoder.hpp \
+  bytes.hpp token_rewriter.hpp token.hpp loc.hpp decoded_input.hpp \
+  source_line.hpp token_ids.hpp shared_byte_list.hpp parser_result.hpp \
+  nodes.hpp diagnostic.hpp messages.hpp comment.hpp magic_comment.hpp \
+  utils.hpp test_helper.hpp
 
-target/debug/custom_decoder.o: src/custom_decoder.cpp \
-  src/custom_decoder.h src/bytes.h src/byte_ptr.h
+blobs.o: blobs.cpp
 
-target/debug/diagnostic.o: src/diagnostic.cpp src/diagnostic.h \
-  src/error_level.h src/bytes.h src/byte_ptr.h src/loc.h src/input.h \
-  src/message.h src/gen/messages/variant.h src/gen/messages/classes.h \
-  src/gen/messages/../../bytes.h
+bytes.o: bytes.cpp bytes.hpp utils.hpp test_helper.hpp
 
-target/debug/input.o: src/input.cpp src/input.h src/bytes.h \
-  src/byte_ptr.h
+comment.o: comment.cpp utils.hpp comment.hpp loc.hpp decoded_input.hpp \
+  string.hpp source_line.hpp bytes.hpp test_helper.hpp
 
-target/debug/loc.o: src/loc.cpp src/loc.h src/bytes.h src/byte_ptr.h \
-  src/input.h
+decoded_input.o: decoded_input.cpp utils.hpp decoded_input.hpp string.hpp \
+  source_line.hpp bytes.hpp test_helper.hpp
 
-target/debug/low_level.o: src/low_level.cpp src/low_level.h \
-  src/gen/nodes/make.h src/gen/nodes/../../byte_ptr.h \
-  src/gen/nodes/../../node.h src/gen/nodes/variant.h \
-  src/gen/nodes/classes.h src/gen/nodes/../../loc.h src/bytes.h \
-  src/byte_ptr.h src/input.h src/gen/nodes/../../bytes.h \
-  src/gen/messages/make.h src/gen/messages/../../error_level.h \
-  src/gen/messages/../../byte_ptr.h src/comment_type.h src/error_level.h \
-  src/magic_comment_kind.h src/comment.h src/loc.h src/custom_decoder.h \
-  src/token.h src/diagnostic.h src/message.h src/gen/messages/variant.h \
-  src/gen/messages/classes.h src/gen/messages/../../bytes.h \
-  src/magic_comment.h src/parser_options.h src/token_rewriter.h \
-  src/parser_result.h src/node.h
+decoder.o: decoder.cpp decoder.hpp string.hpp bytes.hpp utils.hpp \
+  test_helper.hpp
 
-target/debug/magic_comment.o: src/magic_comment.cpp src/magic_comment.h \
-  src/magic_comment_kind.h src/loc.h src/bytes.h src/byte_ptr.h \
-  src/input.h
+diagnostic.o: diagnostic.cpp diagnostic.hpp messages.hpp string.hpp \
+  loc.hpp decoded_input.hpp source_line.hpp bytes.hpp utils.hpp \
+  test_helper.hpp
 
-target/debug/message.o: src/message.cpp src/message.h \
-  src/gen/messages/variant.h src/gen/messages/classes.h \
-  src/gen/messages/../../bytes.h src/byte_ptr.h
+loc.o: loc.cpp utils.hpp loc.hpp decoded_input.hpp string.hpp \
+  source_line.hpp bytes.hpp test_helper.hpp
 
-target/debug/node.o: src/node.cpp src/node.h src/gen/nodes/variant.h \
-  src/gen/nodes/classes.h src/gen/nodes/../../loc.h src/bytes.h \
-  src/byte_ptr.h src/input.h src/gen/nodes/../../bytes.h \
-  src/gen/nodes/../../node.h
+magic_comment.o: magic_comment.cpp magic_comment.hpp loc.hpp \
+  decoded_input.hpp string.hpp source_line.hpp bytes.hpp utils.hpp \
+  test_helper.hpp
 
-target/debug/parser_options.o: src/parser_options.cpp \
-  src/parser_options.h src/custom_decoder.h src/bytes.h src/byte_ptr.h \
-  src/token_rewriter.h src/token.h src/loc.h src/input.h
+messages.o: messages.cpp messages.hpp string.hpp utils.hpp \
+  test_helper.hpp
 
-target/debug/parser_result.o: src/parser_result.cpp src/parser_result.h \
-  src/bytes.h src/byte_ptr.h src/node.h src/gen/nodes/variant.h \
-  src/gen/nodes/classes.h src/gen/nodes/../../loc.h src/input.h \
-  src/gen/nodes/../../bytes.h src/gen/nodes/../../node.h src/token.h \
-  src/loc.h src/diagnostic.h src/error_level.h src/message.h \
-  src/gen/messages/variant.h src/gen/messages/classes.h \
-  src/gen/messages/../../bytes.h src/comment.h src/comment_type.h \
-  src/magic_comment.h src/magic_comment_kind.h src/parser_options.h \
-  src/custom_decoder.h src/token_rewriter.h
+nodes.o: nodes.cpp nodes.hpp string.hpp loc.hpp decoded_input.hpp \
+  source_line.hpp bytes.hpp utils.hpp test_helper.hpp
 
-target/debug/token.o: src/token.cpp src/token.h src/bytes.h \
-  src/byte_ptr.h src/loc.h src/input.h
+parser_options.o: parser_options.cpp parser_options.hpp string.hpp \
+  decoder.hpp bytes.hpp token_rewriter.hpp token.hpp loc.hpp \
+  decoded_input.hpp source_line.hpp token_ids.hpp shared_byte_list.hpp \
+  utils.hpp test_helper.hpp
 
-target/debug/token_rewriter.o: src/token_rewriter.cpp \
-  src/token_rewriter.h src/token.h src/bytes.h src/byte_ptr.h src/loc.h \
-  src/input.h
+parser_result.o: parser_result.cpp parser_result.hpp nodes.hpp string.hpp \
+  loc.hpp decoded_input.hpp source_line.hpp bytes.hpp token.hpp \
+  token_ids.hpp diagnostic.hpp messages.hpp comment.hpp \
+  magic_comment.hpp utils.hpp test_helper.hpp
 
-target/debug/gen/messages/classes.o: src/gen/messages/classes.cpp \
-  src/gen/messages/classes.h src/gen/messages/../../bytes.h \
-  src/gen/messages/../../byte_ptr.h
+shared_byte_list.o: shared_byte_list.cpp shared_byte_list.hpp \
+  test_helper.hpp
 
-target/debug/gen/messages/make.o: src/gen/messages/make.cpp \
-  src/gen/messages/make.h src/gen/messages/../../error_level.h \
-  src/gen/messages/../../byte_ptr.h src/gen/messages/variant.h \
-  src/gen/messages/classes.h src/gen/messages/../../bytes.h \
-  src/gen/messages/../../message.h \
-  src/gen/messages/../../gen/messages/variant.h \
-  src/gen/messages/../../loc.h src/gen/messages/../../input.h \
-  src/gen/messages/../../diagnostic.h
+source_line.o: source_line.cpp source_line.hpp utils.hpp test_helper.hpp
 
-target/debug/gen/messages/render.o: src/gen/messages/render.cpp \
-  src/gen/messages/render.h src/gen/messages/../../error_level.h \
-  src/gen/messages/../../byte_ptr.h src/gen/messages/../../diagnostic.h \
-  src/gen/messages/../../bytes.h src/gen/messages/../../loc.h \
-  src/gen/messages/../../input.h src/gen/messages/../../message.h \
-  src/gen/messages/../../gen/messages/variant.h \
-  src/gen/messages/classes.h
+string.o: string.cpp string.hpp utils.hpp test_helper.hpp
 
-target/debug/gen/nodes/classes.o: src/gen/nodes/classes.cpp \
-  src/gen/nodes/classes.h src/gen/nodes/../../loc.h \
-  src/gen/nodes/../../bytes.h src/gen/nodes/../../byte_ptr.h \
-  src/gen/nodes/../../input.h src/gen/nodes/../../node.h \
-  src/gen/nodes/../../gen/nodes/variant.h
+test_helper.o: test_helper.cpp test_helper.hpp
 
-target/debug/gen/nodes/make.o: src/gen/nodes/make.cpp \
-  src/gen/nodes/make.h src/gen/nodes/../../byte_ptr.h \
-  src/gen/nodes/../../node.h src/gen/nodes/../../gen/nodes/variant.h \
-  src/gen/nodes/classes.h src/gen/nodes/../../loc.h \
-  src/gen/nodes/../../bytes.h src/gen/nodes/../../input.h
+token.o: token.cpp token.hpp bytes.hpp loc.hpp decoded_input.hpp \
+  string.hpp source_line.hpp token_ids.hpp utils.hpp test_helper.hpp
+
+token_rewriter.o: token_rewriter.cpp token_rewriter.hpp token.hpp \
+  bytes.hpp loc.hpp decoded_input.hpp string.hpp source_line.hpp \
+  token_ids.hpp shared_byte_list.hpp utils.hpp test_helper.hpp
+
+tests/runner: tests/test.cpp tests/../test_helper.hpp tests/../bytes.hpp \
+  tests/../comment.hpp tests/../loc.hpp tests/../decoded_input.hpp \
+  tests/../string.hpp tests/../source_line.hpp tests/../decoder.hpp \
+  tests/../diagnostic.hpp tests/../messages.hpp \
+  tests/../magic_comment.hpp tests/../nodes.hpp \
+  tests/../parser_options.hpp tests/../token_rewriter.hpp \
+  tests/../token.hpp tests/../token_ids.hpp \
+  tests/../shared_byte_list.hpp tests/../parser_result.hpp \
+  tests/../api.hpp
 

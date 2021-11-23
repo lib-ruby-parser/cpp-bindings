@@ -1,0 +1,31 @@
+[package]
+authors = ["Ilya Bylich <ibylich@gmail.com>"]
+edition = "2018"
+name = "ruby-parser-cpp"
+version = "0.1.0"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+crate-type = ["staticlib"]
+
+[features]
+default = []
+
+# Include test APIs to run C tests
+tests = []
+
+# Use external allocator (compatible with C, needed for mingw target)
+use_external_allocator = []
+
+[dependencies]
+lib-ruby-parser = {version = "3.0.12"}
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+debug-assertions = false
+incremental = false
+lto = true
+overflow-checks = false
+panic = "abort"
