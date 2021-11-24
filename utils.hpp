@@ -3,6 +3,7 @@
 
 #include <cassert>
 #include <cstring>
+#include <cstdint>
 #include <utility>
 
 #define BLOB(T)                       \

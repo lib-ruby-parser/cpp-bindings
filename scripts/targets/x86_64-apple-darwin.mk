@@ -6,7 +6,7 @@ A = a
 STATIC_LIB_FILE = libruby_parser_cpp.$(A)
 LIST_DEPS = otool -L
 
-CXXFLAGS += -Wall -Wextra -Wpedantic -Weverything -g
+CXXFLAGS += -std=c++17 -Wall -Wextra -Wpedantic -Weverything -g
 # but disable -Wpadded, we inherit Rust layouts
 CXXFLAGS += -Wno-padded
 # ignore C++98 compatibility
