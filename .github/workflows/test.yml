@@ -38,7 +38,7 @@ jobs:
             ld: ld
             ar: ar
             run: |
-              $CC --version
+              $CXX --version
               make tests/run
 
           - name: test on windows (msvc)
@@ -47,16 +47,6 @@ jobs:
             cxx: cl.exe
             ld: link.exe
             run: |
-              make tests/run
-
-          - name: test on windows (mingw)
-            os: windows-latest
-            target: x86_64-pc-windows-gnu
-            cxx: g++
-            ld: ld
-            ar: ar
-            run: |
-              gcc --version
               make tests/run
 
           - name: valgrind
@@ -77,7 +67,7 @@ jobs:
             cxx: clang++-12
             ld: ld.lld-12
             ar: llvm-ar-12
-            run: ASAN_OPTIONS=detect_leaks=1 CXXFLAGS="-fsanitize=address" make tests/run
+            run: ASAN_OPTIONS=detect_leaks=1:alloc_dealloc_mismatch=0 CXXFLAGS="-fsanitize=address" make tests/run
 
     steps:
       - name: setup msvc on windows
@@ -103,7 +93,7 @@ jobs:
           RUSTFLAGS: ""
         run: |
           make do-codegen
-          make token_ids.h
+          make token_ids.hpp
 
       - name: run tests
         run: ${{ matrix.build.run }}
