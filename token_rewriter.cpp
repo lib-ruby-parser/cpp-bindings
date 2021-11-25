@@ -26,6 +26,15 @@ namespace lib_ruby_parser
     {
         LIB_RUBY_PARSER_drop_token_rewriter_result(this);
     }
+
+    MaybeTokenRewriter MaybeTokenRewriter::Some(TokenRewriter token_rewriter_)
+    {
+        return MaybeTokenRewriter(token_rewriter_);
+    }
+    MaybeTokenRewriter MaybeTokenRewriter::None()
+    {
+        return MaybeTokenRewriter(TokenRewriter(nullptr));
+    }
 } // namespace lib_ruby_parser
 
 #ifdef TEST_ENV

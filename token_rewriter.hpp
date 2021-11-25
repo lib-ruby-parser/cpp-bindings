@@ -64,6 +64,9 @@ namespace lib_ruby_parser
 
         bool is_some() const;
         bool is_none() const;
+
+        static MaybeTokenRewriter Some(TokenRewriter decoder);
+        static MaybeTokenRewriter None();
     };
 
 #ifdef TEST_ENV
