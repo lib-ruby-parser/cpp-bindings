@@ -43,7 +43,7 @@ namespace lib_ruby_parser
     }
 } // lib_ruby_parser
 
-// #ifdef TEST_ENV
+#ifdef TEST_ENV
 
 #include "test_helper.hpp"
 #include <cstring>
@@ -124,4 +124,4 @@ namespace lib_ruby_parser
     }
 }
 
-// #endif
+#endif

@@ -1,7 +1,6 @@
 #include "test_helper.hpp"
 #include <cstring>
 #include <iostream>
-#include "string.h"
 
 void run_tests_as_group(const char *group_name, const test_fn_t *tests, size_t count)
 {

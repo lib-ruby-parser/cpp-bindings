@@ -8,7 +8,8 @@ const TEMPLATE: &str = "#ifndef LIB_RUBY_PARSER_MESSAGES_HPP
 #include <cstdint>
 #include \"string.hpp\"
 
-namespace lib_ruby_parser {
+namespace lib_ruby_parser
+{
 {{ each message }}<dnl>
 {{ helper message-comment }}
     class {{ helper message-camelcase-name }}
@@ -94,10 +95,10 @@ namespace lib_ruby_parser {
         DiagnosticMessageList &operator=(DiagnosticMessageList &&);
     };
 
-    // #ifdef TEST_ENV
+#ifdef TEST_ENV
     void run_test_group_message(void);
-    // #endif
-}
+#endif
+} // namespace lib_ruby_parser
 
 #endif // LIB_RUBY_PARSER_MESSAGES_HPP
 ";

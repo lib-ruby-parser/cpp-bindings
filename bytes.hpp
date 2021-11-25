@@ -48,9 +48,9 @@ namespace lib_ruby_parser
         Bytes &operator=(Bytes &&) = default;
     };
 
-    // #ifdef TEST_ENV
+#ifdef TEST_ENV
     void run_test_group_bytes(void);
-    // #endif
+#endif
 
 } // namespace lib_ruby_parser
 

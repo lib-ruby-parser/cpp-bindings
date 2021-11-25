@@ -13,7 +13,7 @@ namespace lib_ruby_parser
                                                   bytes(std::move(bytes_)) {}
 }
 
-// #ifdef TEST_ENV
+#ifdef TEST_ENV
 
 #include "test_helper.hpp"
 
@@ -45,4 +45,5 @@ namespace lib_ruby_parser
         run_tests_as_group("decoded_input", tests, sizeof(tests) / sizeof(test_fn_t));
     }
 }
-// #endif
+
+#endif

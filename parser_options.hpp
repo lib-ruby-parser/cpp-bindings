@@ -33,10 +33,10 @@ namespace lib_ruby_parser
         ParserOptions &operator=(ParserOptions &&) = default;
     };
 
-    // #ifdef TEST_ENV
+#ifdef TEST_ENV
     void run_test_group_parser_options(void);
-    // #endif
+#endif
 
-}
+} // namespace lib_ruby_parser
 
 #endif // LIB_RUBY_PARSER_PARSER_OPTIONS_HPP

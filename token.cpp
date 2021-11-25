@@ -27,7 +27,7 @@ namespace lib_ruby_parser
     LIST_IMPL(TokenList, Token, LIB_RUBY_PARSER_drop_token_list);
 } // namespace lib_ruby_parser
 
-// #ifdef TEST_ENV
+#ifdef TEST_ENV
 
 #include "test_helper.hpp"
 #include <cstring>
@@ -99,4 +99,4 @@ namespace lib_ruby_parser
     }
 } // namespace lib_ruby_parser
 
-// #endif
+#endif

@@ -47,7 +47,7 @@ namespace lib_ruby_parser
     LIST_IMPL(NodeList, Node, LIB_RUBY_PARSER_drop_node_list);
 } // namespace lib_ruby_parser
 
-// #ifdef TEST_ENV
+#ifdef TEST_ENV
 
 #include \"test_helper.hpp\"
 
@@ -133,7 +133,7 @@ namespace lib_ruby_parser {
     }
 } // namespace lib_ruby_parser
 
-// #endif
+#endif
 ";
 
 pub(crate) fn codegen() {

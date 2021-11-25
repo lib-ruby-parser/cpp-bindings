@@ -10,7 +10,8 @@ const TEMPLATE: &str = "#ifndef LIB_RUBY_PARSER_NODES_HPP
 #include \"loc.hpp\"
 #include \"bytes.hpp\"
 
-namespace lib_ruby_parser {
+namespace lib_ruby_parser
+{
     class Node;
     class NodeList
     {
@@ -72,10 +73,10 @@ namespace lib_ruby_parser {
         Node &operator=(Node &&);
     };
 
-    // #ifdef TEST_ENV
+#ifdef TEST_ENV
     void run_test_group_node(void);
-    // #endif
-}
+#endif
+} // namespace lib_ruby_parser
 
 #endif // LIB_RUBY_PARSER_NODES_HPP
 ";

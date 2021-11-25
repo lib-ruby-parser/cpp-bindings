@@ -1,5 +1,5 @@
-#ifndef LOC_HPP
-#define LOC_HPP
+#ifndef LIB_RUBY_PARSER_LOC_HPP
+#define LIB_RUBY_PARSER_LOC_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -53,9 +53,9 @@ namespace lib_ruby_parser
         static MaybeLoc None();
     };
 
-    // #ifdef TEST_ENV
+#ifdef TEST_ENV
     void run_test_group_loc(void);
-    // #endif
+#endif
 } // namespace lib_ruby_parser
 
-#endif // LOC_HPP
+#endif // LIB_RUBY_PARSER_LOC_HPP

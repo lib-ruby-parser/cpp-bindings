@@ -2,7 +2,7 @@
 #include <cstddef>
 #include <string>
 
-#include "../target/lib-ruby-parser.h"
+#include "../lib-ruby-parser.hpp"
 
 using namespace lib_ruby_parser;
 

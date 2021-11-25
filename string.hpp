@@ -1,5 +1,5 @@
-#ifndef String_HPP
-#define String_HPP
+#ifndef LIB_RUBY_PARSER_String_HPP
+#define LIB_RUBY_PARSER_String_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -68,9 +68,9 @@ namespace lib_ruby_parser
         bool is_none() const;
     };
 
-    // #ifdef TEST_ENV
+#ifdef TEST_ENV
     void run_test_group_string(void);
-    // #endif
-}
+#endif
+} // namespace lib_ruby_parser
 
-#endif // String_HPP
+#endif // LIB_RUBY_PARSER_String_HPP

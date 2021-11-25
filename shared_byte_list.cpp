@@ -8,7 +8,7 @@ namespace lib_ruby_parser
 
 } // namespace lib_ruby_parser
 
-// #ifdef TEST_ENV
+#ifdef TEST_ENV
 
 #include "test_helper.hpp"
 
@@ -38,4 +38,4 @@ namespace lib_ruby_parser
     }
 } // namespace lib_ruby_parser
 
-// #endif
+#endif

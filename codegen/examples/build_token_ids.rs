@@ -20,7 +20,7 @@ impl TokenId {
 }
 
 fn bindgen() -> String {
-    const TMP_BINDINGS: &str = "codegen/examples/target/tmp_bindings.h";
+    const TMP_BINDINGS: &str = "codegen/examples/target/tmp_bindings.hpp";
 
     cbindgen::Builder::new()
         .with_crate("ruby-parser-cpp")

@@ -7,8 +7,6 @@ api.o: api.cpp api.hpp parser_options.hpp string.hpp decoder.hpp \
   nodes.hpp diagnostic.hpp messages.hpp comment.hpp magic_comment.hpp \
   utils.hpp test_helper.hpp
 
-blobs.o: blobs.cpp
-
 bytes.o: bytes.cpp bytes.hpp utils.hpp test_helper.hpp
 
 comment.o: comment.cpp utils.hpp comment.hpp loc.hpp decoded_input.hpp \

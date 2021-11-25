@@ -28,7 +28,7 @@ namespace lib_ruby_parser
     Bytes::Bytes(ByteList raw_) : raw(std::move(raw_)) {}
 } // namespace lib_ruby_parser
 
-// #ifdef TEST_ENV
+#ifdef TEST_ENV
 
 #include "test_helper.hpp"
 #include <cstdlib>
@@ -94,4 +94,4 @@ namespace lib_ruby_parser
 
 }
 
-// #endif
+#endif

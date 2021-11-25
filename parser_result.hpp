@@ -64,9 +64,9 @@ namespace lib_ruby_parser
         ParserResult &operator=(ParserResult &&) = default;
     };
 
-    // #ifdef TEST_ENV
+#ifdef TEST_ENV
     void run_test_group_parser_result(void);
-    // #endif
-}
+#endif
+} // namespace lib_ruby_parser
 
 #endif // LIB_RUBY_PARSER_PARSER_RESULT_HPP

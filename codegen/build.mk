@@ -12,21 +12,21 @@ CODEGEN_DEPS += codegen/build.rs
 DO_CODEGEN = cd codegen && cargo build
 
 # Codegen deps
-messages.c: $(CODEGEN_DEPS)
+messages.cpp: $(CODEGEN_DEPS)
 	$(DO_CODEGEN)
-CLEAN += messages.c
+CLEAN += messages.cpp
 
-messages.h: $(CODEGEN_DEPS)
+messages.hpp: $(CODEGEN_DEPS)
 	$(DO_CODEGEN)
-CLEAN += messages.h
+CLEAN += messages.hpp
 
-nodes.c: $(CODEGEN_DEPS)
+nodes.cpp: $(CODEGEN_DEPS)
 	$(DO_CODEGEN)
-CLEAN += nodes.c
+CLEAN += nodes.cpp
 
-nodes.h: $(CODEGEN_DEPS)
+nodes.hpp: $(CODEGEN_DEPS)
 	$(DO_CODEGEN)
-CLEAN += nodes.h
+CLEAN += nodes.hpp
 
 ruby-parser-c/src/node.rs: $(CODEGEN_DEPS)
 	$(DO_CODEGEN)
@@ -48,8 +48,7 @@ update-depend: token_ids.hpp
 lib-ruby-parser.hpp: codegen/examples/merge_headers.rs $(HPP_FILES) token_ids.hpp
 	cargo run --example merge_headers --manifest-path codegen/Cargo.toml
 CLEAN += lib-ruby-parser.hpp
-# update-depend: lib-ruby-parser.hpp
-# FIXME
+update-depend: lib-ruby-parser.hpp
 
 # manual codegen task
 do-codegen:

@@ -12,7 +12,7 @@ namespace lib_ruby_parser
     LIST_IMPL(SourceLineList, SourceLine, LIB_RUBY_PARSER_drop_source_line_list);
 }
 
-// #ifdef TEST_ENV
+#ifdef TEST_ENV
 
 #include "test_helper.hpp"
 
@@ -61,4 +61,4 @@ namespace lib_ruby_parser
 
 }
 
-// #endif
+#endif

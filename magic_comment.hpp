@@ -58,10 +58,10 @@ namespace lib_ruby_parser
         MagicCommentList &operator=(MagicCommentList &&);
     };
 
-    // #ifdef TEST_ENV
+#ifdef TEST_ENV
     void run_test_group_magic_comment(void);
-    // #endif
+#endif
 
-}
+} // namespace lib_ruby_parser
 
 #endif // LIB_RUBY_PARSER_MAGIC_COMMENT_HPP
