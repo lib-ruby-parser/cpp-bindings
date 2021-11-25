@@ -47,5 +47,5 @@ benchmark/record: benchmark/cpp-parser
 	$(call run_benchmark, ./rust-parser >> ../$(BENCHMARK_RECORDING))
 	echo "Ruby:" >> $(BENCHMARK_RECORDING)
 	$(call run_benchmark, ruby ruby-parser.rb >> ../$(BENCHMARK_RECORDING))
-	echo "C:" >> $(BENCHMARK_RECORDING)
+	echo "C++:" >> $(BENCHMARK_RECORDING)
 	$(call run_benchmark, ./cpp-parser >> ../$(BENCHMARK_RECORDING))

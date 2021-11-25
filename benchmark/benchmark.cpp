@@ -36,7 +36,7 @@ int main()
 
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 
-    std::cout << double(std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count()) / 1000000000 << "[s]" << std::endl;
+    std::cout << double(std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count()) / 1000000000 << std::endl;
 
     return 0;
 }
