@@ -71,3 +71,6 @@ tests/runner: tests/test.cpp tests/../test_helper.hpp tests/../bytes.hpp \
   tests/../shared_byte_list.hpp tests/../parser_result.hpp \
   tests/../api.hpp
 
+benchmark/cpp-parser: benchmark/benchmark.cpp benchmark/rb_filelist.hpp \
+  benchmark/../lib-ruby-parser.hpp
+
