@@ -81,8 +81,8 @@ pub extern "C" fn LIB_RUBY_PARSER_drop_parser_result(parser_result: *mut ParserR
 
 #[no_mangle]
 pub extern "C" fn LIB_RUBY_PARSER_parse(
-    options: ParserOptionsBlob,
     input: ByteListBlob,
+    options: ParserOptionsBlob,
 ) -> ParserResultBlob {
     let options = CParserOptions::from(options);
     let options = lib_ruby_parser::ParserOptions::from(options);

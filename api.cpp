@@ -9,15 +9,15 @@ namespace lib_ruby_parser
 
     extern "C"
     {
-        ParserResultBlob LIB_RUBY_PARSER_parse(ParserOptionsBlob options, ByteListBlob input);
+        ParserResultBlob LIB_RUBY_PARSER_parse(ByteListBlob input, ParserOptionsBlob options);
     }
 
-    ParserResult parse(ParserOptions options, ByteList input)
+    ParserResult parse(ByteList input, ParserOptions options)
     {
         return from_blob<ParserResultBlob, ParserResult>(
             LIB_RUBY_PARSER_parse(
-                into_blob<ParserOptions, ParserOptionsBlob>(std::move(options)),
-                into_blob<ByteList, ByteListBlob>(std::move(input))));
+                into_blob<ByteList, ByteListBlob>(std::move(input)),
+                into_blob<ParserOptions, ParserOptionsBlob>(std::move(options))));
     }
 }
 
@@ -39,7 +39,9 @@ namespace lib_ruby_parser
 
         ByteList input = ByteList::Copied("2 + 3", 5);
 
-        ParserResult result = parse(std::move(options), std::move(input));
+        ParserResult result = parse(
+            std::move(input),
+            std::move(options));
 
         assert_eq(result.ast->tag, Node::Tag::SEND);
         assert_eq(result.tokens.len, 4); // tINT tPLUS tINT EOF

@@ -30,8 +30,8 @@ int main()
         lib_ruby_parser::ByteList input = std::move(file.content);
 
         lib_ruby_parser::parse(
-            std::move(options),
-            std::move(input));
+            std::move(input),
+            std::move(options));
     }
 
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
