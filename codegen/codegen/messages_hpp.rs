@@ -81,8 +81,8 @@ namespace lib_ruby_parser
     {
     public:
         DiagnosticMessage *ptr;
-        size_t len;
         size_t capacity;
+        size_t len;
 
         DiagnosticMessageList() = delete;
         DiagnosticMessageList(DiagnosticMessage *ptr, size_t len, size_t capacity);

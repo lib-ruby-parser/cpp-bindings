@@ -17,8 +17,8 @@ namespace lib_ruby_parser
     {
     public:
         Node *ptr;
-        size_t len;
         size_t capacity;
+        size_t len;
 
         NodeList() = delete;
         NodeList(Node *ptr, size_t len, size_t capacity);

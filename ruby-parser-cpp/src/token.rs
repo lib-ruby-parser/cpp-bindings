@@ -43,8 +43,9 @@ pub extern "C" fn LIB_RUBY_PARSER_drop_token(token: *mut Token) {
 #[cfg(feature = "tests")]
 #[no_mangle]
 pub extern "C" fn lib_ruby_parser__test__make_token_list(token: TokenBlob) -> TokenListBlob {
-    let token = Token::from(token);
-    TokenListBlob::from(vec![token])
+    let mut v = vec![Token::from(token)];
+    v.reserve(10);
+    TokenListBlob::from(v)
 }
 
 #[no_mangle]

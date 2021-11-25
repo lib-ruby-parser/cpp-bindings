@@ -26,8 +26,8 @@ namespace lib_ruby_parser
     {
     public:
         SourceLine *ptr;
-        size_t len;
         size_t capacity;
+        size_t len;
 
         SourceLineList() = delete;
         SourceLineList(SourceLine *ptr, size_t len, size_t capacity);

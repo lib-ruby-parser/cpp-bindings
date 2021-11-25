@@ -49,8 +49,8 @@ namespace lib_ruby_parser
     {
     public:
         Comment *ptr;
-        size_t len;
         size_t capacity;
+        size_t len;
 
         CommentList() = delete;
         CommentList(Comment *ptr, size_t len, size_t capacity);

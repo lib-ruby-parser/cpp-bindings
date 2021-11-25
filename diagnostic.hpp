@@ -62,8 +62,8 @@ namespace lib_ruby_parser
     {
     public:
         Diagnostic *ptr;
-        size_t len;
         size_t capacity;
+        size_t len;
 
         DiagnosticList() = delete;
         DiagnosticList(Diagnostic *ptr, size_t len, size_t capacity);

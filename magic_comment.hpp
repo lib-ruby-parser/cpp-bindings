@@ -44,8 +44,8 @@ namespace lib_ruby_parser
     {
     public:
         MagicComment *ptr;
-        size_t len;
         size_t capacity;
+        size_t len;
 
         MagicCommentList() = delete;
         MagicCommentList(MagicComment *ptr, size_t len, size_t capacity);

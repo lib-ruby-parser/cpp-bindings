@@ -47,8 +47,8 @@ namespace lib_ruby_parser
     {
     public:
         Token *ptr;
-        size_t len;
         size_t capacity;
+        size_t len;
 
         TokenList() = delete;
         TokenList(Token *ptr, size_t len, size_t capacity);

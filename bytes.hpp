@@ -13,8 +13,8 @@ namespace lib_ruby_parser
     {
     public:
         char *ptr;
-        size_t len;
         size_t capacity;
+        size_t len;
 
         ByteList() = delete;
         ByteList(char *ptr, size_t len, size_t capacity);
