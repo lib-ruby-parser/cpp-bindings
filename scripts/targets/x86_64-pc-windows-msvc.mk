@@ -24,7 +24,7 @@ $(CXX) $(1) $(CXXFLAGS) /c /Fo
 endef
 
 define build_cxx_exe
-$(CXX) ws2_32.lib advapi32.lib userenv.lib $(1) $(CXXFLAGS) /link /OUT:$(2)
+$(CXX) ws2_32.lib advapi32.lib userenv.lib bcrypt.lib $(1) $(CXXFLAGS) /link /OUT:$(2)
 endef
 
 BENCHMARK_RUNNER_ASSET_NAME = rust-parser-x86_64-pc-windows-msvc.exe
