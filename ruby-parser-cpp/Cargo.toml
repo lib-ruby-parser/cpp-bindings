@@ -11,7 +11,7 @@ crate-type = ["staticlib"]
 [features]
 default = []
 
-# Include test APIs to run C tests
+# Include test APIs to run C++ tests
 tests = []
 
 [dependencies]

@@ -14,7 +14,7 @@ namespace lib_ruby_parser
     {
     public:
         {%- if message.fields.size == 0 %}
-        // dummy byte (zero-sized structs are no allowed in C)
+        // dummy byte (zero-sized classes are not allowed in C++)
         uint8_t dummy;
         {%- endif %}
 

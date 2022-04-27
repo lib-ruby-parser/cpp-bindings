@@ -27,7 +27,7 @@ extern "C"
 int main()
 {
     lib_ruby_parser__test__print_build_info();
-    std::cerr << "C build info:\n";
+    std::cerr << "C++ build info:\n";
     std::cerr << "sizeof(size_t): " << sizeof(size_t) << "\n";
     std::cerr << "sizeof(void*): " << sizeof(void *) << "\n";
     std::cerr << "\n";

@@ -57,7 +57,7 @@ All node classes fully match node structs of the original Rust implementation. Y
 + Clone the repo
 + Set environment variables:
     + `TARGET` (e.g. `export TARGET=x86_64-apple-darwin`, no default value)
-    + `CC` (e.g. `gcc`)
+    + `CXX` (e.g. `g++`)
     + `BUILD_ENV` (`debug` or `release`, `debug` is the default value)
 + run `make tests/run` to run tests
 + run `make libruby_parser_cpp.a` (or `make libruby_parser_cpp.lib` for MSVC) to get a static library
@@ -66,8 +66,8 @@ All node classes fully match node structs of the original Rust implementation. Y
 # Structure
 
 + Each directory has its own `build.mk` file that is included my the main `Makefile`
-+ Rust parser with basic C bindings is located under `ruby-parser-c`.
-+ Actual C bindings are located in `*.{h, c}` files in the root directory
++ Rust parser with basic C++ bindings is located under `ruby-parser-cpp`.
++ Actual C++ bindings are located in `*.{hpp, cpp}` files in the root directory
 + `scripts` directory contains per-triplet additional configurations for `make`
 + `codegen` directory is a Rust micro-library that does code generation
-+ `benchmark` directory contains a set of scripts to compare performance of Rust vs C vs Ripper
++ `benchmark` directory contains a set of scripts to compare performance of Rust vs C++ vs Ripper

@@ -21,13 +21,13 @@ nodes.hpp: $(CODEGEN_DEPS)
 	$(DO_CODEGEN)
 CLEAN += nodes.hpp
 
-ruby-parser-c/src/node.rs: $(CODEGEN_DEPS)
+ruby-parser-cpp/src/node.rs: $(CODEGEN_DEPS)
 	$(DO_CODEGEN)
-CLEAN += ruby-parser-c/src/node.rs
+CLEAN += ruby-parser-cpp/src/node.rs
 
-ruby-parser-c/src/message.rs: $(CODEGEN_DEPS)
+ruby-parser-cpp/src/message.rs: $(CODEGEN_DEPS)
 	$(DO_CODEGEN)
-CLEAN += ruby-parser-c/src/message.rs
+CLEAN += ruby-parser-cpp/src/message.rs
 
 # token_id.hpp codegen
 DO_CODEGEN_TOKEN_IDS = cargo run --example build_token_ids --manifest-path codegen/Cargo.toml
