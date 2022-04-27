@@ -9,6 +9,10 @@ on:
 env:
   CARGO_TERM_COLOR: always
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   test:
     name: ${{ matrix.build.name }}
@@ -17,7 +21,6 @@ jobs:
       BUILD_ENV: debug
       TARGET: ${{ matrix.build.target }}
       CXX: ${{ matrix.build.cxx }}
-      LD: ${{ matrix.build.ld }}
       AR: ${{ matrix.build.ar }}
     strategy:
       fail-fast: false
@@ -27,7 +30,6 @@ jobs:
             os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
             cxx: clang++-12
-            ld: ld.lld-12
             ar: llvm-ar-12
             run: make tests/run
 
@@ -35,7 +37,6 @@ jobs:
             os: macos-latest
             target: x86_64-apple-darwin
             cxx: clang++
-            ld: ld
             ar: ar
             run: |
               $CXX --version
@@ -45,7 +46,6 @@ jobs:
             os: windows-latest
             target: x86_64-pc-windows-msvc
             cxx: cl.exe
-            ld: link.exe
             run: |
               make tests/run
 
@@ -53,7 +53,6 @@ jobs:
             os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
             cxx: clang++-12
-            ld: ld.lld-12
             ar: llvm-ar-12
             run: |
               sudo apt-get update
@@ -65,7 +64,6 @@ jobs:
             os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
             cxx: clang++-12
-            ld: ld.lld-12
             ar: llvm-ar-12
             run: ASAN_OPTIONS=detect_leaks=1:alloc_dealloc_mismatch=0 CXXFLAGS="-fsanitize=address" make tests/run
 
