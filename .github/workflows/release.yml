@@ -12,7 +12,6 @@ jobs:
       BUILD_ENV: release
       TARGET: ${{ matrix.build.target }}
       CXX: ${{ matrix.build.cxx }}
-      LD: ${{ matrix.build.ld }}
       AR: ${{ matrix.build.ar }}
     strategy:
       fail-fast: false
@@ -21,7 +20,6 @@ jobs:
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
             cxx: clang++-12
-            ld: ld.lld-12
             ar: llvm-ar-12
             lib_file: libruby_parser_cpp.a
             output_artifact_name: libruby_parser_cpp-x86_64-unknown-linux-gnu.a
@@ -29,7 +27,6 @@ jobs:
           - os: macos-latest
             target: x86_64-apple-darwin
             cxx: clang++
-            ld: ld
             ar: ar
             lib_file: libruby_parser_cpp.a
             output_artifact_name: libruby_parser_cpp-x86_64-apple-darwin.a
@@ -37,7 +34,6 @@ jobs:
           - os: windows-latest
             target: x86_64-pc-windows-msvc
             cxx: cl.exe
-            ld: link.exe
             lib_file: libruby_parser_cpp.lib
             output_artifact_name: libruby_parser_cpp-x86_64-pc-windows-msvc.lib
 
@@ -78,8 +74,21 @@ jobs:
           name: ${{ matrix.build.output_artifact_name }}
           path: ${{ matrix.build.output_artifact_name }}
 
+      - name: download benchmark assets
+        run: make benchmark/download
+
+      - name: build C++ runner
+        run: make benchmark/cpp-parser
+
+      # NOTE: ruby/setup-ruby breaks paths for MSVC,
+      #       and so all files must be compiled before running Ruby
+      - name: install ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.1.1"
+
       - name: benchmark
-        run: make benchmark/download && make benchmark/record
+        run: make benchmark/record
 
       - name: upload ${{ matrix.build.target }}.benchmark-out
         uses: actions/upload-artifact@v2
