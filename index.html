@@ -132,7 +132,31 @@ Basic API</h1>
 <li><code>MagicCommentList magic_comments</code> - list of magic comments</li>
 <li><code>DecodedInput input</code> - decoded input</li>
 </ol>
-<p>All node classes fully match node structs of the original Rust implementation. You can check <a href="https://docs.rs/lib-ruby-parser">full documentation</a> (<code>nodes</code> module) </p>
+<p>All node classes fully match node structs of the original Rust implementation. You can check <a href="https://docs.rs/lib-ruby-parser">full documentation</a> (<code>nodes</code> module)</p>
+<h1><a class="anchor" id="autotoc_md2"></a>
+Development</h1>
+<ul>
+<li>Clone the repo</li>
+<li>Set environment variables:<ul>
+<li><code>TARGET</code> (e.g. <code>export TARGET=x86_64-apple-darwin</code>, no default value)</li>
+<li><code>CC</code> (e.g. <code>gcc</code>)</li>
+<li><code>BUILD_ENV</code> (<code>debug</code> or <code>release</code>, <code>debug</code> is the default value)</li>
+</ul>
+</li>
+<li>run <code>make tests/run</code> to run tests</li>
+<li>run <code>make libruby_parser_cpp.a</code> (or <code>make libruby_parser_cpp.lib</code> for MSVC) to get a static library</li>
+<li>run <code>make lib-ruby-parser.hpp</code> to get a header file</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md3"></a>
+Structure</h1>
+<ul>
+<li>Each directory has its own <code>build.mk</code> file that is included my the main <code>Makefile</code></li>
+<li>Rust parser with basic C bindings is located under <code>ruby-parser-c</code>.</li>
+<li>Actual C bindings are located in <code>*.{h, c}</code> files in the root directory</li>
+<li><code>scripts</code> directory contains per-triplet additional configurations for <code>make</code></li>
+<li><code>codegen</code> directory is a Rust micro-library that does code generation</li>
+<li><code>benchmark</code> directory contains a set of scripts to compare performance of Rust vs C vs Ripper </li>
+</ul>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
 </div><!-- doc-content -->

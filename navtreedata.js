@@ -24,7 +24,9 @@ var NAVTREE =
 [
   [ "lib-ruby-parser (C++ bindings)", "index.html", [
     [ "C++ bindings for <tt>lib-ruby-parser</tt>", "index.html", [
-      [ "Basic API", "index.html#autotoc_md1", null ]
+      [ "Basic API", "index.html#autotoc_md1", null ],
+      [ "Development", "index.html#autotoc_md2", null ],
+      [ "Structure", "index.html#autotoc_md3", null ]
     ] ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
@@ -67,8 +69,8 @@ var NAVTREEINDEX =
 "classlib__ruby__parser_1_1_node.html#a81459e298913b5dea570963bc46fb94ba18e25ac6cc28c2b91bce1fbe629b682a",
 "classlib__ruby__parser_1_1_reg_opt.html",
 "classlib__ruby__parser_1_1_unterminated_heredoc.html#a292adfe5d7ea9438929beb98a6954b95",
-"token_8hpp.html",
-"unionlib__ruby__parser_1_1_diagnostic_message_1_1_value.html#adb94edd63cc8a320192575e27a32629f"
+"test__helper_8hpp.html#afb8e24f1a0db7ea0ac515a34d019b946",
+"unionlib__ruby__parser_1_1_diagnostic_message_1_1_value.html#ad860f6b1cb4eee4885aee483c2b12a15"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
