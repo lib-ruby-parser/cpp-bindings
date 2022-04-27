@@ -9,6 +9,8 @@ LIST_DEPS = otool -L
 CXXFLAGS += -std=c++17 -Wall -Wextra -Wpedantic -Weverything -g
 # but disable -Wpadded, we inherit Rust layouts
 CXXFLAGS += -Wno-padded
+# ignore documentation, it has examples of syntax errors on purpose
+CXXFLAGS += -Wno-documentation-unknown-command
 # ignore C++98 compatibility
 CXXFLAGS += -Wno-c++98-compat -Wno-c++98-compat-pedantic
 # ignore __ in function/macro names

@@ -63,7 +63,7 @@ clean:
 	rm -f *.$(O)
 	rm -f *.$(A)
 	rm -rf *.dSYM
-	touch codegen/Cargo.toml
+	touch codegen/build.rs
 
 check:
 	CC=$(CC) ruby assert_defs.rb bindings.hpp bindings.cpp bindings_messages.cpp bindings_nodes.cpp
