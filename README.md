@@ -4,12 +4,11 @@
 
 All classes/methods are defined under `lib_ruby_parser` namespace. API mostly mirrors Rust version.
 
-Pre-compiled library and header file are available on [Releases](https://github.com/lib-ruby-parser/cpp-bindings/releases), supported platforms:
+Pre-compiled libraries and header files are available on [Releases](https://github.com/lib-ruby-parser/cpp-bindings/releases), supported platforms:
 
 + `x86_64-apple-darwin`
 + `x86_64-unknown-linux-gnu`
 + `x86_64-pc-windows-msvc`
-+ `x86_64-pc-windows-gnu`
 
 ## Basic API
 
