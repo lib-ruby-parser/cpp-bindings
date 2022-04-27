@@ -6,9 +6,7 @@
 
 namespace lib_ruby_parser
 {
-    /*
-        Equivalent of `lib_ruby_parser::source::CommentType`
-    */
+    /// Equivalent of `lib_ruby_parser::source::CommentType`
     enum class CommentType
     {
         INLINE,
@@ -16,20 +14,14 @@ namespace lib_ruby_parser
         UNKNOWN,
     };
 
-    /*
-        Equivalent of `lib_ruby_parser::source::Comment`
-    */
+    /// Equivalent of `lib_ruby_parser::source::Comment`
     class Comment
     {
     public:
-        /*
-            Location of the comment
-        */
+        /// Location of the comment
         Loc location;
 
-        /*
-            Kind of the comment (inline/document/unknown)
-        */
+        /// Kind of the comment (inline/document/unknown)
         CommentType kind;
 
         Comment() = delete;
@@ -42,9 +34,7 @@ namespace lib_ruby_parser
         Comment &operator=(Comment &&) = default;
     };
 
-    /*
-        Equivalent of `Vec<lib_ruby_parser::source::Comment>`
-    */
+    /// Equivalent of `Vec<lib_ruby_parser::source::Comment>`
     class CommentList
     {
     public:

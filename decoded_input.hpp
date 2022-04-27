@@ -7,9 +7,7 @@
 
 namespace lib_ruby_parser
 {
-    /*
-        Equivalent of `lib_ruby_parser::source::DecodedInput`
-    */
+    /// Equivalent of `lib_ruby_parser::source::DecodedInput`
     class DecodedInput
     {
     public:

@@ -6,10 +6,8 @@
 
 namespace lib_ruby_parser
 {
-    /*
-        Parses given `input` according to `option`.
-        This is the main entrypoint API.
-    */
+    /// Parses given `input` according to `option`.
+    /// This is the main entrypoint API.
     ParserResult parse(ByteList input, ParserOptions options);
 
 #ifdef TEST_ENV

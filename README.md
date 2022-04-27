@@ -1,98 +1,55 @@
 # C++ bindings for `lib-ruby-parser`
 
-tldr; You can find examples in `test/test.cpp`. Valgrind and ASAN give no errors.
+[Documentation](https://lib-ruby-parser.github.io/cpp-bindings/)
 
-## API
+All classes/methods are defined under `lib_ruby_parser` namespace. API mostly mirrors Rust version.
 
-All classes/methods are defined in the `lib_ruby_parser` namespace.
+Pre-compiled library and header file are available on [Releases](https://github.com/lib-ruby-parser/cpp-bindings/releases), supported platforms:
 
-1. `ParserResult::from_source(Bytes source, ParserOptions options)`
++ `x86_64-apple-darwin`
++ `x86_64-unknown-linux-gnu`
++ `x86_64-pc-windows-msvc`
++ `x86_64-pc-windows-gnu`
 
-    Parses given input into `ParserResult`, has the following fields:
-    ```cpp
-    // AST
-    std::unique_ptr<Node> ast;
+## Basic API
 
-    // List of tokns
-    std::vector<Token> tokens;
+```cpp
+// Configure parsing options
+lib_ruby_parser::ParserOptions options(
+    /* 1. filename */
+    lib_ruby_parser::String::Copied("(eval)"),
 
-    // List of diagnostic messages
-    std::vector<Diagnostic> diagnostics;
+    /* 2. decoder */
+    lib_ruby_parser::MaybeDecoder(lib_ruby_parser::Decoder(nullptr)),
 
-    // List of comments
-    std::vector<Comment> comments;
+    /* 3. token_rewriter */
+    lib_ruby_parser::MaybeTokenRewriter(lib_ruby_parser::TokenRewriter(nullptr)),
 
-    // List of magic comments
-    std::vector<MagicComment> magic_comments;
+    /* 4. record_tokens */
+    true);
 
-    // Decoded input
-    Input input;
-    ```
+// Setup input to parse
+lib_ruby_parser::ByteList input = lib_ruby_parser::ByteList::Copied("2 + 3", 5);
 
-2. `Node::is<T>` where `T` is one of the ~100 node types.
+lib_ruby_parser::ParserResult result = lib_ruby_parser::parse(
+    std::move(input),
+    std::move(options));
 
-    ```cpp
-    ast.is<Args>()
-    // => true
+assert_eq(result.ast->tag, lib_ruby_parser::Node::Tag::SEND);
+assert_eq(result.tokens.len, 4); // tINT tPLUS tINT EOF
+assert_eq(result.comments.len, 0);
+assert_eq(result.magic_comments.len, 0);
+assert_byte_list(result.input.bytes, "2 + 3");
+```
 
-    ast.is<Defs>()
-    // => false
-    ```
+`ParserResult` contains the following fields:
 
-3. `Node::get<T>` where `T` is one of the ~100 node locs
+1. `Node* ast` - potentually nullable AST, tagged enum
+2. `TokenList tokens` - list of tokens
+3. `DiagnosticList diagnostics` - list of diagnostics
+4. `CommentList comments` - list of comments
+5. `MagicCommentList magic_comments` - list of magic comments
+6. `DecodedInput input` - decoded input
 
-    ```cpp
-    Args *args = ast.get<Args>()
-    ```
+All node classes fully match node structs of the original Rust implementation. You can check [full documentation](https://docs.rs/lib-ruby-parser) (`nodes` module)
 
-4. All node classes fully match node structs of the original Rust implementation. You can check [full documentation](https://docs.rs/lib-ruby-parser) (`nodes` module)
-
-5. `Token` has the following fields and methods:
-
-    ```cpp
-    std::string token_value;
-    std::unique_ptr<Loc> loc; // has numeric "begin" and "end" fields
-    std::string name();
-    ```
-
-    Also it has a numeric `token_type` field that probably could be used for fast comparison. It is used to get `name()`, so it's different for different token types.
-
-6. `Diagnostic` has the following fields:
-
-    ```cpp
-    ErrorLevel level; // enum with WARNING and ERROR values
-    std::unique_ptr<DiagnosticMessage> message;
-    std::unique_ptr<Loc> loc;
-    ```
-
-    can be rendered either using `render_message()` or `render(const Bytes &)`
-
-7. `Comment` has the following fields:
-
-    ```cpp
-    CommentType kind; // enum with INLINE, DOCUMENT and UNKNOWN values
-    std::unique_ptr<Loc> location;
-    ```
-
-8. `Loc` has the following fields and methods:
-
-    ```cpp
-    uint32_t begin;
-    uint32_t end;
-    std::string source(Input &input);
-    ```
-
-    `input` is what you get from `ParserResult::from`. It can be different from your original source if it has magic encoding comment.
-
-9. `MagicComment` has the following fields:
-
-    ```cpp
-    MagicCommentKind kind; // enum with ENCODING, FROZEN_STRING_LITERAL, WARN_INDENT values
-
-    // location of key/value
-    // "# encoding: utf-8"
-    //    ~~~~~~~~ key
-    //              ~~~~~ value
-    std::unique_ptr<Loc> key_l;
-    std::unique_ptr<Loc> value_l;
-    ```

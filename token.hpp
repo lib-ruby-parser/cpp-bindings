@@ -8,9 +8,7 @@
 
 namespace lib_ruby_parser
 {
-    /*
-        Equivalent of `lib_ruby_parser::Token`
-    */
+    /// Equivalent of `lib_ruby_parser::Token`
     class Token
     {
     public:
@@ -34,15 +32,11 @@ namespace lib_ruby_parser
         Token(Token &&) = default;
         Token &operator=(Token &&) = default;
 
-        /*
-            Returns token name (like "kDEF") for a given token.
-        */
+        /// Returns token name (like "kDEF") for a given token.
         std::string token_name() const;
     };
 
-    /*
-        Equivalent of `Vec<lib_ruby_parser::Token>`
-    */
+    /// Equivalent of `Vec<lib_ruby_parser::Token>`
     class TokenList
     {
     public:

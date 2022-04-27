@@ -5,10 +5,8 @@
 
 namespace lib_ruby_parser
 {
-    /*
-        Equivalent of `&[u8]` in Rust.
-        Holds a constant pointer + length.
-    */
+    /// Equivalent of `&[u8]` in Rust.
+    /// Holds a constant pointer + length.
     class SharedByteList
     {
     public:

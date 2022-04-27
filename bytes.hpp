@@ -5,10 +5,8 @@
 
 namespace lib_ruby_parser
 {
-    /*
-        Representation of a Vec<u8>.
-        `capacity` doesn't matter.
-    */
+    /// Representation of a Vec<u8>.
+    /// `capacity` doesn't matter.
     class ByteList
     {
     public:
@@ -27,12 +25,15 @@ namespace lib_ruby_parser
 
         ~ByteList();
 
+        /// Constructs an "owned" version of `ByteList`,
+        /// takes ownership of the given pointer.
         static ByteList Owned(char *s, size_t len);
+
+        /// Constructs a `ByteList` by copying given pointer
         static ByteList Copied(const char *s, size_t len);
     };
-    /*
-        Rerpresentation of `Bytes` struct from lib-ruby-parser.
-    */
+
+    /// Rerpresentation of `Bytes` struct from lib-ruby-parser.
     class Bytes
     {
     public:

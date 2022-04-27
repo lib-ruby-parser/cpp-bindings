@@ -6,9 +6,7 @@
 
 namespace lib_ruby_parser
 {
-    /*
-        `SourceLine` struct from `lib-ruby-parser`
-    */
+    /// `SourceLine` struct from `lib-ruby-parser`
     class SourceLine
     {
     public:
@@ -19,9 +17,7 @@ namespace lib_ruby_parser
         SourceLine(size_t start, size_t end, size_t ends_with_eof);
     };
 
-    /*
-        Equivalent of `Vec<SourceLine>`
-    */
+    /// Equivalent of `Vec<SourceLine>`
     class SourceLineList
     {
     public:

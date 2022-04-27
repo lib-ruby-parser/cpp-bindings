@@ -7,11 +7,9 @@
 
 namespace lib_ruby_parser
 {
-    /*
-        Representation of a String.
-        `ptr` is NOT NULL-terminated.
-        `capacity` doesn't matter.
-    */
+    /// Representation of a String.
+    /// `ptr` is NOT NULL-terminated.
+    /// `capacity` doesn't matter.
     class String
     {
     public:
@@ -34,14 +32,12 @@ namespace lib_ruby_parser
         static String Copied(const char *s);
     };
 
-    /*
-        Rerpresentation of Option<String>.
-        Rust has a Option<non-null ptr> optimization that None is NULL on the byte level.
-        Thus, it's not a tagged enum.
-        To check whether it's a Some(String) or None use helpers:
-        + LIB_RUBY_PARSER_maybe_string_is_some
-        + LIB_RUBY_PARSER_maybe_string_is_none
-    */
+    /// Rerpresentation of Option<String>.
+    /// Rust has a Option<non-null ptr> optimization that None is NULL on the byte level.
+    /// Thus, it's not a tagged enum.
+    /// To check whether it's a Some(String) or None use helpers:
+    /// + LIB_RUBY_PARSER_maybe_string_is_some
+    /// + LIB_RUBY_PARSER_maybe_string_is_none
     class MaybeString
     {
     public:
@@ -58,13 +54,9 @@ namespace lib_ruby_parser
 
         ~MaybeString() = default;
 
-        /*
-            Returns `true` if given pointer is `Some(String)`
-        */
+        /// Returns `true` if pointer is `Some(String)`
         bool is_some() const;
-        /*
-            Returns `true` if given pointer is `None`
-        */
+        /// Returns `true` if pointer is `None`
         bool is_none() const;
     };
 

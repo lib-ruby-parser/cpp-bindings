@@ -10,49 +10,35 @@
 
 namespace lib_ruby_parser
 {
-    /*
-        Equivalent of `lib_ruby_parser::ParserResult`
-    */
+    /// Equivalent of `lib_ruby_parser::ParserResult`
     class ParserResult
     {
     public:
-        /*
-            Final AST, nullable.
-        */
+        /// Final AST, nullable.
         Node *ast;
 
-        /*
-            List of tokens, empty if `parser_options.record_tokens` was set to false
-        */
+        /// List of tokens, empty if `parser_options.record_tokens` was set to false
         TokenList tokens;
 
-        /*
-            List of diagnostics (errors/warnings)
-        */
+        /// List of diagnostics (errors/warnings)
         DiagnosticList diagnostics;
 
-        /*
-            List of comments
-        */
+        /// List of comments
         CommentList comments;
 
-        /*
-            List of magic comments
-        */
+        /// List of magic comments
         MagicCommentList magic_comments;
 
-        /*
-            Decoded input
-
-            Sometimes source code has a magic encoding comment
-            that forces us to re-encode given source to other encoding.
-
-            In such cases source code on the byte level is different and so
-            all locations (Loc) refer to that new re-encode byte ranges.
-
-            Thus, always use this re-encoded byte array to compute source code
-            of any location.
-        */
+        /// Decoded input
+        ///
+        /// Sometimes source code has a magic encoding comment
+        /// that forces us to re-encode given source to other encoding.
+        ///
+        /// In such cases source code on the byte level is different and so
+        /// all locations (Loc) refer to that new re-encode byte ranges.
+        ///
+        /// Thus, always use this re-encoded byte array to compute source code
+        /// of any location.
         DecodedInput input;
 
         ~ParserResult();

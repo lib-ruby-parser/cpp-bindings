@@ -8,34 +8,24 @@
 
 namespace lib_ruby_parser
 {
-    /*
-        Equivalent of `lib_ruby_parser::ErrorLevel`
-    */
+    /// Equivalent of `lib_ruby_parser::ErrorLevel`
     enum class ErrorLevel
     {
         WARNING,
         ERROR
     };
 
-    /*
-        Equivalent of `lib_ruby_parser::Diagnostic`
-    */
+    /// Equivalent of `lib_ruby_parser::Diagnostic`
     class Diagnostic
     {
     public:
-        /*
-            Level of the diagnostic (error/warning)
-        */
+        /// Level of the diagnostic (error/warning)
         ErrorLevel level;
 
-        /*
-            Message of the diagnsotic
-        */
+        /// Message of the diagnsotic
         DiagnosticMessage message;
 
-        /*
-            Location of the diagnostic
-        */
+        /// Location of the diagnostic
         Loc loc;
 
         Diagnostic() = delete;
@@ -47,17 +37,13 @@ namespace lib_ruby_parser
         Diagnostic(Diagnostic &&) = default;
         Diagnostic &operator=(Diagnostic &&) = default;
 
-        /*
-            Render given diagnsostic on a given source input.
-            Equivalent of lib_ruby_parser::Diagnostic::render.
-            Return owned NULL-terminated string.
-        */
+        /// Render given diagnsostic on a given source input.
+        /// Equivalent of lib_ruby_parser::Diagnostic::render.
+        /// Return owned NULL-terminated string.
         std::string render(const DecodedInput &input) const;
     };
 
-    /*
-        Equivalent of `Vec<lib_ruby_parser::Diagnostic`
-    */
+    /// Equivalent of `Vec<lib_ruby_parser::Diagnostic`
     class DiagnosticList
     {
     public:

@@ -64,5 +64,6 @@ clean:
 	rm -f *.$(A)
 	rm -rf *.dSYM
 
-check:
-	CC=$(CC) ruby assert_defs.rb bindings.hpp bindings.cpp bindings_messages.cpp bindings_nodes.cpp
+doxygen: messages.hpp nodes.hpp token_ids.hpp
+	rm -rf docs
+	doxygen

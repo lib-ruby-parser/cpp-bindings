@@ -8,9 +8,7 @@
 
 namespace lib_ruby_parser
 {
-    /*
-        `Loc` struct from `lib-ruby-parser`
-    */
+    /// `Loc` struct from `lib-ruby-parser`
     class Loc
     {
     public:
@@ -22,15 +20,7 @@ namespace lib_ruby_parser
         std::string source(const DecodedInput &decoded_input) const;
     };
 
-    /*
-        Returns source code of the given location.
-        Equivalent of `lib_ruby_parser::Loc::source`
-    */
-    // char *loc_source(const Loc *loc, const DecodedInput *input);
-
-    /*
-        Equivalent of `Option<Loc>`
-    */
+    /// Equivalent of `Option<Loc>`
     class MaybeLoc
     {
     public:

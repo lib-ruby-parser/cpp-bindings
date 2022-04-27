@@ -6,9 +6,7 @@
 
 namespace lib_ruby_parser
 {
-    /*
-        Equivalent of `lib_ruby_parser::source::MagicCommentKind`
-    */
+    /// Equivalent of `lib_ruby_parser::source::MagicCommentKind`
     enum class MagicCommentKind
     {
         ENCODING,
@@ -17,9 +15,7 @@ namespace lib_ruby_parser
         SHAREABLE_CONSTANT_VALUE,
     };
 
-    /*
-        Equivalent of `lib_ruby_parser::source::MagicComment`
-    */
+    /// Equivalent of `lib_ruby_parser::source::MagicComment`
     class MagicComment
     {
     public:
@@ -37,9 +33,7 @@ namespace lib_ruby_parser
         MagicComment &operator=(MagicComment &&) = default;
     };
 
-    /*
-        Equivalent of `Vec<lib_ruby_parser::source::MagicComment>`
-    */
+    /// Equivalent of `Vec<lib_ruby_parser::source::MagicComment>`
     class MagicCommentList
     {
     public:

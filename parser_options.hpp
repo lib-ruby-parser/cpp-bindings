@@ -9,9 +9,7 @@
 
 namespace lib_ruby_parser
 {
-    /*
-        Equivalent of `lib_ruby_parser::ParserOptions`
-    */
+    /// Equivalent of `lib_ruby_parser::ParserOptions`
     class ParserOptions
     {
     public:
