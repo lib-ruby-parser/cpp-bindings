@@ -21,8 +21,9 @@ impl From<CParserOptions> for lib_ruby_parser::ParserOptions {
         } = options;
 
         let decoder = decoder.map(|decoder| {
+            let Decoder { f, state } = decoder;
             lib_ruby_parser::source::Decoder::new(Box::new(move |encoding, input| {
-                (decoder.f)(encoding.into(), input.into()).into()
+                f(encoding.into(), input.into(), state).into()
             }))
         });
 

@@ -33,7 +33,7 @@ namespace lib_ruby_parser
 
         ParserOptions options(
             String::Copied("(eval)"),
-            MaybeDecoder(Decoder(nullptr)),
+            MaybeDecoder(Decoder(nullptr, nullptr)),
             MaybeTokenRewriter(TokenRewriter(nullptr)),
             true);
 

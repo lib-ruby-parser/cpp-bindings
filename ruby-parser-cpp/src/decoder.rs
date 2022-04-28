@@ -52,53 +52,70 @@ pub extern "C" fn LIB_RUBY_PARSER_drop_decoder_result(decoder_result: *mut Decod
 #[repr(C)]
 #[derive(Debug)]
 pub struct Decoder {
-    pub f: extern "C" fn(encoding: StringBlob, input: ByteListBlob) -> DecoderResultBlob,
+    pub f: extern "C" fn(
+        encoding: StringBlob,
+        input: ByteListBlob,
+        state: *const std::ffi::c_void,
+    ) -> DecoderResultBlob,
+    pub state: *const std::ffi::c_void,
 }
 
 #[cfg(feature = "tests")]
 #[no_mangle]
-pub extern "C" fn lib_ruby_parser__test__always_ok_decoder() -> Decoder {
+pub extern "C" fn lib_ruby_parser__test__always_ok_decoder(output: *const u8) -> Decoder {
     #[no_mangle]
     pub extern "C" fn lib_ruby_parser__test__always_ok_decoder_fn(
         encoding: StringBlob,
         input: ByteListBlob,
+        state: *const std::ffi::c_void,
     ) -> DecoderResultBlob {
         // do cleanup
         drop(String::from(encoding));
         drop(Vec::<u8>::from(input));
-        // and return constant output
-        DecoderResultBlob::from(DecoderResult::Ok("always_ok".as_bytes().to_vec()))
+        // and return given output
+        let output = unsafe { std::ffi::CStr::from_ptr(state as *const i8) }
+            .to_str()
+            .unwrap();
+        DecoderResultBlob::from(DecoderResult::Ok(output.as_bytes().to_vec()))
     }
     Decoder {
         f: lib_ruby_parser__test__always_ok_decoder_fn,
+        state: output as *const std::ffi::c_void,
     }
 }
 
 #[cfg(feature = "tests")]
 #[no_mangle]
-pub extern "C" fn lib_ruby_parser__test__always_err_decoder() -> Decoder {
+pub extern "C" fn lib_ruby_parser__test__always_err_decoder(output: *const u8) -> Decoder {
     #[no_mangle]
     pub extern "C" fn lib_ruby_parser__test__always_err_decoder_fn(
         encoding: StringBlob,
         input: ByteListBlob,
+        state: *const std::ffi::c_void,
     ) -> DecoderResultBlob {
         // do cleanup
         drop(String::from(encoding));
         drop(Vec::<u8>::from(input));
-        // and return constant output
-        DecoderResultBlob::from(DecoderResult::Err(InputError::DecodingError(String::from(
-            "always_err",
-        ))))
+        // and return given output
+        let output = unsafe { std::ffi::CStr::from_ptr(state as *const i8) }
+            .to_str()
+            .unwrap();
+        DecoderResultBlob::from(DecoderResult::Err(InputError::DecodingError(
+            output.to_string(),
+        )))
     }
     Decoder {
         f: lib_ruby_parser__test__always_err_decoder_fn,
+        state: output as *const std::ffi::c_void,
     }
 }
 
 #[cfg(feature = "tests")]
 #[no_mangle]
-pub extern "C" fn lib_ruby_parser__test__some_always_ok_decoder() -> MaybeDecoderBlob {
-    MaybeDecoderBlob::from(Some(lib_ruby_parser__test__always_ok_decoder()))
+pub extern "C" fn lib_ruby_parser__test__some_always_ok_decoder(
+    output: *mut u8,
+) -> MaybeDecoderBlob {
+    MaybeDecoderBlob::from(Some(lib_ruby_parser__test__always_ok_decoder(output)))
 }
 
 #[cfg(feature = "tests")]

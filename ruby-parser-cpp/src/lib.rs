@@ -6,7 +6,7 @@ macro_rules! blob_type {
         #[repr(C)]
         #[derive(Debug)]
         pub struct $c_type {
-            content: [u8; std::mem::size_of::<$rust_type>()],
+            pub(crate) content: [u8; std::mem::size_of::<$rust_type>()],
         }
 
         impl From<$rust_type> for $c_type {

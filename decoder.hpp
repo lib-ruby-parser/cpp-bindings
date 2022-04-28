@@ -71,13 +71,14 @@ namespace lib_ruby_parser
         static DecoderResult Err(InputError err);
     };
 
-    typedef DecoderResult (*DecoderFunction)(String, ByteList);
+    typedef DecoderResult (*DecoderFunction)(String, ByteList, void *);
     class Decoder
     {
     public:
         DecoderFunction f;
+        void *state;
 
-        explicit Decoder(DecoderFunction f);
+        explicit Decoder(DecoderFunction f, void *state);
     };
 
     class MaybeDecoder
