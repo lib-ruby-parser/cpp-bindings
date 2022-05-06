@@ -1,12 +1,28 @@
 #include "test_helper.hpp"
 #include "../magic_comment.hpp"
+#include "../utils.hpp"
 
 namespace lib_ruby_parser
 {
+#ifndef MAGIC_COMMENT_KIND_HAS_BLOB
+#define MAGIC_COMMENT_KIND_HAS_BLOB
     BLOB(MagicCommentKind);
+#endif // MAGIC_COMMENT_KIND_HAS_BLOB
+
+#ifndef MAGIC_COMMENT_HAS_BLOB
+#define MAGIC_COMMENT_HAS_BLOB
     BLOB(MagicComment);
+#endif // MAGIC_COMMENT_HAS_BLOB
+
+#ifndef MAGIC_COMMENT_LIST_HAS_BLOB
+#define MAGIC_COMMENT_LIST_HAS_BLOB
     BLOB(MagicCommentList);
+#endif // MAGIC_COMMENT_LIST_HAS_BLOB
+
+#ifndef LOC_HAS_BLOB
+#define LOC_HAS_BLOB
     BLOB(Loc);
+#endif // LOC_HAS_BLOB
 
     extern "C"
     {
@@ -88,6 +104,7 @@ namespace lib_ruby_parser
             Loc(3, 4));
     }
 
+    void run_test_group_magic_comment(void);
     void run_test_group_magic_comment(void)
     {
         const test_fn_t tests[] = {

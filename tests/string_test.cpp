@@ -1,10 +1,19 @@
 #include "test_helper.hpp"
 #include "../string.hpp"
+#include "../utils.hpp"
 #include <cstring>
 
 namespace lib_ruby_parser
 {
+#ifndef STRING_HAS_BLOB
+#define STRING_HAS_BLOB
+    BLOB(String);
+#endif // STRING_HAS_BLOB
+
+#ifndef MAYBE_STRING_HAS_BLOB
+#define MAYBE_STRING_HAS_BLOB
     BLOB(MaybeString);
+#endif // MAYBE_STRING_HAS_BLOB
 
     static char *new_owned_string(const char *s)
     {
@@ -65,6 +74,7 @@ namespace lib_ruby_parser
         assert(none_string.is_none());
     }
 
+    void run_test_group_string(void);
     void run_test_group_string(void)
     {
         const test_fn_t tests[] = {

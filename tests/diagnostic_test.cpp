@@ -1,11 +1,19 @@
 #include "test_helper.hpp"
 #include "../diagnostic.hpp"
+#include "../utils.hpp"
 #include <cstdlib>
 
 namespace lib_ruby_parser
 {
+#ifndef DIAGNOSTIC_HAS_BLOB
+#define DIAGNOSTIC_HAS_BLOB
     BLOB(Diagnostic);
+#endif // DIAGNOSTIC_HAS_BLOB
+
+#ifndef DIAGNOSTIC_LIST_HAS_BLOB
+#define DIAGNOSTIC_LIST_HAS_BLOB
     BLOB(DiagnosticList);
+#endif // DIAGNOSTIC_LIST_HAS_BLOB
 
     extern "C"
     {
@@ -69,6 +77,7 @@ namespace lib_ruby_parser
         assert_eq(diagnostic_list.ptr[0].loc.end, 2);
     }
 
+    void run_test_group_diagnostic(void);
     void run_test_group_diagnostic(void)
     {
         const test_fn_t tests[] = {

@@ -2,6 +2,7 @@ $(info Compiling x86_64-unknown-linux-gnu target)
 
 O = o
 A = a
+EXE =
 
 STATIC_LIB_FILE = libruby_parser_cpp.$(A)
 LIST_DEPS = ldd
@@ -9,7 +10,7 @@ LIST_DEPS = ldd
 CXXFLAGS += -std=c++17 -Wall -Wextra -g -target $(TARGET)
 
 ifeq ($(BUILD_ENV), debug)
-CXXFLAGS += -O0 -DTEST_ENV
+CXXFLAGS += -O0
 else
 CXXFLAGS += -O3
 endif

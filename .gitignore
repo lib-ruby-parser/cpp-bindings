@@ -9,6 +9,8 @@ messages.cpp
 nodes.hpp
 nodes.cpp
 token_ids.hpp
+tests/messages_test.cpp
+tests/nodes_test.cpp
 target
 *.o
 *.a
@@ -23,3 +25,5 @@ benchmark/filelist
 benchmark/stats
 *.benchmark-out
 docs/
+codegen/codegen
+codegen/merge-headers

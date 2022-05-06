@@ -19,15 +19,12 @@ SOURCES = \
 	shared_byte_list \
 	source_line \
 	string \
-	token \
-	token_rewriter
-
-ifeq ($(BUILD_ENV), debug)
-SOURCES += test_helper
-endif
+	token_rewriter \
+	token
 
 CPP_FILES = $(foreach source,$(SOURCES),$(source).cpp)
 HPP_FILES = $(foreach source,$(SOURCES),$(source).hpp)
+HPP_FILES += token_ids.hpp
 O_FILES = $(foreach source,$(SOURCES),$(source).$(O))
 STATIC_LIB = libruby_parser_cpp.$(A)
 
@@ -64,6 +61,6 @@ clean:
 	rm -f *.$(A)
 	rm -rf *.dSYM
 
-doxygen: messages.hpp nodes.hpp token_ids.hpp
+doxygen: $(CODEGEN_FILES)
 	rm -rf docs
 	doxygen

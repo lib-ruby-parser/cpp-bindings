@@ -1,15 +1,35 @@
 #include "test_helper.hpp"
 #include "../token_rewriter.hpp"
+#include "../utils.hpp"
 #include <cstring>
 #include <cstdlib>
 
 namespace lib_ruby_parser
 {
+#ifndef REWRITE_ACTION_HAS_BLOB
+#define REWRITE_ACTION_HAS_BLOB
     BLOB(RewriteAction);
+#endif // REWRITE_ACTION_HAS_BLOB
+
+#ifndef LEX_STATE_HAS_BLOB
+#define LEX_STATE_HAS_BLOB
     BLOB(LexStateAction);
+#endif // LEX_STATE_HAS_BLOB
+
+#ifndef TOKEN_REWRITER_RESULT_HAS_BLOB
+#define TOKEN_REWRITER_RESULT_HAS_BLOB
     BLOB(TokenRewriterResult);
+#endif // TOKEN_REWRITER_RESULT_HAS_BLOB
+
+#ifndef TOKEN_REWRITER_HAS_BLOB
+#define TOKEN_REWRITER_HAS_BLOB
     BLOB(TokenRewriter);
+#endif // TOKEN_REWRITER_HAS_BLOB
+
+#ifndef MAYBE_TOKEN_REWRITER_RESULT_HAS_BLOB
+#define MAYBE_TOKEN_REWRITER_RESULT_HAS_BLOB
     BLOB(MaybeTokenRewriter);
+#endif // MAYBE_TOKEN_REWRITER_RESULT_HAS_BLOB
 
     extern "C"
     {
@@ -132,6 +152,7 @@ namespace lib_ruby_parser
         }
     }
 
+    void run_test_group_token_rewriter(void);
     void run_test_group_token_rewriter(void)
     {
         const test_fn_t tests[] = {

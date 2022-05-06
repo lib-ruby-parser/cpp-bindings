@@ -1,10 +1,14 @@
 #include "test_helper.hpp"
-#include "../parser_options.hpp"
+#include "../parser_result.hpp"
+#include "../utils.hpp"
 #include <cstdlib>
 
 namespace lib_ruby_parser
 {
+#ifndef PARSER_RESULT_HAS_BLOB
+#define PARSER_RESULT_HAS_BLOB
     BLOB(ParserResult);
+#endif // PARSER_RESULT_HAS_BLOB
 
     extern "C"
     {
@@ -49,6 +53,7 @@ namespace lib_ruby_parser
         assert_byte_list(parser_result.input.bytes, "2 + 2");
     }
 
+    void run_test_group_parser_result(void);
     void run_test_group_parser_result(void)
     {
         const test_fn_t tests[] = {

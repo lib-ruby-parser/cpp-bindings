@@ -1,12 +1,20 @@
 #include "test_helper.hpp"
 #include "../loc.hpp"
+#include "../utils.hpp"
 #include <cstdlib>
 #include <iostream>
 
 namespace lib_ruby_parser
 {
+#ifndef LOC_HAS_BLOB
+#define LOC_HAS_BLOB
     BLOB(Loc);
+#endif // LOC_HAS_BLOB
+
+#ifndef MAYBE_LOC_HAS_BLOB
+#define MAYBE_LOC_HAS_BLOB
     BLOB(MaybeLoc);
+#endif // MAYBE_LOC_HAS_BLOB
 
     extern "C"
     {
@@ -60,6 +68,7 @@ namespace lib_ruby_parser
         assert_some_loc(some_loc, Loc(1, 2));
     }
 
+    void run_test_group_loc(void);
     void run_test_group_loc(void)
     {
         const test_fn_t tests[] = {

@@ -26,6 +26,7 @@ namespace lib_ruby_parser
         assert_byte_list(result.input.bytes, "2 + 3");
     }
 
+    void run_test_group_api(void);
     void run_test_group_api(void)
     {
         const test_fn_t tests[] = {

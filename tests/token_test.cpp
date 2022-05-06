@@ -1,14 +1,26 @@
 #include "test_helper.hpp"
 #include "../token.hpp"
+#include "../utils.hpp"
 #include <cstring>
 #include <cstdlib>
 #include <iostream>
 
 namespace lib_ruby_parser
 {
+#ifndef LOC_HAS_BLOB
+#define LOC_HAS_BLOB
     BLOB(Loc);
+#endif // LOC_HAS_BLOB
+
+#ifndef TOKEN_HAS_BLOB
+#define TOKEN_HAS_BLOB
     BLOB(Token);
+#endif // TOKEN_HAS_BLOB
+
+#ifndef TOKEN_LIST_HAS_BLOB
+#define TOKEN_LIST_HAS_BLOB
     BLOB(TokenList);
+#endif // TOKEN_LIST_HAS_BLOB
 
     extern "C"
     {
@@ -58,6 +70,7 @@ namespace lib_ruby_parser
         TokenList moved = std::move(token_list);
     }
 
+    void run_test_group_token(void);
     void run_test_group_token(void)
     {
         const test_fn_t tests[] = {

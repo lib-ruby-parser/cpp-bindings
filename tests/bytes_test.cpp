@@ -1,10 +1,21 @@
 #include "test_helper.hpp"
 #include "../bytes.hpp"
+#include "../utils.hpp"
 #include <cstdlib>
 #include <iostream>
 
 namespace lib_ruby_parser
 {
+#ifndef BYTE_LIST_HAS_BLOB
+#define BYTE_LIST_HAS_BLOB
+    BLOB(ByteList);
+#endif // BYTE_LIST_HAS_BLOB
+
+#ifndef BYTES_HAS_BLOB
+#define BYTES_HAS_BLOB
+    BLOB(Bytes);
+#endif // BYTES_HAS_BLOB
+
     extern "C"
     {
         ByteListBlob lib_ruby_parser__test__make_byte_list(char i1, char i2, char i3);
@@ -50,6 +61,7 @@ namespace lib_ruby_parser
         assert_byte_list(bytes.raw, "abc");
     }
 
+    void run_test_group_bytes(void);
     void run_test_group_bytes(void)
     {
         const test_fn_t tests[] = {

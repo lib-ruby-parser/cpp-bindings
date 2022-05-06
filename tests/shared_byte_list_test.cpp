@@ -17,6 +17,7 @@ namespace lib_ruby_parser
         assert_str_eq(foo.ptr, "foo");
     }
 
+    void run_test_group_shared_byte_list(void);
     void run_test_group_shared_byte_list(void)
     {
         const test_fn_t tests[] = {

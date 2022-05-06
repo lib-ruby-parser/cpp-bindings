@@ -2,6 +2,7 @@ $(info Compiling x86_64-pc-windows-msvc target)
 
 O = obj
 A = lib
+EXE = .exe
 
 STATIC_LIB_FILE = ruby_parser_cpp.$(A)
 LIST_DEPS = dumpbin /dependents
@@ -10,7 +11,7 @@ LIST_DEPS = dumpbin /dependents
 CXXFLAGS += /std:c++17 /bigobj /MT /Zi
 
 ifeq ($(BUILD_ENV), debug)
-CXXFLAGS += /Od /DEBUG /DTEST_ENV
+CXXFLAGS += /Od /DEBUG
 else
 CXXFLAGS += /O2
 endif

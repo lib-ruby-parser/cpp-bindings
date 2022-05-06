@@ -1,8 +1,29 @@
 #include "test_helper.hpp"
 #include "../comment.hpp"
+#include "../utils.hpp"
 
 namespace lib_ruby_parser
 {
+#ifndef COMMENT_HAS_BLOB
+#define COMMENT_HAS_BLOB
+    BLOB(Comment);
+#endif // COMMENT_HAS_BLOB
+
+#ifndef LOC_HAS_BLOB
+#define LOC_HAS_BLOB
+    BLOB(Loc);
+#endif // LOC_HAS_BLOB
+
+#ifndef COMMENT_TYPE_HAS_BLOB
+#define COMMENT_TYPE_HAS_BLOB
+    BLOB(CommentType);
+#endif // COMMENT_TYPE_HAS_BLOB
+
+#ifndef COMMENT_LIST_HAS_BLOB
+#define COMMENT_LIST_HAS_BLOB
+    BLOB(CommentList);
+#endif // COMMENT_LIST_HAS_BLOB
+
     extern "C"
     {
         CommentType lib_ruby_parser__test__make_comment_type_document(void);
@@ -58,6 +79,7 @@ namespace lib_ruby_parser
         assert_comment(comment_list.ptr[0], Loc(1, 2), CommentType::INLINE);
     }
 
+    void run_test_group_comment(void);
     void run_test_group_comment(void)
     {
         const test_fn_t tests[] = {

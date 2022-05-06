@@ -1,9 +1,13 @@
 #include "test_helper.hpp"
 #include "../parser_options.hpp"
+#include "../utils.hpp"
 
 namespace lib_ruby_parser
 {
+#ifndef PARSER_OPTIONS_HAS_BLOB
+#define PARSER_OPTIONS_HAS_BLOB
     BLOB(ParserOptions);
+#endif // PARSER_OPTIONS_HAS_BLOB
 
     extern "C"
     {
@@ -22,6 +26,7 @@ namespace lib_ruby_parser
         assert(parser_options.record_tokens);
     }
 
+    void run_test_group_parser_options(void);
     void run_test_group_parser_options(void)
     {
         const test_fn_t tests[] = {

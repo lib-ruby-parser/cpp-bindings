@@ -1,14 +1,38 @@
 #include "test_helper.hpp"
 #include "../decoder.hpp"
+#include "../utils.hpp"
 
 namespace lib_ruby_parser
 {
+#ifndef STRING_HAS_BLOB
+#define STRING_HAS_BLOB
     BLOB(String);
+#endif // STRING_HAS_BLOB
+
+#ifndef INPUT_ERROR_HAS_BLOB
+#define INPUT_ERROR_HAS_BLOB
     BLOB(InputError);
+#endif // INPUT_ERROR_HAS_BLOB
+
+#ifndef BYTE_LIST_HAS_BLOB
+#define BYTE_LIST_HAS_BLOB
     BLOB(ByteList);
+#endif // BYTE_LIST_HAS_BLOB
+
+#ifndef DECODER_RESULT_HAS_BLOB
+#define DECODER_RESULT_HAS_BLOB
     BLOB(DecoderResult);
+#endif // DECODER_RESULT_HAS_BLOB
+
+#ifndef DECODER_HAS_BLOB
+#define DECODER_HAS_BLOB
     BLOB(Decoder);
+#endif // DECODER_HAS_BLOB
+
+#ifndef MAYBE_DECODER_HAS_BLOB
+#define MAYBE_DECODER_HAS_BLOB
     BLOB(MaybeDecoder);
+#endif // MAYBE_DECODER_HAS_BLOB
 
     extern "C"
     {
@@ -127,6 +151,7 @@ namespace lib_ruby_parser
         assert(none_decoder.is_none());
     }
 
+    void run_test_group_decoder(void);
     void run_test_group_decoder(void)
     {
         const test_fn_t tests[] = {

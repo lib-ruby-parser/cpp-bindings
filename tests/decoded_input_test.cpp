@@ -1,8 +1,14 @@
 #include "test_helper.hpp"
 #include "../decoded_input.hpp"
+#include "../utils.hpp"
 
 namespace lib_ruby_parser
 {
+#ifndef DECODED_INPUT_HAS_BLOB
+#define DECODED_INPUT_HAS_BLOB
+    BLOB(DecodedInput);
+#endif // DECODED_INPUT_HAS_BLOB
+
     extern "C"
     {
         DecodedInputBlob lib_ruby_parser__test__make_decoded_input(void);
@@ -20,6 +26,7 @@ namespace lib_ruby_parser
         assert_byte_list(decoded_input.bytes, "2 + 2");
     }
 
+    void run_test_group_decoded_input(void);
     void run_test_group_decoded_input(void)
     {
         const test_fn_t tests[] = {

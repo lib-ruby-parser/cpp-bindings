@@ -2,6 +2,7 @@ $(info Compiling x86_64-apple-darwin target)
 
 O = o
 A = a
+EXE =
 
 STATIC_LIB_FILE = libruby_parser_cpp.$(A)
 LIST_DEPS = otool -L
@@ -17,7 +18,7 @@ CXXFLAGS += -Wno-c++98-compat -Wno-c++98-compat-pedantic
 CXXFLAGS += -Wno-reserved-macro-identifier -Wno-reserved-identifier
 
 ifeq ($(BUILD_ENV), debug)
-CXXFLAGS += -O0 -DTEST_ENV
+CXXFLAGS += -O0
 else
 CXXFLAGS += -O3
 endif

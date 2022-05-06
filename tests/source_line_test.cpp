@@ -1,10 +1,18 @@
 #include "test_helper.hpp"
 #include "../source_line.hpp"
+#include "../utils.hpp"
 
 namespace lib_ruby_parser
 {
+#ifndef SOURCE_LINE_HAS_BLOB
+#define SOURCE_LINE_HAS_BLOB
     BLOB(SourceLine);
+#endif // SOURCE_LINE_HAS_BLOB
+
+#ifndef SOURCE_LINE_LIST_HAS_BLOB
+#define SOURCE_LINE_LIST_HAS_BLOB
     BLOB(SourceLineList);
+#endif // SOURCE_LINE_LIST_HAS_BLOB
 
     extern "C"
     {
@@ -34,6 +42,7 @@ namespace lib_ruby_parser
         assert_source_line(source_line_list.ptr[0], 1, 2, true);
     }
 
+    void run_test_group_source_line(void);
     void run_test_group_source_line(void)
     {
         const test_fn_t tests[] = {
