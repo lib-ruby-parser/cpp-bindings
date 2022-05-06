@@ -28,6 +28,7 @@ var NAVTREE =
       [ "Development", "index.html#autotoc_md2", null ],
       [ "Structure", "index.html#autotoc_md3", null ]
     ] ],
+    [ "Modules", "modules.html", "modules" ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
@@ -51,8 +52,6 @@ var NAVTREE =
       [ "File List", "files.html", "files_dup" ],
       [ "File Members", "globals.html", [
         [ "All", "globals.html", null ],
-        [ "Functions", "globals_func.html", null ],
-        [ "Typedefs", "globals_type.html", null ],
         [ "Macros", "globals_defs.html", null ]
       ] ]
     ] ]
@@ -69,8 +68,8 @@ var NAVTREEINDEX =
 "classlib__ruby__parser_1_1_node.html#a81459e298913b5dea570963bc46fb94ba17b8ef2c330f1430e00c9de5469fc7e7",
 "classlib__ruby__parser_1_1_redo.html#a862b560ef14fa8b6c00e20ef84c4d4b1",
 "classlib__ruby__parser_1_1_unterminated_heredoc.html",
-"test__helper_8hpp.html#af8886463ae7675cb738e8d617c96513d",
-"unionlib__ruby__parser_1_1_diagnostic_message_1_1_value.html#ad82b4f46f03912767fb9dbb802a2449f"
+"token__ids_8hpp.html#a0d7e17725f9017da20e4eda08e6e60f6",
+"unionlib__ruby__parser_1_1_diagnostic_message_1_1_value.html#afd5fd39ef10c03296ad5a6c43215a0b4"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

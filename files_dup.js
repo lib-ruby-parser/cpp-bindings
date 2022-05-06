@@ -258,7 +258,6 @@ var files_dup =
       [ "String", "classlib__ruby__parser_1_1_string.html", "classlib__ruby__parser_1_1_string" ],
       [ "MaybeString", "classlib__ruby__parser_1_1_maybe_string.html", "classlib__ruby__parser_1_1_maybe_string" ]
     ] ],
-    [ "test_helper.hpp", "test__helper_8hpp.html", "test__helper_8hpp" ],
     [ "token.hpp", "token_8hpp.html", [
       [ "Token", "classlib__ruby__parser_1_1_token.html", "classlib__ruby__parser_1_1_token" ],
       [ "TokenList", "classlib__ruby__parser_1_1_token_list.html", "classlib__ruby__parser_1_1_token_list" ]

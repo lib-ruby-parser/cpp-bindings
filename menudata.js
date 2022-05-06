@@ -22,6 +22,7 @@ for the JavaScript code in this file
 */
 var menudata={children:[
 {text:"Main Page",url:"index.html"},
+{text:"Modules",url:"modules.html"},
 {text:"Namespaces",url:"namespaces.html",children:[
 {text:"Namespace List",url:"namespaces.html"},
 {text:"Namespace Members",url:"namespacemembers.html",children:[
@@ -112,12 +113,6 @@ var menudata={children:[
 {text:"File List",url:"files.html"},
 {text:"File Members",url:"globals.html",children:[
 {text:"All",url:"globals.html",children:[
-{text:"a",url:"globals.html#index_a"},
-{text:"l",url:"globals.html#index_l"},
-{text:"r",url:"globals.html#index_r"},
-{text:"t",url:"globals.html#index_t"}]},
-{text:"Functions",url:"globals_func.html"},
-{text:"Typedefs",url:"globals_type.html"},
+{text:"l",url:"globals.html#index_l"}]},
 {text:"Macros",url:"globals_defs.html",children:[
-{text:"a",url:"globals_defs.html#index_a"},
 {text:"l",url:"globals_defs.html#index_l"}]}]}]}]}
