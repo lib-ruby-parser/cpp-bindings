@@ -61,10 +61,6 @@ namespace lib_ruby_parser
         DiagnosticList(DiagnosticList &&);
         DiagnosticList &operator=(DiagnosticList &&);
     };
-
-#ifdef TEST_ENV
-    void run_test_group_diagnostic(void);
-#endif
 } // namespace lib_ruby_parser
 
 #endif // LIB_RUBY_PARSER_DIAGNOSTIC_HPP

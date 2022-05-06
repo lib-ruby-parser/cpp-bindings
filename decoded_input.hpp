@@ -24,10 +24,6 @@ namespace lib_ruby_parser
         DecodedInput(DecodedInput &&) = default;
         DecodedInput &operator=(DecodedInput &&) = default;
     };
-
-#ifdef TEST_ENV
-    void run_test_group_decoded_input(void);
-#endif
 } // namespace lib_ruby_parser
 
 #endif // LIB_RUBY_PARSER_DECODED_INPUT_HPP

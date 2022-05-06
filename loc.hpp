@@ -42,10 +42,6 @@ namespace lib_ruby_parser
         static MaybeLoc Some(Loc loc);
         static MaybeLoc None();
     };
-
-#ifdef TEST_ENV
-    void run_test_group_loc(void);
-#endif
 } // namespace lib_ruby_parser
 
 #endif // LIB_RUBY_PARSER_LOC_HPP

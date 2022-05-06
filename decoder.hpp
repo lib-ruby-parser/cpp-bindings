@@ -94,10 +94,6 @@ namespace lib_ruby_parser
         static MaybeDecoder Some(Decoder decoder);
         static MaybeDecoder None();
     };
-
-#ifdef TEST_ENV
-    void run_test_group_decoder(void);
-#endif
 } // namespace lib_ruby_parser
 
 #endif // LIB_RUBY_PARSER_DECODER_HPP

@@ -59,10 +59,6 @@ namespace lib_ruby_parser
         /// Returns `true` if pointer is `None`
         bool is_none() const;
     };
-
-#ifdef TEST_ENV
-    void run_test_group_string(void);
-#endif
 } // namespace lib_ruby_parser
 
 #endif // LIB_RUBY_PARSER_String_HPP

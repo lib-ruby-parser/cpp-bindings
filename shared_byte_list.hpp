@@ -16,11 +16,6 @@ namespace lib_ruby_parser
         SharedByteList() = delete;
         SharedByteList(const char *ptr, size_t len);
     };
-
-#ifdef TEST_ENV
-    void run_test_group_shared_byte_list(void);
-#endif
-
 } // namespace lib_ruby_parser
 
 #endif // LIB_RUBY_PARSER_SHARED_BYTE_LIST_HPP

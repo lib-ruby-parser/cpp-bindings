@@ -54,10 +54,6 @@ namespace lib_ruby_parser
         TokenList(TokenList &&);
         TokenList &operator=(TokenList &&);
     };
-
-#ifdef TEST_ENV
-    void run_test_group_token(void);
-#endif
 } // namespace lib_ruby_parser
 
 #endif // LIB_RUBY_PARSER_TOKEN_HPP

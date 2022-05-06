@@ -52,10 +52,6 @@ namespace lib_ruby_parser
         CommentList(CommentList &&);
         CommentList &operator=(CommentList &&);
     };
-
-#ifdef TEST_ENV
-    void run_test_group_comment(void);
-#endif
 } // namespace lib_ruby_parser
 
 #endif // LIB_RUBY_PARSER_COMMENT_HPP

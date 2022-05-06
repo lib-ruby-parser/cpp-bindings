@@ -48,11 +48,6 @@ namespace lib_ruby_parser
         Bytes(Bytes &&) = default;
         Bytes &operator=(Bytes &&) = default;
     };
-
-#ifdef TEST_ENV
-    void run_test_group_bytes(void);
-#endif
-
 } // namespace lib_ruby_parser
 
 #endif // LIB_RUBY_PARSER_BYTES_HPP

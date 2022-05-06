@@ -35,11 +35,6 @@ namespace lib_ruby_parser
         SourceLineList(SourceLineList &&);
         SourceLineList &operator=(SourceLineList &&);
     };
-
-#ifdef TEST_ENV
-    void run_test_group_source_line(void);
-#endif
-
 } // namespace lib_ruby_parser
 
 #endif // LIB_RUBY_PARSER_SOURCE_LINE_HPP
