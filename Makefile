@@ -50,7 +50,7 @@ include tests/build.mk
 include benchmark/build.mk
 
 # deps
-update-depend: $(CPP_FILES) $(HPP_FILES)
+update-depend: $(CPP_FILES) $(HPP_FILES) tests/messages_test.cpp tests/nodes_test.cpp
 	CC=$(CC) ./scripts/update-depend.sh
 include .depend
 

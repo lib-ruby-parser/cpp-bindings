@@ -3,7 +3,7 @@
 #include <chrono>
 
 #include "rb_filelist.hpp"
-#include "../lib-ruby-parser.hpp"
+#include "../api.hpp"
 
 int main()
 {

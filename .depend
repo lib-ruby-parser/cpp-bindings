@@ -59,18 +59,27 @@ tests/runner: tests/runner.cpp tests/test_helper.hpp \
   utils.hpp tests/comment_test.cpp comment.hpp \
   loc.hpp decoded_input.hpp string.hpp \
   source_line.hpp tests/decoded_input_test.cpp \
-  tests/decoder_test.cpp decoder.hpp tests/diagnostic_test.cpp \
-  diagnostic.hpp messages.hpp tests/loc_test.cpp \
-  tests/magic_comment_test.cpp magic_comment.hpp \
-  tests/messages_test.cpp tests/nodes_test.cpp nodes.hpp \
-  tests/parser_options_test.cpp parser_options.hpp \
-  token_rewriter.hpp token.hpp token_ids.hpp \
-  shared_byte_list.hpp tests/parser_result_test.cpp \
-  parser_result.hpp tests/shared_byte_list_test.cpp \
-  tests/source_line_test.cpp tests/string_test.cpp \
-  tests/token_rewriter_test.cpp tests/token_test.cpp tests/api_test.cpp \
-  api.hpp
+  tests/decoder_test.cpp decoder.hpp api.hpp \
+  parser_options.hpp token_rewriter.hpp \
+  token.hpp token_ids.hpp \
+  shared_byte_list.hpp parser_result.hpp \
+  nodes.hpp diagnostic.hpp messages.hpp \
+  magic_comment.hpp tests/diagnostic_test.cpp \
+  tests/loc_test.cpp tests/magic_comment_test.cpp \
+  tests/messages_test.cpp tests/nodes_test.cpp \
+  tests/parser_options_test.cpp tests/parser_result_test.cpp \
+  tests/shared_byte_list_test.cpp tests/source_line_test.cpp \
+  tests/string_test.cpp tests/token_rewriter_test.cpp \
+  tests/token_test.cpp tests/api_test.cpp
 
 benchmark/cpp-parser: benchmark/benchmark.cpp benchmark/rb_filelist.hpp \
-  benchmark/../lib-ruby-parser.hpp
+  api.hpp parser_options.hpp \
+  string.hpp decoder.hpp \
+  bytes.hpp token_rewriter.hpp \
+  token.hpp loc.hpp \
+  decoded_input.hpp source_line.hpp \
+  token_ids.hpp shared_byte_list.hpp \
+  parser_result.hpp nodes.hpp \
+  diagnostic.hpp messages.hpp \
+  comment.hpp magic_comment.hpp
 

@@ -2,7 +2,7 @@
 #include <vector>
 #include <string>
 #include <streambuf>
-#include "../lib-ruby-parser.hpp"
+#include "../api.hpp"
 
 class FileToParse
 {
