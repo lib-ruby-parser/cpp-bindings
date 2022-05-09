@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['zsuper_971',['ZSuper',['../classlib__ruby__parser_1_1_z_super.html',1,'lib_ruby_parser']]]
+  ['zsuper_980',['ZSuper',['../classlib__ruby__parser_1_1_z_super.html',1,'lib_ruby_parser']]]
 ];

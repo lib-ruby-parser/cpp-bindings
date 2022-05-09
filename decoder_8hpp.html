@@ -86,12 +86,14 @@ $(document).ready(function(){initNavTree('decoder_8hpp.html',''); initResizable(
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#typedef-members">Typedefs</a>  </div>
+<a href="#typedef-members">Typedefs</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">decoder.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;cstdbool&gt;</code><br />
+<code>#include &lt;cstring&gt;</code><br />
 <code>#include &quot;<a class="el" href="string_8hpp_source.html">string.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="bytes_8hpp_source.html">bytes.hpp</a>&quot;</code><br />
 </div>
@@ -103,9 +105,11 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">union &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unionlib__ruby__parser_1_1_input_error_1_1_value.html">lib_ruby_parser::InputError::Value</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlib__ruby__parser_1_1_decoder_result.html">lib_ruby_parser::DecoderResult</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlib__ruby__parser_1_1_decoder_result.html">lib_ruby_parser::DecoderResult</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">union &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unionlib__ruby__parser_1_1_decoder_result_1_1_value.html">lib_ruby_parser::DecoderResult::Value</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlib__ruby__parser_1_1_decoder_result_blob.html">lib_ruby_parser::DecoderResultBlob</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlib__ruby__parser_1_1_decoder.html">lib_ruby_parser::Decoder</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -119,8 +123,17 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a76757a936de0469eb559977ac39e29fd"><td class="memItemLeft" align="right" valign="top">typedef DecoderResult(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacelib__ruby__parser.html#a76757a936de0469eb559977ac39e29fd">lib_ruby_parser::DecoderFunction</a>) (String, ByteList, void *)</td></tr>
-<tr class="separator:a76757a936de0469eb559977ac39e29fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a920f751948534d0fe1ef34a1b2e53234"><td class="memItemLeft" align="right" valign="top">typedef DecoderResultBlob(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacelib__ruby__parser.html#a920f751948534d0fe1ef34a1b2e53234">lib_ruby_parser::DecoderFunction</a>) (void *, StringBlob, ByteListBlob)</td></tr>
+<tr class="separator:a920f751948534d0fe1ef34a1b2e53234"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ac5747f1e245ff77b6a2c61e9ee07bd6e"><td class="memItemLeft" align="right" valign="top">String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacelib__ruby__parser.html#ac5747f1e245ff77b6a2c61e9ee07bd6e">lib_ruby_parser::string_from_string_blob</a> (StringBlob blob)</td></tr>
+<tr class="separator:ac5747f1e245ff77b6a2c61e9ee07bd6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8adac37a1e7a86b5f6a6a3af57791efb"><td class="memItemLeft" align="right" valign="top">ByteList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacelib__ruby__parser.html#a8adac37a1e7a86b5f6a6a3af57791efb">lib_ruby_parser::byte_list_from_byte_list_blob</a> (ByteListBlob blob)</td></tr>
+<tr class="separator:a8adac37a1e7a86b5f6a6a3af57791efb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93539f590b1f6fb16bf9da79a4431cf8"><td class="memItemLeft" align="right" valign="top">DecoderResultBlob&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacelib__ruby__parser.html#a93539f590b1f6fb16bf9da79a4431cf8">lib_ruby_parser::decoder_result_to_blob</a> (DecoderResult decoder_result)</td></tr>
+<tr class="separator:a93539f590b1f6fb16bf9da79a4431cf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->

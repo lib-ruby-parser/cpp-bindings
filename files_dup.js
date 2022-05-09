@@ -3,6 +3,7 @@ var files_dup =
     [ "api.hpp", "api_8hpp.html", "api_8hpp" ],
     [ "bytes.hpp", "bytes_8hpp.html", [
       [ "ByteList", "classlib__ruby__parser_1_1_byte_list.html", "classlib__ruby__parser_1_1_byte_list" ],
+      [ "ByteListBlob", "structlib__ruby__parser_1_1_byte_list_blob.html", "structlib__ruby__parser_1_1_byte_list_blob" ],
       [ "Bytes", "classlib__ruby__parser_1_1_bytes.html", "classlib__ruby__parser_1_1_bytes" ]
     ] ],
     [ "comment.hpp", "comment_8hpp.html", "comment_8hpp" ],
@@ -256,6 +257,7 @@ var files_dup =
     ] ],
     [ "string.hpp", "string_8hpp.html", [
       [ "String", "classlib__ruby__parser_1_1_string.html", "classlib__ruby__parser_1_1_string" ],
+      [ "StringBlob", "structlib__ruby__parser_1_1_string_blob.html", "structlib__ruby__parser_1_1_string_blob" ],
       [ "MaybeString", "classlib__ruby__parser_1_1_maybe_string.html", "classlib__ruby__parser_1_1_maybe_string" ]
     ] ],
     [ "token.hpp", "token_8hpp.html", [
