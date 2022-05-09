@@ -66,6 +66,12 @@ namespace lib_ruby_parser
         std::memset(&other, 0, sizeof(Value));
     }
     DecoderResult::Value::~Value() {}
+    DecoderResult::Value &DecoderResult::Value::operator=(DecoderResult::Value &&other)
+    {
+        std::memcpy(this, &other, sizeof(Value));
+        std::memset(&other, 0, sizeof(Value));
+        return *this;
+    }
 
     DecoderResult::DecoderResult(Tag tag_,
                                  Value as_) : tag(tag_),
@@ -89,6 +95,52 @@ namespace lib_ruby_parser
     }
 
     // decoder
+    String string_from_string_blob(StringBlob blob)
+    {
+        union U
+        {
+            String t;
+            StringBlob b;
+
+            U() { std::memset(this, 0, sizeof(U)); }
+            ~U() {}
+        };
+
+        U u;
+        u.b = blob;
+        return std::move(u.t);
+    }
+    ByteList byte_list_from_byte_list_blob(ByteListBlob blob)
+    {
+        union U
+        {
+            ByteList t;
+            ByteListBlob b;
+
+            U() { std::memset(this, 0, sizeof(U)); }
+            ~U() {}
+        };
+
+        U u;
+        u.b = blob;
+        return std::move(u.t);
+    }
+    DecoderResultBlob decoder_result_to_blob(DecoderResult decoder_result)
+    {
+        union U
+        {
+            DecoderResult t;
+            DecoderResultBlob b;
+
+            U() { std::memset(this, 0, sizeof(U)); }
+            ~U() {}
+        };
+
+        U u;
+        u.t = std::move(decoder_result);
+        return u.b;
+    }
+
     Decoder::Decoder(DecoderFunction f_, void *state_) : f(f_), state(state_) {}
 
     // maybe decoder

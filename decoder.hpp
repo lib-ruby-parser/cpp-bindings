@@ -2,6 +2,7 @@
 #define LIB_RUBY_PARSER_DECODER_HPP
 
 #include <cstdbool>
+#include <cstring>
 #include "string.hpp"
 #include "bytes.hpp"
 
@@ -41,9 +42,8 @@ namespace lib_ruby_parser
         static InputError DecodingError(String decoding_error);
     };
 
-    class DecoderResult
+    struct DecoderResult
     {
-    public:
         enum class Tag
         {
             OK,
@@ -57,6 +57,7 @@ namespace lib_ruby_parser
 
             Value();
             Value(Value &&);
+            Value &operator=(Value &&);
             ~Value();
         };
 
@@ -65,13 +66,29 @@ namespace lib_ruby_parser
 
         DecoderResult(Tag tag, Value as);
         DecoderResult(DecoderResult &&) = default;
+        DecoderResult &operator=(DecoderResult &&) = default;
         ~DecoderResult();
 
         static DecoderResult Ok(ByteList decoded);
         static DecoderResult Err(InputError err);
     };
 
-    typedef DecoderResult (*DecoderFunction)(String, ByteList, void *);
+    extern "C"
+    {
+        struct DecoderResultBlob
+        {
+            uint8_t bytes[sizeof(DecoderResult)];
+        };
+    }
+
+    String string_from_string_blob(StringBlob blob);
+    ByteList byte_list_from_byte_list_blob(ByteListBlob blob);
+    DecoderResultBlob decoder_result_to_blob(DecoderResult decoder_result);
+
+    extern "C"
+    {
+        typedef DecoderResultBlob (*DecoderFunction)(void *, StringBlob, ByteListBlob);
+    }
     class Decoder
     {
     public:

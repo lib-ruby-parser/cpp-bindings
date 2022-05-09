@@ -1,28 +1,14 @@
 #include "test_helper.hpp"
 #include "../decoder.hpp"
+#include "../api.hpp"
 #include "../utils.hpp"
 
 namespace lib_ruby_parser
 {
-#ifndef STRING_HAS_BLOB
-#define STRING_HAS_BLOB
-    BLOB(String);
-#endif // STRING_HAS_BLOB
-
 #ifndef INPUT_ERROR_HAS_BLOB
 #define INPUT_ERROR_HAS_BLOB
     BLOB(InputError);
 #endif // INPUT_ERROR_HAS_BLOB
-
-#ifndef BYTE_LIST_HAS_BLOB
-#define BYTE_LIST_HAS_BLOB
-    BLOB(ByteList);
-#endif // BYTE_LIST_HAS_BLOB
-
-#ifndef DECODER_RESULT_HAS_BLOB
-#define DECODER_RESULT_HAS_BLOB
-    BLOB(DecoderResult);
-#endif // DECODER_RESULT_HAS_BLOB
 
 #ifndef DECODER_HAS_BLOB
 #define DECODER_HAS_BLOB
@@ -95,7 +81,7 @@ namespace lib_ruby_parser
         DecoderBlob lib_ruby_parser__test__always_ok_decoder(const char *output);
         DecoderBlob lib_ruby_parser__test__always_err_decoder(const char *output);
     }
-    static DecoderResult call_decoder(Decoder decoder, String encoding, ByteList input, void *state)
+    static DecoderResult call_decoder(Decoder decoder, void *state, String encoding, ByteList input)
     {
         StringBlob encoding_blob = into_blob<String, StringBlob>(std::move(encoding));
         ByteListBlob input_blob = into_blob<ByteList, ByteListBlob>(std::move(input));
@@ -103,12 +89,12 @@ namespace lib_ruby_parser
         // (String, ByteList) -> DecoderResult
         // to
         // (StringBlob, ByteListBlob) -> DecoderResultBlob
-        typedef DecoderResultBlob (*DecoderFunctionBlob)(StringBlob, ByteListBlob, void *);
+        typedef DecoderResultBlob (*DecoderFunctionBlob)(void *, StringBlob, ByteListBlob);
         DecoderFunctionBlob fn_blob =
             reinterpret_cast<DecoderFunctionBlob>(
                 reinterpret_cast<void *>(
                     decoder.f));
-        DecoderResultBlob result_blob = fn_blob(encoding_blob, input_blob, state);
+        DecoderResultBlob result_blob = fn_blob(state, encoding_blob, input_blob);
         return from_blob<DecoderResultBlob, DecoderResult>(result_blob);
     }
 
@@ -118,13 +104,13 @@ namespace lib_ruby_parser
 
         Decoder ok_decoder = from_blob<DecoderBlob, Decoder>(
             lib_ruby_parser__test__always_ok_decoder("anything"));
-        DecoderResult ok_decoder_result = call_decoder(ok_decoder, String::Copied("utf-8"), ByteList::Copied("2 + 2", 5), const_cast<char *>("foo"));
+        DecoderResult ok_decoder_result = call_decoder(ok_decoder, const_cast<char *>("foo"), String::Copied("utf-8"), ByteList::Copied("2 + 2", 5));
         assert_eq(ok_decoder_result.tag, DecoderResult::Tag::OK);
         assert_byte_list(ok_decoder_result.as.ok, "foo");
 
         Decoder err_decoder = from_blob<DecoderBlob, Decoder>(
             lib_ruby_parser__test__always_err_decoder("anything"));
-        DecoderResult err_decoder_result = call_decoder(err_decoder, String::Copied("utf-8"), ByteList::Copied("2 + 2", 5), const_cast<char *>("bar"));
+        DecoderResult err_decoder_result = call_decoder(err_decoder, const_cast<char *>("bar"), String::Copied("utf-8"), ByteList::Copied("2 + 2", 5));
         assert_eq(err_decoder_result.as.err.tag, InputError::Tag::DECODING_ERROR);
         assert_string_eq(err_decoder_result.as.err.as.unsupported_encoding, "bar");
     }
@@ -151,6 +137,35 @@ namespace lib_ruby_parser
         assert(none_decoder.is_none());
     }
 
+    extern "C"
+    {
+        DecoderResultBlob custom_decoder(void *state, StringBlob encoding_blob, ByteListBlob input_blob);
+        DecoderResultBlob custom_decoder(void *state, StringBlob encoding_blob, ByteListBlob input_blob)
+        {
+            assert_eq(*(static_cast<int *>(state)), 42);
+            String encoding = string_from_string_blob(encoding_blob);
+            assert_string_eq(encoding, "unknown");
+            ByteList input = from_blob<ByteListBlob, ByteList>(input_blob);
+            assert_byte_list(input, "# encoding: unknown\n2 + 3");
+            return decoder_result_to_blob(DecoderResult::Ok(ByteList::Copied("# encoding: unknown\nfoo", 23)));
+        }
+    }
+    static void test_custom_decoder()
+    {
+        annotate_test;
+        int state = 42;
+
+        ParserResult result = parse(
+            ByteList::Copied("# encoding: unknown\n2 + 3", 25),
+            ParserOptions(
+                String::Copied("(eval)"),
+                MaybeDecoder(Decoder(custom_decoder, static_cast<void *>(&state))),
+                MaybeTokenRewriter(TokenRewriter(nullptr)),
+                false));
+
+        assert_byte_list(result.input.bytes, "# encoding: unknown\nfoo");
+    }
+
     void run_test_group_decoder(void);
     void run_test_group_decoder(void)
     {
@@ -159,6 +174,7 @@ namespace lib_ruby_parser
             test_decoder_result_fields,
             test_decoder_fields,
             test_maybe_decoder_fields,
+            test_custom_decoder,
         };
 
         run_tests_as_group("decoder", tests, sizeof(tests) / sizeof(test_fn_t));

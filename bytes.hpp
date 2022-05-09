@@ -2,6 +2,7 @@
 #define LIB_RUBY_PARSER_BYTES_HPP
 
 #include <cstddef>
+#include <cstdint>
 
 namespace lib_ruby_parser
 {
@@ -32,6 +33,14 @@ namespace lib_ruby_parser
         /// Constructs a `ByteList` by copying given pointer
         static ByteList Copied(const char *s, size_t len);
     };
+
+    extern "C"
+    {
+        struct ByteListBlob
+        {
+            uint8_t bytes[sizeof(ByteList)];
+        };
+    }
 
     /// Rerpresentation of `Bytes` struct from lib-ruby-parser.
     class Bytes

@@ -53,9 +53,9 @@ pub extern "C" fn LIB_RUBY_PARSER_drop_decoder_result(decoder_result: *mut Decod
 #[derive(Debug)]
 pub struct Decoder {
     pub f: extern "C" fn(
+        state: *const std::ffi::c_void,
         encoding: StringBlob,
         input: ByteListBlob,
-        state: *const std::ffi::c_void,
     ) -> DecoderResultBlob,
     pub state: *const std::ffi::c_void,
 }
@@ -65,9 +65,9 @@ pub struct Decoder {
 pub extern "C" fn lib_ruby_parser__test__always_ok_decoder(output: *const u8) -> Decoder {
     #[no_mangle]
     pub extern "C" fn lib_ruby_parser__test__always_ok_decoder_fn(
+        state: *const std::ffi::c_void,
         encoding: StringBlob,
         input: ByteListBlob,
-        state: *const std::ffi::c_void,
     ) -> DecoderResultBlob {
         // do cleanup
         drop(String::from(encoding));
@@ -89,9 +89,9 @@ pub extern "C" fn lib_ruby_parser__test__always_ok_decoder(output: *const u8) ->
 pub extern "C" fn lib_ruby_parser__test__always_err_decoder(output: *const u8) -> Decoder {
     #[no_mangle]
     pub extern "C" fn lib_ruby_parser__test__always_err_decoder_fn(
+        state: *const std::ffi::c_void,
         encoding: StringBlob,
         input: ByteListBlob,
-        state: *const std::ffi::c_void,
     ) -> DecoderResultBlob {
         // do cleanup
         drop(String::from(encoding));

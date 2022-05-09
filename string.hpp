@@ -32,6 +32,14 @@ namespace lib_ruby_parser
         static String Copied(const char *s);
     };
 
+    extern "C"
+    {
+        struct StringBlob
+        {
+            uint8_t bytes[sizeof(String)];
+        };
+    }
+
     /// Rerpresentation of Option<String>.
     /// Rust has a Option<non-null ptr> optimization that None is NULL on the byte level.
     /// Thus, it's not a tagged enum.

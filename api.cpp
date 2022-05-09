@@ -5,7 +5,6 @@ namespace lib_ruby_parser
 {
     BLOB(ParserResult);
     BLOB(ParserOptions);
-    BLOB(ByteList);
 
     extern "C"
     {

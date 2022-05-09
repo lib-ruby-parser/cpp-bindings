@@ -4,8 +4,6 @@
 
 namespace lib_ruby_parser
 {
-    BLOB(String);
-
     extern "C"
     {
         StringBlob LIB_RUBY_PARSER_new_string_owned(char *s, size_t len);

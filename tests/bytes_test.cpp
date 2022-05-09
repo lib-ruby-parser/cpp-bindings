@@ -6,11 +6,6 @@
 
 namespace lib_ruby_parser
 {
-#ifndef BYTE_LIST_HAS_BLOB
-#define BYTE_LIST_HAS_BLOB
-    BLOB(ByteList);
-#endif // BYTE_LIST_HAS_BLOB
-
 #ifndef BYTES_HAS_BLOB
 #define BYTES_HAS_BLOB
     BLOB(Bytes);

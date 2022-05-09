@@ -22,6 +22,7 @@ jobs:
       TARGET: ${{ matrix.build.target }}
       CXX: ${{ matrix.build.cxx }}
       AR: ${{ matrix.build.ar }}
+      RUST_BACKTRACE: "1"
     strategy:
       fail-fast: false
       matrix:

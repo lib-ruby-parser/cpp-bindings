@@ -3,7 +3,6 @@
 
 namespace lib_ruby_parser
 {
-    BLOB(ByteList);
     BLOB(Bytes);
 
     extern "C"

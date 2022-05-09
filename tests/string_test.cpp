@@ -5,11 +5,6 @@
 
 namespace lib_ruby_parser
 {
-#ifndef STRING_HAS_BLOB
-#define STRING_HAS_BLOB
-    BLOB(String);
-#endif // STRING_HAS_BLOB
-
 #ifndef MAYBE_STRING_HAS_BLOB
 #define MAYBE_STRING_HAS_BLOB
     BLOB(MaybeString);
