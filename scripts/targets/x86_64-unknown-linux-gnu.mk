@@ -7,7 +7,7 @@ EXE =
 STATIC_LIB_FILE = libruby_parser_cpp.$(A)
 LIST_DEPS = ldd
 
-CXXFLAGS += -std=c++17 -Wall -Wextra -g -target $(TARGET)
+CXXFLAGS += -std=c++17 -Wall -Wextra -g -target $(TARGET) -fPIC
 
 ifeq ($(BUILD_ENV), debug)
 CXXFLAGS += -O0
