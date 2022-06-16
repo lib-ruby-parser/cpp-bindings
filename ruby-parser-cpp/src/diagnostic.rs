@@ -8,7 +8,7 @@ use lib_ruby_parser::{Diagnostic, DiagnosticMessage, ErrorLevel, Loc};
 blob_type!(DiagnosticBlob, Diagnostic);
 blob_type!(DiagnosticListBlob, Vec<Diagnostic>);
 
-#[cfg(feature = "tests")]
+#[cfg(test)]
 #[no_mangle]
 pub extern "C" fn lib_ruby_parser__test__make_diagnostic() -> DiagnosticBlob {
     DiagnosticBlob::from(Diagnostic {
@@ -25,7 +25,7 @@ pub extern "C" fn LIB_RUBY_PARSER_drop_diagnostic(diagnostic: *mut Diagnostic) {
     unsafe { std::ptr::drop_in_place(diagnostic) }
 }
 
-#[cfg(feature = "tests")]
+#[cfg(test)]
 #[no_mangle]
 pub extern "C" fn lib_ruby_parser__test__make_diagnostic_list() -> DiagnosticListBlob {
     let mut v = vec![Diagnostic::from(lib_ruby_parser__test__make_diagnostic())];
