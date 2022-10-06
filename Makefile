@@ -22,10 +22,10 @@ SOURCES = \
 	token_rewriter \
 	token
 
-CPP_FILES = $(foreach source,$(SOURCES),$(source).cpp)
-HPP_FILES = $(foreach source,$(SOURCES),$(source).hpp)
+CPP_FILES = $(addsuffix .cpp,$(SOURCES))
+HPP_FILES = $(addsuffix .hpp,$(SOURCES))
 HPP_FILES += token_ids.hpp
-O_FILES = $(foreach source,$(SOURCES),$(source).$(O))
+O_FILES = $(addsuffix .$(O),$(SOURCES))
 STATIC_LIB = libruby_parser_cpp.$(A)
 
 # Codegen
