@@ -1,3 +1,4 @@
+use std::os::raw::{c_char};
 use crate::blob_type;
 #[allow(unused_imports)]
 use lib_ruby_parser::{Bytes, LexState, Lexer, Loc, Token};
@@ -29,7 +30,7 @@ pub extern "C" fn lib_ruby_parser__test__make_token_eq(
 }
 
 #[no_mangle]
-pub extern "C" fn LIB_RUBY_PARSER_token_name(token: *const Token) -> *mut i8 {
+pub extern "C" fn LIB_RUBY_PARSER_token_name(token: *const Token) -> *mut c_char {
     let token = unsafe { token.as_ref().unwrap() };
     let token_name = token.token_name();
     std::ffi::CString::new(token_name).unwrap().into_raw()

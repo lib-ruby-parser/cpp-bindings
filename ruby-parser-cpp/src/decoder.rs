@@ -1,4 +1,5 @@
 #[allow(unused_imports)]
+use std::os::raw::{c_char};
 use crate::{blob_type, bytes::ByteListBlob, string::StringBlob};
 use lib_ruby_parser::source::{DecoderResult, InputError};
 
@@ -73,7 +74,7 @@ pub extern "C" fn lib_ruby_parser__test__always_ok_decoder(output: *const u8) ->
         drop(String::from(encoding));
         drop(Vec::<u8>::from(input));
         // and return given output
-        let output = unsafe { std::ffi::CStr::from_ptr(state as *const i8) }
+        let output = unsafe { std::ffi::CStr::from_ptr(state as *const c_char) }
             .to_str()
             .unwrap();
         DecoderResultBlob::from(DecoderResult::Ok(output.as_bytes().to_vec()))
@@ -97,7 +98,7 @@ pub extern "C" fn lib_ruby_parser__test__always_err_decoder(output: *const u8) -
         drop(String::from(encoding));
         drop(Vec::<u8>::from(input));
         // and return given output
-        let output = unsafe { std::ffi::CStr::from_ptr(state as *const i8) }
+        let output = unsafe { std::ffi::CStr::from_ptr(state as *const c_char) }
             .to_str()
             .unwrap();
         DecoderResultBlob::from(DecoderResult::Err(InputError::DecodingError(

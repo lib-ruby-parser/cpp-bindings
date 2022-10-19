@@ -1,3 +1,4 @@
+use std::os::raw::{c_char};
 use crate::blob_type;
 #[allow(unused_imports)]
 use crate::message::DiagnosticMessageBlob;
@@ -42,7 +43,7 @@ pub extern "C" fn LIB_RUBY_PARSER_drop_diagnostic_list(diagnostic_list: *mut Vec
 pub extern "C" fn LIB_RUBY_PARSER_render_diagnostic(
     diagnostic: *const Diagnostic,
     input: *const DecodedInput,
-) -> *mut i8 {
+) -> *mut c_char {
     let diagnostic = unsafe { diagnostic.as_ref().unwrap() };
     let input = unsafe { input.as_ref().unwrap() };
     let rendered = diagnostic.render(input).unwrap();

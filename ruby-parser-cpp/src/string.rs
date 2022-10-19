@@ -1,4 +1,5 @@
 use crate::blob_type;
+use std::os::raw::{c_char};
 
 blob_type!(StringBlob, String);
 blob_type!(MaybeStringBlob, Option<String>);
@@ -10,7 +11,7 @@ pub extern "C" fn LIB_RUBY_PARSER_new_string_owned(ptr: *mut u8, len: usize) -> 
 }
 
 #[no_mangle]
-pub extern "C" fn LIB_RUBY_PARSER_new_string_from_cstr(ptr: *const i8) -> StringBlob {
+pub extern "C" fn LIB_RUBY_PARSER_new_string_from_cstr(ptr: *const c_char) -> StringBlob {
     let s = unsafe { std::ffi::CStr::from_ptr(ptr) };
     StringBlob::from(s.to_str().unwrap_or_default().to_owned())
 }
