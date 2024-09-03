@@ -127,13 +127,13 @@ jobs:
         uses: actions/checkout@v2
 
       # download benchmark results
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4.1.7
         with: { name: x86_64-unknown-linux-gnu.benchmark-out }
 
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4.1.7
         with: { name: x86_64-apple-darwin.benchmark-out }
 
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4.1.7
         with: { name: x86_64-pc-windows-msvc.benchmark-out }
 
       - name: build release notes
@@ -171,21 +171,21 @@ jobs:
         uses: actions/checkout@v2
 
       # lib files
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4.1.7
         with: { name: libruby_parser_cpp-x86_64-unknown-linux-gnu.a }
 
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4.1.7
         with: { name: libruby_parser_cpp-x86_64-apple-darwin.a }
 
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4.1.7
         with: { name: libruby_parser_cpp-x86_64-pc-windows-msvc.lib }
 
       # header file
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4.1.7
         with: { name: lib-ruby-parser.hpp }
 
       # release notes
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4.1.7
         with: { name: release_notes.md }
 
       - name: show artifacts
